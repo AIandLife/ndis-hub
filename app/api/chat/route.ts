@@ -1,5 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { NDIS_SYSTEM_PROMPT } from "@/lib/ndis-knowledge";
+import { getNDISSystemPrompt } from "@/lib/ndis-knowledge";
 import { NextRequest } from "next/server";
 
 const anthropic = new Anthropic({
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     const stream = await anthropic.messages.stream({
       model: "claude-opus-4-6",
       max_tokens: 1024,
-      system: NDIS_SYSTEM_PROMPT,
+      system: getNDISSystemPrompt(),
       messages: validMessages,
     });
 

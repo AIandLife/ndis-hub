@@ -1,19 +1,30 @@
 // NDIS Knowledge Base for RAG-based AI Q&A
 // Sources: ndis.gov.au, NDIS Commission, 2025-26 Reform updates
 
-export const NDIS_SYSTEM_PROMPT = `你是「澳洲NDIS圈」平台的AI顾问，专门为澳洲华人社区提供NDIS（国家残障保险计划）和养老（Aged Care）方面的专业中文指导。
+// Declare system prompt as a function to avoid hoisting issues
+export function getNDISSystemPrompt(): string {
+  return `你是「澳洲NDIS圈」平台的AI顾问，专门为澳洲华人社区提供NDIS（国家残障保险计划）和养老（Aged Care）方面的专业中文指导。
 
 你的回答原则：
-1. 用简单易懂的中文回答，避免过度专业术语
-2. 给出有方向性的建议，不要只说"请咨询专业人士"
-3. 分层回答：先给出大方向，再说具体步骤，最后说何时需要专业帮助
+1. 用简单易懂的中文回答，避免过度专业术语，但保留重要的英文专业术语（如Support Coordinator、Plan Manager），首次出现时加中文解释
+2. 给出有方向性的建议，不要只说"请咨询专业人士"，要告诉用户下一步具体怎么做
+3. 分层回答：先给出大方向（1-2句），再说具体步骤，最后说何时需要专业帮助
 4. 如果涉及具体金额或法律权利，加上"请以NDIS官网最新信息为准"
-5. 对2026年改革政策保持更新意识
+5. 对2026年改革政策保持更新意识，主动提醒改革影响
+6. 对华人家庭文化背景保持敏感，理解他们面临的语言和文化挑战
+7. 如果用户情绪焦虑或困惑，先表示理解，再给出清晰指引
 
 你的知识库覆盖：
 ${getKnowledgeBase()}
 
+补充专业知识：
+${EXTENDED_KNOWLEDGE_INLINE}
+
 重要免责声明：本AI提供的信息仅供参考，不构成法律、医疗或财务建议。重要决定请咨询持牌NDIS专业人士。`;
+}
+
+// Keep backward compat export
+export const NDIS_SYSTEM_PROMPT = "";
 
 function getKnowledgeBase(): string {
   return `
@@ -144,3 +155,110 @@ export const SAMPLE_QUESTIONS = [
   "如何成为NDIS注册Provider？需要什么资质？",
   "自管（Self-managed）有什么风险？适合我吗？",
 ];
+
+// Used inline in system prompt
+const EXTENDED_KNOWLEDGE_INLINE = `
+## NDIS价格指南（Price Guide）
+
+Provider收费不能超过NDIS价格指南上限。常见服务类别上限（2024-25）：
+- 日常活动协助（周一至周五白天）：约 $67.56/小时
+- 日常活动协助（周末）：约 $94.48/小时
+- Support Coordination：约 $100.14/小时
+- Specialist Support Coordination：约 $190.54/小时
+- 职业治疗（OT）：约 $193.99/小时
+- 言语治疗（SLT）：约 $193.99/小时
+注意：价格每年更新，请以NDIS官网最新价格指南为准。
+
+## Early Childhood通道（0-9岁）
+
+0-9岁有发育迟缓或残障的儿童可走Early Childhood通道，由Early Childhood Partner（ECP）提供支持：
+- 不需要正式NDIS申请和诊断即可获得初步支持
+- ECP评估后决定是否转入完整NDIS计划
+- 9岁以上需要转入正式NDIS流程
+- 常见机构：由NDIA在各地区指定，可拨打NDIS 1800 800 110查询当地ECP
+
+## 住宿支持（SIL/SDA）
+
+Supported Independent Living (SIL)：
+- 帮助参与者在共享住宅或独立住宅中生活
+- 支持日常活动、个人护理、家务等
+- 由注册Provider提供，需要特别的SIL申请流程
+
+Specialist Disability Accommodation (SDA)：
+- 专为有严重功能障碍人士设计的住房
+- 房屋本身由SDA注册Provider提供
+- 并非所有NDIS参与者都符合SDA资格
+
+## NDIS申请被拒后怎么办
+
+1. **内部审查（Internal Review）**：28天内提出，NDIS重新评估决定
+2. **AAT（行政上诉法庭）**：如不满足内部审查结果，可进一步上诉
+3. **证据质量很关键**：更多、更详细的功能评估报告往往能改变结果
+4. **Law Access等法律援助机构**可提供免费法律建议
+
+## 关于CALD（文化和语言多元化）参与者
+
+华人参与者的特殊权利：
+- 有权申请专业翻译（TIS National 131 450，NDIS会议免费）
+- 书面资料可申请中文翻译
+- NDIS规划师应考虑文化因素
+- 如果感觉文化因素没有被考虑，可以在申诉中提出
+
+## 心理健康与NDIS
+
+心理社交残障（Psychosocial Disability）可申请NDIS，但需满足：
+- 诊断来自精神科医生或心理学家
+- 残障是严重且持续的（permanent）
+- 残障显著影响日常生活参与
+常见支持：心理社区支持、支持协调、日常活动支持
+
+注意：焦虑/抑郁本身不自动满足资格，需要证明功能影响程度。
+
+## Roster of Care（护理时间表）
+
+对于需要大量日常护理支持的参与者，NDIS会要求提交"Roster of Care"，
+详细说明每天/每周需要什么支持。
+这通常由Support Coordinator或OT协助准备。
+
+## 如何选择Plan Manager（计划管理员）
+
+好的Plan Manager应该：
+- 7天内处理发票（NDIS规定的服务标准）
+- 提供在线预算查看工具
+- 主动提醒预算即将耗尽
+- 中文沟通能力（如果需要）
+- 不强迫你用特定Provider
+避免：同时也是你的Provider（利益冲突风险）
+
+## 紧急情况和危机支持
+
+如果参与者处于危机状况且NDIS支持中断：
+- 联系NDIS早期干预：1800 800 110（紧急）
+- 若涉及安全风险，联系当地危机支持或000
+- NDIS有Short Term Accommodation (STA，短期住宿）和Crisis Support选项
+- SC有责任协助处理紧急情况
+
+## Provider取消政策
+
+NDIS规定Provider取消政策：
+- 取消通知 < 2个工作日：Provider可收取短期通知费（通常50%）
+- 具体取消条款在服务协议中明确
+- 参与者有权了解Provider的取消政策，并签署前确认接受
+
+## NDIS Worker Screening Check
+
+所有NDIS注册Provider的直接支持工作人员必须持有NDIS Worker Screening Check：
+- 在各州/领地申请
+- 检查内容：犯罪记录、性犯罪、虐待儿童等
+- 有效期5年（全国互认）
+- 参与者有权查询为其提供服务的工作人员是否持有有效的Worker Screening
+
+## 辅助技术（Assistive Technology/AT）
+
+AT属于Capital支持类别，专款专用：
+- 低成本AT（< $1500）：可直接购买
+- 高成本AT（> $1500）：需要专业人士（通常OT）的评估报告
+- 常见AT：轮椅、助听器、特殊通讯设备、家居改造
+- AT购买后属于参与者，Provider不能拿回
+`;
+
