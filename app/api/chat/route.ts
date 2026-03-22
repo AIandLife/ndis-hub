@@ -2,6 +2,8 @@ import Anthropic from "@anthropic-ai/sdk";
 import { getNDISSystemPrompt } from "@/lib/ndis-knowledge";
 import { NextRequest } from "next/server";
 
+export const maxDuration = 30;
+
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
@@ -14,7 +16,6 @@ export async function POST(req: NextRequest) {
       return Response.json({ error: "Invalid messages format" }, { status: 400 });
     }
 
-    // Filter to valid message format
     const validMessages = messages
       .filter(
         (m: { role: string; content: string }) =>
@@ -29,44 +30,17 @@ export async function POST(req: NextRequest) {
       return Response.json({ error: "No valid messages" }, { status: 400 });
     }
 
-    // Use streaming for better UX
-    const stream = await anthropic.messages.stream({
+    const response = await anthropic.messages.create({
       model: "claude-opus-4-6",
       max_tokens: 1024,
       system: getNDISSystemPrompt(),
       messages: validMessages,
     });
 
-    // Return as text stream
-    const encoder = new TextEncoder();
-    const readable = new ReadableStream({
-      async start(controller) {
-        try {
-          for await (const event of stream) {
-            if (
-              event.type === "content_block_delta" &&
-              event.delta.type === "text_delta"
-            ) {
-              controller.enqueue(
-                encoder.encode(`data: ${JSON.stringify({ text: event.delta.text })}\n\n`)
-              );
-            }
-          }
-          controller.enqueue(encoder.encode("data: [DONE]\n\n"));
-          controller.close();
-        } catch (err) {
-          controller.error(err);
-        }
-      },
-    });
+    const text =
+      response.content[0].type === "text" ? response.content[0].text : "";
 
-    return new Response(readable, {
-      headers: {
-        "Content-Type": "text/event-stream",
-        "Cache-Control": "no-cache",
-        Connection: "keep-alive",
-      },
-    });
+    return Response.json({ text });
   } catch (error) {
     console.error("Chat API error:", error);
     return Response.json(

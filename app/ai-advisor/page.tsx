@@ -21,7 +21,6 @@ function AIAdvisorContent() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [streamingText, setStreamingText] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const initialized = useRef(false);
@@ -31,8 +30,7 @@ function AIAdvisorContent() {
       initialized.current = true;
       const q = searchParams.get("q");
       if (q) {
-        setInput(q);
-        setTimeout(() => sendMessage(q), 100);
+        sendMessage(q);
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -40,7 +38,7 @@ function AIAdvisorContent() {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, streamingText]);
+  }, [messages, loading]);
 
   const sendMessage = async (overrideInput?: string) => {
     const text = (overrideInput ?? input).trim();
@@ -51,7 +49,6 @@ function AIAdvisorContent() {
     setMessages(newMessages);
     setInput("");
     setLoading(true);
-    setStreamingText("");
 
     try {
       const res = await fetch("/api/chat", {
@@ -60,52 +57,22 @@ function AIAdvisorContent() {
         body: JSON.stringify({ messages: newMessages }),
       });
 
-      if (!res.ok) throw new Error("Request failed");
+      const data = await res.json();
 
-      const reader = res.body?.getReader();
-      if (!reader) throw new Error("No reader");
-
-      const decoder = new TextDecoder();
-      let accumulated = "";
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        const chunk = decoder.decode(value, { stream: true });
-        const lines = chunk.split("\n");
-
-        for (const line of lines) {
-          if (line.startsWith("data: ")) {
-            const data = line.slice(6);
-            if (data === "[DONE]") {
-              setMessages((prev) => [
-                ...prev,
-                { role: "assistant", content: accumulated },
-              ]);
-              setStreamingText("");
-              break;
-            }
-            try {
-              const parsed = JSON.parse(data);
-              if (parsed.text) {
-                accumulated += parsed.text;
-                setStreamingText(accumulated);
-              }
-            } catch {}
-          }
-        }
+      if (!res.ok || data.error) {
+        throw new Error(data.error || "Request failed");
       }
-    } catch {
+
       setMessages((prev) => [
         ...prev,
-        {
-          role: "assistant",
-          content:
-            "抱歉，AI服务暂时不可用。请确保管理员已配置API密钥，或稍后再试。",
-        },
+        { role: "assistant", content: data.text },
       ]);
-      setStreamingText("");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "AI服务暂时不可用，请稍后再试";
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: msg },
+      ]);
     } finally {
       setLoading(false);
     }
@@ -120,7 +87,6 @@ function AIAdvisorContent() {
 
   const resetChat = () => {
     setMessages([]);
-    setStreamingText("");
     setInput("");
     inputRef.current?.focus();
   };
@@ -218,21 +184,8 @@ function AIAdvisorContent() {
               </div>
             ))}
 
-            {/* Streaming message */}
-            {streamingText && (
-              <div className="flex items-start gap-3 message-enter">
-                <div className="w-8 h-8 rounded-full bg-gold-50 border border-gold-200 flex items-center justify-center flex-shrink-0">
-                  <Brain size={14} className="text-gold-600" />
-                </div>
-                <div className="max-w-[85%] bg-white border border-gray-100 rounded-2xl rounded-tl-sm px-4 py-3 text-sm leading-relaxed text-gray-700 shadow-sm whitespace-pre-wrap">
-                  {streamingText}
-                  <span className="inline-block w-0.5 h-4 bg-navy-900 ml-0.5 animate-pulse" />
-                </div>
-              </div>
-            )}
-
             {/* Loading indicator */}
-            {loading && !streamingText && (
+            {loading && (
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-gold-50 border border-gold-200 flex items-center justify-center">
                   <Brain size={14} className="text-gold-600" />
@@ -275,7 +228,7 @@ function AIAdvisorContent() {
                 className="flex items-center gap-1.5 bg-navy-900 hover:bg-navy-800 disabled:bg-gray-200 disabled:cursor-not-allowed text-white disabled:text-gray-400 px-4 py-2 rounded-xl text-sm font-semibold transition-colors"
               >
                 <Send size={13} />
-                发送
+                {loading ? "回答中..." : "发送"}
               </button>
             </div>
           </div>
