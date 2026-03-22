@@ -366,7 +366,7 @@ function ResourcesContent() {
                 ))}
               </ul>
               <Link
-                href="/providers?register=true"
+                href="/courses"
                 className="block w-full text-center bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold py-2.5 rounded-xl text-sm transition-colors"
               >
                 了解课程详情

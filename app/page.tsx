@@ -16,6 +16,7 @@ import {
   ExternalLink,
   Bell,
   BarChart3,
+  Video,
 } from "lucide-react";
 import { PROVIDERS, WEEKLY_DEMAND } from "@/lib/providers-data";
 import { SAMPLE_QUESTIONS } from "@/lib/ndis-knowledge";
@@ -628,6 +629,57 @@ export default function HomePage() {
                 )}
               </a>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── COURSES CTA ─── */}
+      <section className="py-16 bg-white border-t border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-gradient-to-br from-gold-50 to-amber-50 border border-gold-200 rounded-3xl p-8 lg:p-10">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center gap-8">
+              <div className="flex-1">
+                <div className="inline-flex items-center gap-2 bg-gold-500/20 rounded-full px-3 py-1 mb-4">
+                  <Video size={13} className="text-gold-600" />
+                  <span className="text-gold-700 text-xs font-semibold">
+                    华人NDIS从业者专属
+                  </span>
+                </div>
+                <h2 className="text-2xl font-bold text-navy-900 mb-3">
+                  想进入 NDIS 行业？先学对再入场
+                </h2>
+                <p className="text-gray-600 mb-4">
+                  从注册入行到合规运营，全中文课程。
+                  避开华人Provider最常见的坑，用最短时间做对。
+                </p>
+                <div className="flex flex-wrap gap-4">
+                  {[
+                    "Provider注册全流程",
+                    "合规与定价",
+                    "Support Coordinator技能",
+                  ].map((item) => (
+                    <div key={item} className="flex items-center gap-1.5 text-sm text-gray-700">
+                      <CheckCircle size={14} className="text-gold-600" />
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="flex flex-col gap-3 flex-shrink-0">
+                <Link
+                  href="/courses"
+                  className="inline-flex items-center justify-center gap-2 bg-navy-900 text-white font-bold px-6 py-3 rounded-xl hover:bg-navy-800 transition-colors"
+                >
+                  查看所有课程 <ArrowRight size={15} />
+                </Link>
+                <Link
+                  href="/ai-advisor?q=我想进入NDIS行业，应该怎么开始？"
+                  className="inline-flex items-center justify-center gap-2 border-2 border-navy-900 text-navy-900 font-semibold px-6 py-3 rounded-xl hover:bg-navy-900 hover:text-white transition-colors text-sm"
+                >
+                  问AI帮我规划路径
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>

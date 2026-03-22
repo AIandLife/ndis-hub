@@ -9,6 +9,7 @@ const navLinks = [
   { href: "/journey", label: "NDIS 全流程" },
   { href: "/providers", label: "找 Provider" },
   { href: "/resources", label: "知识库" },
+  { href: "/courses", label: "课程" },
   { href: "/about", label: "关于" },
 ];
 
