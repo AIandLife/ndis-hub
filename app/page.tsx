@@ -98,45 +98,41 @@ export default function HomePage() {
             <AnimatedHeadline />
 
             <p className="text-lg text-blue-100 mb-8 max-w-2xl leading-relaxed">
-              澳洲华人NDIS专业导航平台——AI中文问答、精准Provider匹配、行业课程，一站搞定。
+              行业知识、合规工具、客户线索、圈子资源——用中文，帮华人NDIS从业者做对、做好、做大。
             </p>
 
-            {/* Quick AI input */}
-            <div className="bg-white rounded-2xl p-1.5 mb-6 shadow-2xl max-w-2xl">
-              <div className="flex items-center gap-2">
-                <input
-                  type="text"
-                  placeholder="输入你的NDIS问题，例如：我孩子刚诊断自闭症..."
-                  className="flex-1 px-4 py-3 text-gray-800 text-sm outline-none rounded-xl bg-transparent"
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      const val = (e.target as HTMLInputElement).value;
-                      if (val.trim()) {
-                        window.location.href = `/ai-advisor?q=${encodeURIComponent(val)}`;
-                      }
-                    }
-                  }}
-                />
-                <Link
-                  href="/ai-advisor"
-                  className="bg-navy-900 text-white px-5 py-3 rounded-xl text-sm font-semibold hover:bg-navy-800 transition-colors flex items-center gap-1 whitespace-nowrap"
-                >
-                  AI 问答 <ArrowRight size={14} />
-                </Link>
-              </div>
+            {/* Primary CTAs for practitioners */}
+            <div className="flex flex-col sm:flex-row gap-3 mb-8">
+              <Link
+                href="/providers?register=true"
+                className="inline-flex items-center justify-center gap-2 bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold px-6 py-3.5 rounded-xl transition-colors"
+              >
+                <Bell size={16} />
+                免费入驻，接收客户线索
+              </Link>
+              <Link
+                href="/courses"
+                className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold px-6 py-3.5 rounded-xl transition-colors"
+              >
+                查看入行课程
+              </Link>
+              <Link
+                href="/ai-advisor"
+                className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold px-6 py-3.5 rounded-xl transition-colors"
+              >
+                AI 行业顾问
+              </Link>
             </div>
 
-            {/* Sample questions */}
-            <div className="flex flex-wrap gap-2">
-              {sampleQs.map((q, i) => (
-                <Link
-                  key={i}
-                  href={`/ai-advisor?q=${encodeURIComponent(q)}`}
-                  className="text-xs bg-white/10 hover:bg-white/20 text-white/80 hover:text-white px-3 py-1.5 rounded-full border border-white/20 transition-colors"
-                >
-                  {q.length > 22 ? q.slice(0, 22) + "…" : q}
-                </Link>
-              ))}
+            {/* Participant subtle link */}
+            <div className="flex items-center gap-2 text-blue-300 text-sm">
+              <span>你的客户也能用：</span>
+              <Link
+                href="/families"
+                className="underline underline-offset-2 hover:text-white transition-colors"
+              >
+                参与者/家属中文指南 →
+              </Link>
             </div>
           </div>
 

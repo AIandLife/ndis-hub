@@ -9,7 +9,7 @@ import {
   AlertCircle,
   ChevronRight,
 } from "lucide-react";
-import { SAMPLE_QUESTIONS } from "@/lib/ndis-knowledge";
+import { PRACTITIONER_QUESTIONS, FAMILY_QUESTIONS } from "@/lib/ndis-knowledge";
 
 interface Message {
   role: "user" | "assistant";
@@ -21,6 +21,7 @@ function AIAdvisorContent() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [role, setRole] = useState<"practitioner" | "family">("practitioner");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const initialized = useRef(false);
@@ -129,20 +130,56 @@ function AIAdvisorContent() {
 
         {/* Empty state */}
         {messages.length === 0 && !loading && (
-          <div className="text-center py-8 mb-6">
-            <div className="w-16 h-16 rounded-2xl bg-navy-900 flex items-center justify-center mx-auto mb-4">
-              <Brain className="text-gold-400" size={28} />
+          <div className="py-8 mb-6">
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 rounded-2xl bg-navy-900 flex items-center justify-center mx-auto mb-4">
+                <Brain className="text-gold-400" size={28} />
+              </div>
+              <h2 className="text-xl font-bold text-navy-900 mb-2">
+                你好！我是你的NDIS顾问
+              </h2>
+              <p className="text-gray-500 max-w-md mx-auto text-sm">
+                用中文提问，给你有方向的回答。先选择你的身份：
+              </p>
             </div>
-            <h2 className="text-xl font-bold text-navy-900 mb-2">
-              你好！我是你的NDIS顾问
-            </h2>
-            <p className="text-gray-500 mb-8 max-w-md mx-auto">
-              用中文提问，我会给你有方向性的答案——
-              不是百科全书，是帮你搞清楚下一步怎么走。
-            </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl mx-auto text-left">
-              {SAMPLE_QUESTIONS.map((q, i) => (
+            {/* Role toggle */}
+            <div className="flex gap-2 justify-center mb-6">
+              <button
+                onClick={() => setRole("practitioner")}
+                className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+                  role === "practitioner"
+                    ? "bg-navy-900 text-white"
+                    : "bg-white border border-gray-200 text-gray-600 hover:border-navy-900"
+                }`}
+              >
+                我是从业者 / Provider
+              </button>
+              <button
+                onClick={() => setRole("family")}
+                className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+                  role === "family"
+                    ? "bg-navy-900 text-white"
+                    : "bg-white border border-gray-200 text-gray-600 hover:border-navy-900"
+                }`}
+              >
+                我是参与者 / 家属
+              </button>
+            </div>
+
+            {role === "family" && (
+              <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3 mb-5 max-w-2xl mx-auto">
+                <span className="text-emerald-700 text-xs">
+                  我们为参与者和家属准备了专属页面，内容更有针对性——
+                </span>
+                <a href="/families" className="text-emerald-700 font-semibold text-xs underline whitespace-nowrap">
+                  查看参与者指南 →
+                </a>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl mx-auto">
+              {(role === "practitioner" ? PRACTITIONER_QUESTIONS : FAMILY_QUESTIONS).map((q, i) => (
                 <button
                   key={i}
                   onClick={() => sendMessage(q)}

@@ -145,16 +145,28 @@ Q：我对NDIS决定不满意怎么办？
 A：28天内申请Internal Review → 不满意可申请AAT（Administrative Appeals Tribunal）复审。`;
 }
 
-export const SAMPLE_QUESTIONS = [
+// Questions for practitioners (primary audience)
+export const PRACTITIONER_QUESTIONS = [
+  "如何注册成为NDIS Provider？需要哪些资质？",
+  "2026年NDIS改革对Provider有什么影响？",
+  "NDIS价格指南怎么看？我能收多少钱？",
+  "Support Coordinator和Specialist SC有什么区别？",
+  "NDIS Worker Screening Check怎么申请？",
+  "Plan Manager如何处理参与者预算超支问题？",
+  "如何应对NDIS Quality and Safeguards Commission的审查？",
+  "华人Provider如何开拓第一批客户？",
+];
+
+// Questions for families (secondary audience — link to /families page)
+export const FAMILY_QUESTIONS = [
   "我的孩子刚被诊断为自闭症，第一步应该怎么做？",
   "NDIS的Core Support和Capacity Building有什么区别？",
-  "Plan Manager和Support Coordinator是同一个人吗？",
-  "2026年NDIS改革有哪些变化，我现在应该准备什么？",
   "怎么投诉一个不提供服务的Provider？",
   "NDIS参与者65岁以后怎么办？",
-  "如何成为NDIS注册Provider？需要什么资质？",
-  "自管（Self-managed）有什么风险？适合我吗？",
 ];
+
+// Default shown in AI advisor (practitioner-first)
+export const SAMPLE_QUESTIONS = PRACTITIONER_QUESTIONS;
 
 // Used inline in system prompt
 const EXTENDED_KNOWLEDGE_INLINE = `

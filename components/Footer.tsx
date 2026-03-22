@@ -54,7 +54,8 @@ export default function Footer() {
               {[
                 { href: "/providers?register=true", label: "Provider 入驻" },
                 { href: "/providers?leads=true", label: "客户线索订阅" },
-                { href: "/resources?tab=business", label: "生意辅导课程" },
+                { href: "/courses", label: "生意辅导课程" },
+                { href: "/families", label: "参与者/家属指南" },
                 { href: "mailto:hello@ndishub.com.au", label: "商务合作" },
               ].map((link) => (
                 <li key={link.href}>
