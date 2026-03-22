@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import AnimatedHeadline from "@/components/AnimatedHeadline";
 import {
   Brain,
   MapPin,
@@ -93,16 +94,11 @@ export default function HomePage() {
               </span>
             </div>
 
-            {/* Headline */}
-            <h1 className="hero-title text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight mb-6">
-              NDIS 复杂？
-              <br />
-              <span className="gradient-text">让 AI 帮你找方向</span>
-            </h1>
+            {/* Animated Headline */}
+            <AnimatedHeadline />
 
             <p className="text-lg text-blue-100 mb-8 max-w-2xl leading-relaxed">
-              无论你是参与者家属、服务提供商，还是想进入这个行业的创业者——
-              用中文，在这里找到你需要的答案和人脉。
+              澳洲华人NDIS专业导航平台——AI中文问答、精准Provider匹配、行业课程，一站搞定。
             </p>
 
             {/* Quick AI input */}
