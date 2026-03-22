@@ -2,15 +2,22 @@ import Anthropic from "@anthropic-ai/sdk";
 import { getNDISSystemPrompt } from "@/lib/ndis-knowledge";
 import { NextRequest } from "next/server";
 
-export const maxDuration = 30;
-
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
 export async function POST(req: NextRequest) {
   try {
-    const { messages } = await req.json();
+    // Debug: check if API key is present
+    if (!process.env.ANTHROPIC_API_KEY) {
+      return Response.json(
+        { error: "API密钥未配置，请联系管理员" },
+        { status: 500 }
+      );
+    }
+
+    const body = await req.json();
+    const { messages } = body;
 
     if (!messages || !Array.isArray(messages)) {
       return Response.json({ error: "Invalid messages format" }, { status: 400 });
@@ -42,9 +49,10 @@ export async function POST(req: NextRequest) {
 
     return Response.json({ text });
   } catch (error) {
-    console.error("Chat API error:", error);
+    const errMsg = error instanceof Error ? error.message : String(error);
+    console.error("Chat API error:", errMsg);
     return Response.json(
-      { error: "AI服务暂时不可用，请稍后再试" },
+      { error: `服务错误: ${errMsg.slice(0, 100)}` },
       { status: 500 }
     );
   }
