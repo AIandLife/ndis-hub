@@ -489,7 +489,7 @@ export default function HomePage() {
                   "专业中文NDIS知识库，来源官方文件",
                   "分层回答：方向 → 步骤 → 专业转介",
                   "2026年改革政策实时更新",
-                  "免责声明保障，重要决定转专业顾问",
+                  "持续跟踪2026年改革动态，知识库实时更新",
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-2">
                     <CheckCircle size={15} className="text-emerald-500 flex-shrink-0" />

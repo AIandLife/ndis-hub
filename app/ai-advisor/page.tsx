@@ -120,13 +120,6 @@ function AIAdvisorContent() {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6">
-        {/* Disclaimer */}
-        <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 mb-6">
-          <AlertCircle size={15} className="text-amber-600 flex-shrink-0 mt-0.5" />
-          <p className="text-amber-800 text-xs">
-            AI回答仅供参考，不构成法律、医疗或财务建议。重要决定请咨询持牌NDIS专业人士。
-          </p>
-        </div>
 
         {/* Empty state */}
         {messages.length === 0 && !loading && (
@@ -257,7 +250,7 @@ function AIAdvisorContent() {
             />
             <div className="flex items-center justify-between px-4 py-2 border-t border-gray-50">
               <span className="text-xs text-gray-400">
-                回答基于NDIS官方文件，仅供参考
+                回答基于NDIS官方文件
               </span>
               <button
                 onClick={() => sendMessage()}

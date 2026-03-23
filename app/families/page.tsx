@@ -115,13 +115,6 @@ export default function FamiliesPage() {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-        {/* Disclaimer */}
-        <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 mb-8">
-          <AlertCircle size={15} className="text-amber-600 flex-shrink-0 mt-0.5" />
-          <p className="text-amber-800 text-xs">
-            以下内容仅供参考，不构成专业建议。重要决定请咨询持牌NDIS顾问或致电NDIS热线 1800 800 110。
-          </p>
-        </div>
 
         {/* Scenario Picker */}
         <div className="mb-10">
