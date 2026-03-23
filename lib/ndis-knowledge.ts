@@ -155,6 +155,8 @@ export const PRACTITIONER_QUESTIONS = [
   "Plan Manager如何处理参与者预算超支问题？",
   "如何应对NDIS Quality and Safeguards Commission的审查？",
   "华人Provider如何开拓第一批客户？",
+  "SDA住房投资回报怎么样？如何入行成为SDA Provider？",
+  "同时做NDIS和养老服务，需要分开注册吗？",
 ];
 
 // Questions for families (secondary audience — link to /families page)
@@ -264,6 +266,66 @@ NDIS规定Provider取消政策：
 - 检查内容：犯罪记录、性犯罪、虐待儿童等
 - 有效期5年（全国互认）
 - 参与者有权查询为其提供服务的工作人员是否持有有效的Worker Screening
+
+## SDA住房（Specialist Disability Accommodation）— 投资与入行指南
+
+### 什么是SDA？
+SDA是专为有严重功能障碍的NDIS参与者设计的特殊住房，由NDIS资金支付房租（而非普通市场租金）。开发商/投资人建造并注册SDA房产，NDIS参与者入住后NDIS直接向SDA Provider支付租金。
+
+### SDA的四种设计类别（Design Categories）
+1. **Improved Liveability**：改善采光、空间布局，适合认知或感官障碍
+2. **Fully Accessible**：完全无障碍，适合轮椅用户
+3. **High Physical Support**：最高规格，需配备辅助技术预留位、紧急呼叫系统等
+4. **Robust**：加固材料，适合有破坏性行为的参与者
+
+### SDA投资回报概览（2024-25）
+- SDA房产年收益率通常远高于普通住宅（8%-15%不等，视类别和地区）
+- NDIS按参与者人数和设计类别支付SDA费用，最高单套可达约$50,000+/年
+- 需求缺口大：全澳SDA房源严重不足，尤其High Physical Support类别
+- 参考数据请以NDIS官网SDA Payment Amounts为准
+
+### 如何成为SDA Provider（入行步骤）
+1. **注册NDIS Provider**：先完成标准NDIS Provider注册
+2. **SDA专项注册**：在NDIS Commission申请SDA注册类别
+3. **设计合规**：房产必须符合NDIS SDA Design Standard（2021版）
+4. **建筑认证**：需获得认可的SDA Assessor出具合规证书
+5. **登记房源**：在NDIS SDA登记册上登记，参与者和支持协调员可查找
+
+### SDA与普通投资房的关键区别
+- 租客：NDIS参与者（通常长期稳定入住）
+- 付租方：NDIS（政府背书，收款稳定）
+- 要求：建筑必须符合SDA Design Standard，改建成本高但补贴也高
+- 退出：将来可转为NDIS注册住房或出售给其他SDA Provider
+
+### 华人投资者/开发商常见问题
+
+Q：普通住宅可以改建成SDA吗？
+A：可以，但改建成本较高（通常需要专业无障碍改造），且必须通过SDA Assessor认证。新建项目更容易做到设计达标。
+
+Q：SDA参与者的入住从哪里来？
+A：NDIS参与者通过Support Coordinator或NDIA寻找SDA房源，SDA Provider也可主动联系NDIS和SC网络。维持满租是运营关键。
+
+Q：投资SDA有没有政府补贴？
+A：SDA本身不是政府补贴项目，而是NDIS资金定向支付体系。部分州有针对无障碍住房的额外激励，需查询各州住房部门。
+
+Q：最值得投资的SDA类别是哪个？
+A：High Physical Support需求最大、单价最高，但建造要求最严格。Improved Liveability入门门槛相对低，适合第一个SDA项目。建议先咨询SDA专业顾问和NDIS注册规划师。
+
+## 养老服务（Aged Care）与NDIS的衔接
+
+### 65岁转养老流程
+NDIS参与者在65岁生日后转入My Aged Care体系：
+1. 提前6-12个月联系My Aged Care：myagedcare.gov.au，1800 200 422
+2. 申请ACAT（Aged Care Assessment Team）评估
+3. 根据评估结果进入Home Care Package或Residential Care
+4. NDIS计划逐步关闭，Aged Care资金接替
+
+### 同时做NDIS和养老服务的Provider
+很多华人机构同时提供NDIS支持和Home Care Package服务：
+- 需分别注册：NDIS Provider注册 + My Aged Care Approved Provider注册
+- 资金完全独立，不能混用
+- 优势：同一套团队和系统，服务同一批客户群体，效率高
+- 华人养老服务需求大，语言匹配是核心竞争力
 
 ## 辅助技术（Assistive Technology/AT）
 

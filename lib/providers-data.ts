@@ -142,6 +142,8 @@ export const SERVICE_TYPES = [
   "Community Access",
   "Home Modifications",
   "Early Childhood",
+  "SDA住房",
+  "养老服务",
 ];
 
 export const LOCATIONS = [
