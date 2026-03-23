@@ -338,7 +338,7 @@ function ResourcesContent() {
                 rel="noopener noreferrer"
                 className="mt-4 flex items-center gap-1 text-xs text-gray-400 hover:text-navy-900 transition-colors"
               >
-                更多活动在澳洲创业圈 <ExternalLink size={10} />
+                更多活动在澳洲商业联盟 <ExternalLink size={10} />
               </Link>
             </div>
 

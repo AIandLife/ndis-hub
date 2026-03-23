@@ -72,7 +72,7 @@ export default function AboutPage() {
             {
               icon: Heart,
               title: "华人生态",
-              desc: "澳洲NDIS圈是澳洲创业圈生态的一部分，与房产、移民等华人服务平台形成互联生态。",
+              desc: "澳洲NDIS圈是澳洲商业联盟生态的一部分，与房产、移民等华人服务平台形成互联生态。",
               color: "text-red-600",
               bg: "bg-red-50",
             },
@@ -114,9 +114,9 @@ export default function AboutPage() {
 
         {/* Ecosystem */}
         <div className="bg-navy-900 rounded-3xl p-8 text-white text-center">
-          <h2 className="text-2xl font-bold mb-3">澳洲创业圈生态</h2>
+          <h2 className="text-2xl font-bold mb-3">澳洲商业联盟生态</h2>
           <p className="text-blue-300 mb-6 text-sm">
-            澳洲NDIS圈是澳洲创业圈的垂直生态成员，
+            澳洲NDIS圈是澳洲商业联盟的垂直生态成员，
             共同为华人在澳发展提供专业支持。
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -126,7 +126,7 @@ export default function AboutPage() {
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold px-6 py-3 rounded-xl text-sm transition-colors"
             >
-              访问澳洲创业圈 <ExternalLink size={14} />
+              访问澳洲商业联盟 <ExternalLink size={14} />
             </a>
             <a
               href="https://aussie-property.vercel.app"

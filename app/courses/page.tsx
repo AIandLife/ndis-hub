@@ -437,7 +437,7 @@ export default function CoursesPage() {
                   className="flex items-center gap-2 text-blue-300 hover:text-white transition-colors text-sm"
                 >
                   <MessageCircle size={14} />
-                  澳洲创业圈微信群
+                  澳洲商业联盟微信群
                 </a>
               </div>
             </div>

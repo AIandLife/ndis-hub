@@ -81,7 +81,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="text-sm hover:text-white transition-colors flex items-center gap-1"
                 >
-                  澳洲创业圈 <ExternalLink size={11} />
+                  澳洲商业联盟 <ExternalLink size={11} />
                 </a>
               </li>
               <li>
@@ -113,7 +113,7 @@ export default function Footer() {
             © 2025 澳洲NDIS圈 NDIS Hub AU. All rights reserved.
           </p>
           <p className="text-xs text-gray-600 flex items-center gap-1">
-            Built with <Heart size={11} className="text-gold-500" /> by 澳洲创业圈生态
+            Built with <Heart size={11} className="text-gold-500" /> by 澳洲商业联盟生态
           </p>
         </div>
       </div>

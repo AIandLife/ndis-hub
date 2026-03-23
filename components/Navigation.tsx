@@ -54,7 +54,7 @@ export default function Navigation() {
               rel="noopener noreferrer"
               className="flex items-center gap-1 text-sm text-gray-500 hover:text-navy-900 transition-colors"
             >
-              <span>澳洲创业圈</span>
+              <span>澳洲商业联盟</span>
               <ExternalLink size={12} />
             </a>
             <Link

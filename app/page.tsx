@@ -572,13 +572,13 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
             <p className="text-gray-400 text-sm font-medium tracking-wide uppercase">
-              澳洲创业圈生态矩阵
+              澳洲商业联盟生态矩阵
             </p>
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
             {[
               {
-                name: "澳洲创业圈",
+                name: "澳洲商业联盟",
                 desc: "华人商业圈子总站",
                 href: "https://auscircle.com",
                 active: false,
