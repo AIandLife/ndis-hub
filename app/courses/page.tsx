@@ -113,6 +113,7 @@ const TESTIMONIALS = [
 
 function InquiryForm({ courseTitle }: { courseTitle?: string }) {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -120,8 +121,19 @@ function InquiryForm({ courseTitle }: { courseTitle?: string }) {
     interest: courseTitle || "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitting(true);
+    try {
+      await fetch("/api/notify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: "course_inquiry", data: form }),
+      });
+    } catch {
+      // Silent — user still sees success
+    }
+    setSubmitting(false);
     setSubmitted(true);
   };
 
@@ -197,9 +209,10 @@ function InquiryForm({ courseTitle }: { courseTitle?: string }) {
       </div>
       <button
         type="submit"
-        className="w-full bg-navy-900 text-white font-bold py-3 rounded-xl hover:bg-navy-800 transition-colors"
+        disabled={submitting}
+        className="w-full bg-navy-900 text-white font-bold py-3 rounded-xl hover:bg-navy-800 disabled:bg-gray-400 transition-colors"
       >
-        提交，等待导师联系
+        {submitting ? "提交中..." : "提交，等待导师联系"}
       </button>
       <p className="text-xs text-gray-400 text-center">
         提交即表示同意我们通过电话/微信与你联系

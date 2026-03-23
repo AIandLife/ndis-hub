@@ -126,6 +126,7 @@ function ProviderCard({ provider }: { provider: Provider }) {
 
 function RegisterModal({ onClose }: { onClose: () => void }) {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
     name: "",
     business: "",
@@ -136,8 +137,19 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
     language: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitting(true);
+    try {
+      await fetch("/api/notify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: "provider_register", data: form }),
+      });
+    } catch {
+      // Silent — user still sees success
+    }
+    setSubmitting(false);
     setSubmitted(true);
   };
 
@@ -318,9 +330,10 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
 
             <button
               type="submit"
-              className="w-full bg-navy-900 text-white font-bold py-3 rounded-xl hover:bg-navy-800 transition-colors"
+              disabled={submitting}
+              className="w-full bg-navy-900 text-white font-bold py-3 rounded-xl hover:bg-navy-800 disabled:bg-gray-400 transition-colors"
             >
-              提交申请，免费入驻
+              {submitting ? "提交中..." : "提交申请，免费入驻"}
             </button>
           </form>
         )}
