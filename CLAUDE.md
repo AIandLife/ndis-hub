@@ -30,8 +30,19 @@
 | 变量 | 用途 | 设置位置 |
 |------|------|---------|
 | `ANTHROPIC_API_KEY` | AI 问答接口 | Vercel Production + `.env.local` |
+| `RESEND_API_KEY` | 表单提交邮件通知 | Vercel Production + `.env.local` |
+| `NOTIFY_EMAIL` | 通知收件邮箱（默认 hello@ndishub.com.au） | Vercel Production + `.env.local` |
 
 本地开发：复制 `.env.local.example` 为 `.env.local`，填入 key。
+
+### Resend 一次性配置（表单通知邮件）
+1. 注册 https://resend.com（免费，100封/天）
+2. Dashboard → API Keys → 创建 key
+3. Vercel → Settings → Environment Variables → 添加 `RESEND_API_KEY`
+4. 本地 `.env.local` 同步添加
+5. 表单提交后自动发邮件到 `NOTIFY_EMAIL`（默认 hello@ndishub.com.au）
+
+> 未配置 `RESEND_API_KEY` 时表单仍正常提交，只是不发邮件通知（静默降级）
 
 ## 当前页面结构
 
@@ -108,7 +119,7 @@
 **在开始任何多语言工作之前，中文版必须完成以下所有项目：**
 
 #### 功能层面（待完成）
-- [ ] 表单实际发送通知（Provider入驻、课程报名、参与者需求 → 发邮件给 Terry）
+- [x] 表单实际发送通知（/api/notify 已实现，接 Resend；Terry 需在 Vercel 添加 RESEND_API_KEY）
 - [ ] Provider 需求雷达数字改为可管理的真实数据（或至少可配置）
 - [ ] 移动端全面测试（375px 不变形）
 - [ ] 真实 Provider 数据替换 mock 数据（需 Terry 提供）
