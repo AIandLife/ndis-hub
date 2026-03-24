@@ -11,20 +11,16 @@ import {
   MessageCircle,
   ChevronRight,
   Filter,
-  Bell,
   ArrowRight,
-  Users,
-  TrendingUp,
   Brain,
-  BarChart3,
   X,
+  UserPlus,
 } from "lucide-react";
 import {
   PROVIDERS,
   SERVICE_TYPES,
   LOCATIONS,
   LANGUAGES,
-  WEEKLY_DEMAND,
   type Provider,
 } from "@/lib/providers-data";
 
@@ -159,9 +155,9 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
         <div className="sticky top-0 bg-white rounded-t-3xl px-6 pt-6 pb-4 border-b border-gray-100 flex items-center justify-between">
           <div>
             <h2 className="text-xl font-bold text-navy-900">
-              Provider 免费入驻
+              申请加入成员目录
             </h2>
-            <p className="text-gray-500 text-sm">接收与你匹配的客户线索</p>
+            <p className="text-gray-500 text-sm">审核通过后正式展示在目录中</p>
           </div>
           <button
             onClick={onClose}
@@ -191,24 +187,8 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="p-6 space-y-4">
-            {/* Demand preview */}
-            <div className="bg-navy-50 rounded-2xl p-4 mb-2">
-              <p className="text-navy-900 text-sm font-semibold mb-2">
-                本周平台需求快照
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                {[
-                  { label: "Support Coordinator", count: WEEKLY_DEMAND.total.coordinator },
-                  { label: "Plan Manager", count: WEEKLY_DEMAND.total.planManager },
-                  { label: "治疗类", count: WEEKLY_DEMAND.total.therapy },
-                  { label: "日常护理", count: WEEKLY_DEMAND.total.care },
-                ].map((item) => (
-                  <div key={item.label} className="flex justify-between items-center bg-white rounded-xl px-3 py-2">
-                    <span className="text-xs text-gray-500">{item.label}</span>
-                    <span className="text-sm font-bold text-navy-900">{item.count}</span>
-                  </div>
-                ))}
-              </div>
+            <div className="bg-navy-50 rounded-2xl p-4 text-sm text-navy-800">
+              提交申请后，我们会在1-2个工作日内审核你的信息。审核通过后，你的机构将正式展示在成员目录中。
             </div>
 
             <div>
@@ -351,9 +331,6 @@ function ProvidersContent() {
   const [showRegister, setShowRegister] = useState(
     searchParams.get("register") === "true"
   );
-  const [showLeadForm, setShowLeadForm] = useState(
-    searchParams.get("leads") === "true"
-  );
 
   const filteredProviders = PROVIDERS.filter((p) => {
     const matchSearch =
@@ -394,74 +371,23 @@ function ProvidersContent() {
           </div>
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
             <div>
-              <h1 className="text-3xl font-bold mb-2">找 Provider</h1>
+              <h1 className="text-3xl font-bold mb-2">NDIS 行业成员目录</h1>
               <p className="text-blue-200">
-                经核实的华人NDIS服务提供商，按语言、地区、服务类型筛选
+                经审核认证的NDIS从业者与机构，按服务类型、地区、语言筛选
               </p>
             </div>
             <button
               onClick={() => setShowRegister(true)}
               className="flex items-center gap-2 bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold px-5 py-2.5 rounded-xl transition-colors"
             >
-              <Bell size={15} />
-              Provider 免费入驻
+              <UserPlus size={15} />
+              申请加入
             </button>
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Demand Radar Bar */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-5 mb-6">
-          <div className="flex items-center gap-2 mb-4">
-            <BarChart3 size={16} className="text-navy-900" />
-            <span className="font-semibold text-navy-900 text-sm">
-              本周需求快照
-            </span>
-            <div className="ml-auto flex items-center gap-1.5">
-              <div className="pulse-dot" />
-              <span className="text-green-600 text-xs">实时更新</span>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            {[
-              {
-                label: "Support Coordinator",
-                count: WEEKLY_DEMAND.total.coordinator,
-                icon: Users,
-              },
-              {
-                label: "Plan Manager",
-                count: WEEKLY_DEMAND.total.planManager,
-                icon: TrendingUp,
-              },
-              {
-                label: "治疗类服务",
-                count: WEEKLY_DEMAND.total.therapy,
-                icon: Brain,
-              },
-              {
-                label: "日常护理",
-                count: WEEKLY_DEMAND.total.care,
-                icon: CheckCircle,
-              },
-            ].map((item) => (
-              <div
-                key={item.label}
-                className="flex items-center gap-3 bg-gray-50 rounded-xl px-4 py-3"
-              >
-                <item.icon size={16} className="text-navy-600" />
-                <div>
-                  <div className="text-lg font-bold text-navy-900">
-                    {item.count}
-                  </div>
-                  <div className="text-xs text-gray-500">{item.label}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
         {/* Search & Filters */}
         <div className="bg-white rounded-2xl border border-gray-100 p-4 mb-6">
           <div className="flex flex-col sm:flex-row gap-3">
@@ -522,24 +448,6 @@ function ProvidersContent() {
           </div>
         </div>
 
-        {/* Participant Lead Form */}
-        {showLeadForm && (
-          <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 mb-6">
-            <h3 className="font-bold text-emerald-900 mb-2">
-              提交需求，等待Provider联系你
-            </h3>
-            <p className="text-emerald-700 text-sm mb-4">
-              填写你的NDIS服务需求，我们会通知匹配的华人Provider直接联系你。
-            </p>
-            <Link
-              href="/ai-advisor?q=帮我找一个合适的Support Coordinator"
-              className="inline-flex items-center gap-2 bg-emerald-700 text-white font-semibold px-5 py-2.5 rounded-xl text-sm hover:bg-emerald-800 transition-colors"
-            >
-              先问AI顾问 <ArrowRight size={14} />
-            </Link>
-          </div>
-        )}
-
         {/* Results */}
         <div className="flex items-center justify-between mb-4">
           <p className="text-sm text-gray-500">
@@ -567,39 +475,65 @@ function ProvidersContent() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-16 bg-white rounded-2xl border border-gray-100">
-            <div className="text-4xl mb-3">🔍</div>
-            <h3 className="text-lg font-bold text-navy-900 mb-2">
-              暂无匹配结果
-            </h3>
-            <p className="text-gray-500 mb-6 text-sm">
-              可以尝试调整筛选条件，或联系我们推荐合适的Provider
-            </p>
-            <Link
-              href="/ai-advisor"
-              className="inline-flex items-center gap-2 bg-navy-900 text-white font-semibold px-5 py-2.5 rounded-xl text-sm hover:bg-navy-800 transition-colors"
-            >
-              问AI顾问推荐 <ArrowRight size={14} />
-            </Link>
+          <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+            {/* Empty state hero */}
+            <div className="text-center py-14 px-6">
+              <div className="w-16 h-16 rounded-2xl bg-navy-900 flex items-center justify-center mx-auto mb-5">
+                <UserPlus size={28} className="text-gold-400" />
+              </div>
+              <h3 className="text-xl font-bold text-navy-900 mb-2">
+                成员目录建立中
+              </h3>
+              <p className="text-gray-500 text-sm max-w-md mx-auto mb-8">
+                我们正在对NDIS从业者进行资质审核，审核通过后将在此展示。
+                现在申请，成为首批认证成员。
+              </p>
+              <button
+                onClick={() => setShowRegister(true)}
+                className="inline-flex items-center gap-2 bg-navy-900 hover:bg-navy-800 text-white font-bold px-6 py-3 rounded-xl transition-colors text-sm"
+              >
+                <UserPlus size={15} />
+                申请加入成员目录
+              </button>
+            </div>
+
+            {/* Benefits strip */}
+            <div className="border-t border-gray-100 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-100">
+              {[
+                { icon: CheckCircle, title: "认证展示", desc: "通过审核后在目录中优先展示" },
+                { icon: Brain, title: "AI智能推荐", desc: "参与者通过AI顾问询问时被推荐" },
+                { icon: ArrowRight, title: "圈内转介绍", desc: "加入从业者社群，获得同行转介绍" },
+              ].map((item) => (
+                <div key={item.title} className="flex items-start gap-3 px-6 py-5">
+                  <item.icon size={16} className="text-gold-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <div className="text-sm font-semibold text-navy-900">{item.title}</div>
+                    <div className="text-xs text-gray-500 mt-0.5">{item.desc}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
-        {/* CTA for more providers */}
-        <div className="mt-10 bg-navy-900 rounded-2xl p-6 text-center">
-          <h3 className="text-white font-bold text-lg mb-2">
-            你是华人 NDIS Provider？
-          </h3>
-          <p className="text-blue-300 text-sm mb-4">
-            免费入驻，每周接收与你匹配的客户线索通知
-          </p>
-          <button
-            onClick={() => setShowRegister(true)}
-            className="inline-flex items-center gap-2 bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold px-6 py-3 rounded-xl transition-colors text-sm"
-          >
-            <Bell size={15} />
-            免费入驻申请
-          </button>
-        </div>
+        {/* CTA */}
+        {filteredProviders.length > 0 && (
+          <div className="mt-10 bg-navy-900 rounded-2xl p-6 text-center">
+            <h3 className="text-white font-bold text-lg mb-2">
+              你也在NDIS行业？
+            </h3>
+            <p className="text-blue-300 text-sm mb-4">
+              提交申请，审核通过后加入成员目录，让同行和客户找到你
+            </p>
+            <button
+              onClick={() => setShowRegister(true)}
+              className="inline-flex items-center gap-2 bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold px-6 py-3 rounded-xl transition-colors text-sm"
+            >
+              <UserPlus size={15} />
+              申请加入
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
