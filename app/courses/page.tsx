@@ -431,7 +431,7 @@ export default function CoursesPage() {
                   电话咨询（工作日）
                 </a>
                 <a
-                  href="https://auscircle.com"
+                  href="https://www.australiabusinessalliance.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 text-blue-300 hover:text-white transition-colors text-sm"

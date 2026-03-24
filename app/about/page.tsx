@@ -121,7 +121,7 @@ export default function AboutPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a
-              href="https://auscircle.com"
+              href="https://www.australiabusinessalliance.com"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold px-6 py-3 rounded-xl text-sm transition-colors"
@@ -129,12 +129,12 @@ export default function AboutPage() {
               访问澳洲商业联盟 <ExternalLink size={14} />
             </a>
             <a
-              href="https://aussie-property.vercel.app"
+              href="https://auspropertycircle.com"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 border-2 border-white/30 hover:border-white text-white font-bold px-6 py-3 rounded-xl text-sm transition-colors"
             >
-              澳洲房产AI <ExternalLink size={14} />
+              澳洲房产圈 <ExternalLink size={14} />
             </a>
           </div>
         </div>

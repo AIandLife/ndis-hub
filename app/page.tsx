@@ -580,7 +580,7 @@ export default function HomePage() {
               {
                 name: "澳洲商业联盟",
                 desc: "华人商业圈子总站",
-                href: "https://auscircle.com",
+                href: "https://www.australiabusinessalliance.com",
                 active: false,
               },
               {
@@ -590,9 +590,15 @@ export default function HomePage() {
                 active: true,
               },
               {
-                name: "澳洲房产AI",
+                name: "澳洲房产圈",
                 desc: "房产投资智能导航",
-                href: "https://aussie-property.vercel.app",
+                href: "https://auspropertycircle.com",
+                active: false,
+              },
+              {
+                name: "澳洲建房圈",
+                desc: "建房项目专业平台",
+                href: "https://ausbuildcircle.com",
                 active: false,
               },
             ].map((item, i) => (

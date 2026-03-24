@@ -333,7 +333,7 @@ function ResourcesContent() {
                 ))}
               </div>
               <Link
-                href="https://auscircle.com"
+                href="https://www.australiabusinessalliance.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-4 flex items-center gap-1 text-xs text-gray-400 hover:text-navy-900 transition-colors"

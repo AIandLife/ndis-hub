@@ -49,7 +49,7 @@ export default function Navigation() {
           {/* Right actions */}
           <div className="hidden md:flex items-center gap-3">
             <a
-              href="https://auscircle.com"
+              href="https://www.australiabusinessalliance.com"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1 text-sm text-gray-500 hover:text-navy-900 transition-colors"

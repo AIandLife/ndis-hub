@@ -76,7 +76,7 @@ export default function Footer() {
             <ul className="space-y-2">
               <li>
                 <a
-                  href="https://auscircle.com"
+                  href="https://www.australiabusinessalliance.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm hover:text-white transition-colors flex items-center gap-1"
@@ -86,12 +86,22 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="https://aussie-property.vercel.app"
+                  href="https://auspropertycircle.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm hover:text-white transition-colors flex items-center gap-1"
                 >
-                  澳洲房产AI <ExternalLink size={11} />
+                  澳洲房产圈 <ExternalLink size={11} />
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://ausbuildcircle.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm hover:text-white transition-colors flex items-center gap-1"
+                >
+                  澳洲建房圈 <ExternalLink size={11} />
                 </a>
               </li>
               <li>
