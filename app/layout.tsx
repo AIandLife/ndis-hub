@@ -4,6 +4,10 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
+  icons: {
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+  },
   title: "澳洲NDIS圈 | 华人NDIS专业导航平台",
   description:
     "澳洲华人NDIS与养老行业专业平台。AI智能问答、精准Provider匹配、行业知识库。用中文，找到你的NDIS方向。",
