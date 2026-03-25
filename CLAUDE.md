@@ -33,8 +33,6 @@
 | `RESEND_API_KEY` | 表单提交邮件通知 | Vercel Production + `.env.local` |
 | `NOTIFY_EMAIL` | 通知收件邮箱（默认 hello@ndishub.com.au） | Vercel Production + `.env.local` |
 
-本地开发：复制 `.env.local.example` 为 `.env.local`，填入 key。
-
 ### Resend 一次性配置（表单通知邮件）
 1. 注册 https://resend.com（免费，100封/天）
 2. Dashboard → API Keys → 创建 key
@@ -51,7 +49,7 @@
 | `/` | 首页（从业者优先定位） | ✅ |
 | `/ai-advisor` | AI 中文问答（从业者/家属切换） | ✅ |
 | `/journey` | NDIS 全流程图（6步交互） | ✅ |
-| `/providers` | Provider 目录 + 需求雷达 + 入驻表单 | ✅ |
+| `/providers` | 行业成员目录 + 申请入驻表单 | ✅ |
 | `/providers/[id]` | Provider 详情页 | ✅ |
 | `/courses` | 生意辅导课程（3门，含报名表单） | ✅ |
 | `/resources` | 知识库 + 活动日历 | ✅ |
@@ -63,95 +61,66 @@
 
 ---
 
-## 核心定位原则（每次写内容前必须确认）
+## ⚠️ 核心定位原则（每次开发前必须确认）
 
-### 网站核心受众（主）
-**NDIS 行业从业者**：Provider、Support Coordinator、Plan Manager、入行创业者、养老机构
+### 商业模式（已定型，2026-03-25）
 
-### 辅助受众（次）
-**参与者/家属**：有需要的 NDIS 参与者及其家庭——他们是从业者的客户，内容放在 `/families`，不是主线
+**本质：NDIS行业B2B社群 + 知识平台**
 
-### 变现逻辑
-1. 从业者有预算 → 他们才是付费用户
-2. 平台为从业者提供：客户线索、课程、圈子、合规知识
-3. `/families` 页面是给从业者展示的"你的客户可以用这个" — 增加从业者对平台的信任感
+- **主要变现**：课程销售 + 会员费（向从业者收）
+- **次要变现**：从业者之间的生意撮合（B2B转介绍）
+- **绝对不做**：参与者找Provider的撮合/匹配/交易
 
----
+**受众优先级**：
+1. **主**：NDIS从业者（Provider、SC、PM、创业者、SDA投资人、养老机构）
+2. **次**：参与者/家属（内容参考，不做撮合，放在 /families）
 
-## 语言与内容策略（极其重要）
+### 合规红线（极重要，2026-03-25确认）
 
-### 中文版（当前）
-- **受众**：生活在澳洲的华人社区
-- **可以说**："专为华人从业者打造"、"我们是华人社区"、"中文服务"
-- **语气**：亲切、社群感、华人圈子氛围
+**2026年7月起**，通过平台让参与者**直接找到并雇佣支持工**的平台，需向NDIS Commission强制注册。
 
-### 英文版（待做，第二阶段）
-- **受众**：所有澳洲居民，不限族裔
-- **禁止说**："专为华人"、"华人社区"、"Chinese community"
-- **改说**："for CALD communities in Australia"、"multicultural"
-- **语气**：专业、包容、中性
+**当前网站安全**：Provider目录 + 信息平台，不触发此规定。
 
-### 越南文版（待做，第二阶段）
-- **受众**：澳洲越南裔社区
-- **禁止说**：任何中文/华人相关表达
-- **内容重点**：越南裔 NDIS 参与者和从业者的具体痛点（与华人痛点不同）
-- **语气**：体现越南社区文化，不是中文内容的直接翻译
+**必须避免的功能**：
+- 参与者在平台上直接对接个人支持工
+- 平台内置预约/排班/支付
+- "实时客户线索"推送给Provider（已删除）
 
-### 阿拉伯文版（待做，第二阶段）
-- **技术注意**：RTL（从右到左）排版，需要单独处理
-- **受众**：澳洲阿拉伯裔、穆斯林社区
-- **内容重点**：难民背景、家庭式照护文化、宗教节日对服务安排的影响
-- **禁止说**：任何华人相关表达
+**安全的功能**：
+- Provider目录（机构列表，联系方式，用户自行联系）
+- 行业资讯、AI问答、课程
+- 从业者之间的B2B转介绍
 
-### 印地文版（待做，第二阶段）
-- **受众**：澳洲印度裔社区（增长最快的移民群体）
-- **内容重点**：印度家庭对残障的文化态度、签证与 NDIS 资格的关系
+### 关于"华人"定位
 
-### 核心原则
-> **每种语言版本 = 重新为该文化写内容，不是翻译**
-> 内容框架（导航、功能）可以共用，但文案、案例、语气必须针对该语言的受众重新写
+- **中文版**：可以说"华人从业者"、"中文服务"，但不要求入驻者必须是华人
+- **Provider目录**：已改为"行业成员目录"，不限华人，任何NDIS从业者可申请
+- **其他语言版本**（待做）：英文版禁止说"华人"，改说"CALD communities"
 
 ---
 
-## 多语言实施计划
+## Provider 数据（重要）
 
-### 当前阶段：中文版打磨期
-**在开始任何多语言工作之前，中文版必须完成以下所有项目：**
+**文件**：`/lib/providers-data.ts`
+- **当前状态**：PROVIDERS 数组为空，等待真实成员审批后手动添加
+- **已删除**：6个假华人mock数据、WEEKLY_DEMAND需求雷达（硬编码假数据）
+- **入驻流程**：用户填写申请表单 → `/api/notify` 发邮件给Terry → Terry审批 → 手动加入数组
+- **下一步**：接Supabase实现真正的数据库驱动审批系统（下一阶段）
 
-#### 功能层面（待完成）
-- [x] 表单实际发送通知（/api/notify 已实现，接 Resend；Terry 需在 Vercel 添加 RESEND_API_KEY）
-- [ ] Provider 需求雷达数字改为可管理的真实数据（或至少可配置）
-- [ ] 移动端全面测试（375px 不变形）
-- [ ] 真实 Provider 数据替换 mock 数据（需 Terry 提供）
-- [ ] 课程实际购买/支付流程（或明确只做询价不做在线支付）
-
-#### 内容层面（待完成）
-- [ ] 联系电话替换为真实电话（Footer、Courses 页面）
-- [ ] 活动日期更新为真实活动
-- [ ] 课程价格/内容与合作方对齐
-
-#### SEO/增长（待完成）
-- [ ] Google Analytics 或 Vercel Analytics 接入
-- [ ] 自定义域名（目前是 ndis-hub-ten.vercel.app）
-
-### 第二阶段：多语言（中文版定型后）
-**技术方案**：`next-intl` 框架
-**顺序**：英文 → 越南文 → 阿拉伯文 → 印地文
-**每种语言**：需要针对该受众重写文案，不是机器翻译
+> 添加真实Provider时：在 PROVIDERS 数组中加入对象，字段参考 Provider interface
 
 ---
 
-## 生态系统关系
+## 生态系统关系（已更新，2026-03-25）
 
 ```
-澳洲创业圈（auscircle.com）← 总平台
+澳洲商业联盟（www.australiabusinessalliance.com）← 总平台
     ├── 澳洲NDIS圈（ndis-hub-ten.vercel.app）← 当前项目
-    └── 澳洲房产AI（aussie-property.vercel.app）
+    ├── 澳洲房产圈（auspropertycircle.com）
+    └── 澳洲建房圈（ausbuildcircle.com）
 ```
 
-- NDIS圈 → 创业圈：NDIS Provider 想找更大商业资源时
-- 创业圈 → NDIS圈：创业者想进入 NDIS 行业时
-- Footer 有互链，首页有生态展示区
+> 注意：原"澳洲创业圈"已改名为"澳洲商业联盟"，原"澳洲房产AI"已改名为"澳洲房产圈"
 
 ---
 
@@ -159,22 +128,59 @@
 
 **文件**：`/lib/ndis-knowledge.ts`
 - `getNDISSystemPrompt()`：AI 系统提示，包含完整知识库
-- `PRACTITIONER_QUESTIONS`：从业者示例问题（AI顾问页面主问题）
+- `PRACTITIONER_QUESTIONS`：从业者示例问题（10条，含SDA和养老）
 - `FAMILY_QUESTIONS`：家属示例问题（切换后显示）
+
+**知识库已覆盖**：
+- NDIS基础、申请流程、计划管理
+- Support Coordinator、Plan Manager
+- 2026年改革政策
+- SDA住房（投资/入行指南）←新增
+- 养老服务与NDIS衔接 ←新增
+- 早期干预、心理健康、辅助技术
+- 华人NDIS常见问题
+- NDIS价格指南
 
 **更新原则**：
 - NDIS 政策每年更新，每次大改革后需要更新知识库
-- 2026 年新规划框架上线后需要重大更新
 - 所有内容来源必须是 ndis.gov.au 或 ndiscommission.gov.au
 
 ---
 
-## Provider 数据
+## 表单与通知系统
 
-**文件**：`/lib/providers-data.ts`
-- 当前：6 个 mock Provider（用于演示）
-- 待替换：需要 Terry 提供真实华人 Provider 联系方式
-- 需求雷达数字（`WEEKLY_DEMAND`）：当前为硬编码，待改为可配置
+**文件**：`/app/api/notify/route.ts`
+
+已实现的通知类型：
+- `provider_register`：Provider申请加入成员目录
+- `course_inquiry`：课程报名咨询
+
+表单提交 → POST `/api/notify` → Resend API → 邮件到 `NOTIFY_EMAIL`
+
+---
+
+## 当前待完成清单
+
+### 功能层面
+- [x] 表单发送邮件通知（/api/notify + Resend，Terry需配置RESEND_API_KEY）
+- [ ] **Supabase接入**：Provider申请 → 数据库 → Terry后台审批 → 自动上线（下阶段重点）
+- [ ] 移动端全面测试（375px不变形）
+- [ ] 课程询价流程确认（只做询价，不做在线支付）
+
+### 内容层面
+- [ ] 联系电话替换为真实电话（Footer、Courses页面）
+- [ ] 活动日期更新为真实活动
+- [ ] 课程价格/内容与合作方对齐
+
+### SEO/增长
+- [ ] Google Analytics 或 Vercel Analytics 接入
+- [ ] 自定义域名（目前是 ndis-hub-ten.vercel.app）
+
+### 下一阶段（会员系统）
+- [ ] Supabase + 用户注册/登录
+- [ ] Provider申请 → 审批流程（Terry后台）
+- [ ] 会员收费（Stripe）
+- [ ] 会员专属内容/功能
 
 ---
 
@@ -204,8 +210,9 @@ vercel --prod
 4. **图片**：目前无图片，避免使用外部图片域名（next.config.mjs 需要配置）
 5. **Provider 详情页**：`/providers/[id]` 是 dynamic route，Next.js 14 用 `params.id`（不是 `use(params)`）
 6. **Tailwind 颜色**：navy 和 gold 是自定义色，在 `tailwind.config.ts` 中定义
+7. **PROVIDERS 数组为空**：正常，等待真实审批成员，不是bug
 
 ---
 
-*最后更新：2026-03-23*
+*最后更新：2026-03-25*
 *维护者：Terry（通过 Claude Code）*
