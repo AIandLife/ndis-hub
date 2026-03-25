@@ -176,7 +176,7 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
               提交成功！
             </h3>
             <p className="text-gray-500 mb-6">
-              我们会在1-2个工作日内与你联系，完善你的Provider页面并开始推送客户线索。
+              我们会在1-2个工作日内审核你的信息，通过后你将正式成为圈内认证成员。
             </p>
             <button
               onClick={onClose}
@@ -305,7 +305,7 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
             </div>
 
             <div className="bg-gray-50 rounded-xl p-3 text-xs text-gray-500">
-              ✓ 免费入驻  ✓ 接收匹配客户线索通知  ✓ 中文团队1对1支持
+              ✓ 审核制入驻  ✓ 圈内认证展示  ✓ 中文团队1对1支持
             </div>
 
             <button

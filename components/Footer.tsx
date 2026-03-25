@@ -53,7 +53,7 @@ export default function Footer() {
             <ul className="space-y-2">
               {[
                 { href: "/providers?register=true", label: "Provider 入驻" },
-                { href: "/providers?leads=true", label: "客户线索订阅" },
+                { href: "/providers", label: "圈内成员目录" },
                 { href: "/courses", label: "生意辅导课程" },
                 { href: "/families", label: "参与者/家属指南" },
                 { href: "mailto:hello@ndishub.com.au", label: "商务合作" },

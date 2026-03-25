@@ -98,7 +98,7 @@ export default function HomePage() {
             <AnimatedHeadline />
 
             <p className="text-lg text-blue-100 mb-8 max-w-2xl leading-relaxed">
-              行业知识、合规工具、客户线索、圈子资源——用中文，帮华人NDIS从业者做对、做好、做大。
+              行业知识、合规工具、圈内人脉、上下游合作——用中文，帮NDIS从业者做对、做好、做大。
             </p>
 
             {/* Primary CTAs for practitioners */}
@@ -108,7 +108,7 @@ export default function HomePage() {
                 className="inline-flex items-center justify-center gap-2 bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold px-6 py-3.5 rounded-xl transition-colors"
               >
                 <Bell size={16} />
-                免费入驻，接收客户线索
+                申请加入，加入行业圈子
               </Link>
               <Link
                 href="/courses"
@@ -308,10 +308,10 @@ export default function HomePage() {
                   className="inline-flex items-center gap-2 bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold px-6 py-3 rounded-xl transition-colors"
                 >
                   <Bell size={16} />
-                  免费注册，接收客户线索
+                  申请加入成员目录
                 </Link>
                 <div className="text-blue-300 text-sm">
-                  ✓ 免费入驻  ✓ 按匹配付费  ✓ 中文团队支持
+                  ✓ 审核制入驻  ✓ 圈内认证展示  ✓ 上下游合作转介绍
                 </div>
               </div>
             </div>
@@ -686,18 +686,18 @@ export default function HomePage() {
       <section className="py-16 bg-gray-50">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-navy-900 mb-4">
-            你是 NDIS Provider 吗？
+            你在 NDIS 行业做生意？
           </h2>
           <p className="text-gray-500 mb-8 leading-relaxed">
-            每周有 249+ 华人家庭在平台上寻找服务——
-            免费入驻，接收与你匹配的客户线索。
+            加入澳洲NDIS圈，与圈内从业者建立人脉，
+            拓展上下游合作，共同把生意做大。
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/providers?register=true"
               className="inline-flex items-center justify-center gap-2 bg-navy-900 text-white font-bold px-8 py-3.5 rounded-xl hover:bg-navy-800 transition-colors"
             >
-              免费注册入驻 <ArrowRight size={16} />
+              申请加入圈子 <ArrowRight size={16} />
             </Link>
             <Link
               href="/ai-advisor"
