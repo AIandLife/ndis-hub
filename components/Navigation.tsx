@@ -7,7 +7,7 @@ import { Menu, X, ExternalLink } from "lucide-react";
 const navLinks = [
   { href: "/ai-advisor", label: "AI 顾问" },
   { href: "/journey", label: "NDIS 全流程" },
-  { href: "/providers", label: "找 Provider" },
+  { href: "/providers", label: "圈内成员" },
   { href: "/resources", label: "知识库" },
   { href: "/courses", label: "课程" },
   { href: "/about", label: "关于" },
@@ -61,7 +61,7 @@ export default function Navigation() {
               href="/providers?register=true"
               className="px-4 py-2 bg-navy-900 text-white text-sm font-semibold rounded-lg hover:bg-navy-800 transition-colors"
             >
-              Provider 入驻
+              申请入驻
             </Link>
           </div>
 
@@ -94,7 +94,7 @@ export default function Navigation() {
               onClick={() => setOpen(false)}
               className="block px-4 py-3 bg-navy-900 text-white text-sm font-semibold rounded-lg text-center"
             >
-              Provider 免费入驻
+              申请加入
             </Link>
           </div>
         </div>

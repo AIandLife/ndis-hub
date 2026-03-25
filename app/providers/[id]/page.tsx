@@ -79,7 +79,7 @@ export default function ProviderDetailPage({
               href="/providers"
               className="hover:text-navy-900 transition-colors"
             >
-              找 Provider
+              圈内成员
             </Link>
             <ChevronRight size={13} />
             <span className="text-navy-900 font-medium">

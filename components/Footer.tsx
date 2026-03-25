@@ -32,7 +32,7 @@ export default function Footer() {
               {[
                 { href: "/ai-advisor", label: "AI 智能顾问" },
                 { href: "/journey", label: "NDIS 全流程图" },
-                { href: "/providers", label: "找 Provider" },
+                { href: "/providers", label: "圈内成员" },
                 { href: "/resources", label: "知识库" },
               ].map((link) => (
                 <li key={link.href}>

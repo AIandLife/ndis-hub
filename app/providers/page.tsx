@@ -367,7 +367,7 @@ function ProvidersContent() {
               首页
             </Link>
             <ChevronRight size={13} />
-            <span>找 Provider</span>
+            <span>圈内成员</span>
           </div>
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
             <div>
