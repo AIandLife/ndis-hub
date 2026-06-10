@@ -28,19 +28,19 @@ export default function AboutPage() {
         <div className="bg-white rounded-3xl p-8 mb-8 border border-gray-100">
           <h2 className="text-2xl font-bold text-navy-900 mb-4">我们的使命</h2>
           <p className="text-gray-600 leading-relaxed mb-4">
-            澳大利亚的NDIS体系是世界上最先进的残障支持体系之一，但对华人社区来说，
-            语言障碍、文化差异和信息碎片化让这个体系变得难以触达。
+            澳大利亚的NDIS是一个超过 $420 亿的行业，但对华人从业者来说，
+            语言障碍、合规复杂和资源分散，让做这门生意远比想象中难。
           </p>
           <p className="text-gray-600 leading-relaxed mb-4">
-            每次我们的线下活动，都有数百位华人家庭带着问题而来——
-            "我的孩子被诊断了，第一步怎么做？"
-            "Provider没有提供服务，怎么投诉？"
-            "我想进入这个行业，需要什么资质？"
+            每次我们的线下活动，都有大量华人从业者带着生意问题而来——
+            "我想进入这个行业，需要什么资质和成本？"
+            "怎么合规地开拓第一批客户？"
+            "想给 NDIS 行业供货/做服务，怎么对接上这圈人？"
           </p>
           <p className="text-gray-600 leading-relaxed">
             澳洲NDIS圈的使命是：
             <strong className="text-navy-900">
-              让每一位华人家庭和从业者，都能用中文找到NDIS的方向。
+              让每一位华人 NDIS 从业者，都能用中文找到入行、合规、经营和上下游对接的方向。
             </strong>
           </p>
         </div>
@@ -58,7 +58,7 @@ export default function AboutPage() {
             {
               icon: Users,
               title: "真实社群",
-              desc: "线上平台连接线下社群。我们的活动每次吸引数百位华人NDIS从业者和家属参与。",
+              desc: "线上平台连接线下社群。我们的活动每次吸引数百位华人NDIS从业者参与。",
               color: "text-purple-600",
               bg: "bg-purple-50",
             },

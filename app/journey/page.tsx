@@ -43,7 +43,7 @@ const JOURNEY_STEPS: Step[] = [
     bg: "bg-blue-50",
     border: "border-blue-200",
     description:
-      "NDIS申请的第一步是确认你或你的孩子是否符合NDIS资格。这一步需要准备医疗证明材料并提交申请。",
+      "客户旅程的第一步：确认参与者是否符合 NDIS 资格，准备医疗证明材料并提交申请。从业者懂这步，才能在源头专业地引导和承接客户。",
     keyPoints: [
       "年龄：申请时未满65岁",
       "居住：澳洲公民、PR或保护性签证",
@@ -72,7 +72,7 @@ const JOURNEY_STEPS: Step[] = [
     bg: "bg-purple-50",
     border: "border-purple-200",
     description:
-      "资格被批准后，NDIS规划师（Planner）或本地区域协调员（LAC）会联系你，安排计划制定会议，讨论你的需求和目标。",
+      "资格批准后，NDIS规划师（Planner）或本地区域协调员（LAC）会安排计划制定会议，讨论参与者的需求和目标。SC 常在这一步介入协助，是关键的服务切入点。",
     keyPoints: [
       "提前列出你的生活目标（短期/长期）",
       "Core支持：日常活动、社区参与",
@@ -101,7 +101,7 @@ const JOURNEY_STEPS: Step[] = [
     bg: "bg-green-50",
     border: "border-green-200",
     description:
-      "NDIS计划批准后，需要决定如何管理你的资金。三种方式各有优缺点，选择最适合你情况的。",
+      "计划批准后，参与者要决定如何管理资金（NDIA管理/Plan管理/自管）。Plan Manager 在这一步承接业务——从业者要懂三种方式的差异和各自的获客切入。",
     keyPoints: [
       "NDIA管理：NDIS直接付款，只能用注册Provider",
       "计划管理（Plan-managed）：Plan Manager代管，更灵活",
@@ -130,7 +130,7 @@ const JOURNEY_STEPS: Step[] = [
     bg: "bg-orange-50",
     border: "border-orange-200",
     description:
-      "Support Coordinator（支持协调员）帮助你找到合适的Provider，协调不同服务，解决问题。他们是你在NDIS系统中的向导。",
+      "Support Coordinator（支持协调员）帮参与者找到合适的Provider、协调服务、解决问题。SC 是连接参与者与各类 Provider 的枢纽角色，也是 B2B 转介最活跃的环节。",
     keyPoints: [
       "SC帮助你理解计划和资金",
       "协调不同Provider和服务",
@@ -159,7 +159,7 @@ const JOURNEY_STEPS: Step[] = [
     bg: "bg-red-50",
     border: "border-red-200",
     description:
-      "找到合适的Provider后，签署服务协议，开始享受支持服务。这一阶段要注意监控服务质量和预算使用。",
+      "参与者与Provider签署服务协议、开始接受服务。Provider 在这一步要做好服务协议、合规收费和质量记录——这是口碑和续约的关键。",
     keyPoints: [
       "与Provider签署正式服务协议",
       "确认收费标准不超过NDIS价格指南",
@@ -188,7 +188,7 @@ const JOURNEY_STEPS: Step[] = [
     bg: "bg-teal-50",
     border: "border-teal-200",
     description:
-      "NDIS计划通常每1-3年审查一次。这是申请更多支持或调整计划的机会。充分准备，争取最好的结果。",
+      "计划通常每1-3年审查一次，是参与者调整支持的节点。从业者（尤其 SC）帮客户准备审查材料、应对 2026 新评估方式，是体现专业价值、稳住续约的机会。",
     keyPoints: [
       "年度审查（Annual Review）是常规流程",
       "可主动申请Non-Scheduled Review（情况变化时）",
@@ -227,9 +227,10 @@ export default function JourneyPage() {
             <ChevronRight size={13} />
             <span>NDIS 全流程图</span>
           </div>
-          <h1 className="text-3xl font-bold mb-3">NDIS 全流程图</h1>
+          <h1 className="text-3xl font-bold mb-3">NDIS 全流程图 · 从业者必懂的客户旅程</h1>
           <p className="text-blue-200 max-w-2xl">
-            从申请资格到计划审查，完整的中文导航。点击每个环节查看详细说明、华人实战建议和常见问题解决方案。
+            参与者从申请到审查会经历的完整流程——做这行的人必须吃透，才能在每一步专业地承接客户。
+            点击每个环节，看从业者视角的要点、实战建议和常见问题。
           </p>
         </div>
       </div>
@@ -245,8 +246,8 @@ export default function JourneyPage() {
             <p className="text-amber-800 text-sm">
               澳洲政府正在推进NDIS重大改革：2026年起支持需求评估改为约
               <strong>3小时面谈制</strong>
-              ，新规划框架也将同步推出。现有参与者应与你的Support
-              Coordinator提前沟通应对策略。
+              ，新规划框架也将同步推出。作为 Provider/SC，要提前调整服务流程、
+              帮团队和客户应对，避免计划缩水冲击收入。
               <a
                 href="https://ndis.gov.au"
                 target="_blank"

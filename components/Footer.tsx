@@ -18,7 +18,7 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-sm text-gray-500 leading-relaxed">
-              澳洲华人NDIS行业专业导航平台。用中文，找到你的NDIS方向。
+              华人 NDIS 从业者的 B2B 资源与人脉平台。找同行、找供应商、找合作。
             </p>
             <p className="text-xs text-gray-600 mt-3">
               本平台内容仅供参考，不构成专业法律或医疗建议。
@@ -52,11 +52,10 @@ export default function Footer() {
             <h3 className="text-white font-semibold text-sm mb-4">商业合作</h3>
             <ul className="space-y-2">
               {[
-                { href: "/providers?register=true", label: "Provider 入驻" },
-                { href: "/providers", label: "圈内成员目录" },
+                { href: "/providers?register=true", label: "入驻 / 认领" },
+                { href: "/providers", label: "商家资源库" },
                 { href: "/courses", label: "生意辅导课程" },
-                { href: "/families", label: "参与者/家属指南" },
-                { href: "mailto:hello@ndishub.com.au", label: "商务合作" },
+                { href: "mailto:recommendforterry@gmail.com", label: "联系：Recommend for Terry" },
               ].map((link) => (
                 <li key={link.href}>
                   <Link
@@ -120,7 +119,7 @@ export default function Footer() {
 
         <div className="border-t border-gray-800 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-gray-600">
-            © 2025 澳洲NDIS圈 NDIS Hub AU. All rights reserved.
+            © 2026 澳洲NDIS圈 NDIS Hub AU. All rights reserved.
           </p>
           <p className="text-xs text-gray-600 flex items-center gap-1">
             Built with <Heart size={11} className="text-gold-500" /> by 澳洲商业联盟生态

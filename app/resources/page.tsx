@@ -29,35 +29,35 @@ interface Article {
 const ARTICLES: Article[] = [
   {
     id: "1",
-    title: "2026年NDIS改革完整解读：3小时面谈评估你需要知道的一切",
+    title: "2026年NDIS改革完整解读：3小时面谈评估，Provider/SC该怎么应对",
     excerpt:
-      "澳洲政府宣布从2026年起将NDIS支持需求评估方式改为3小时面谈制。这对现有参与者意味着什么？如何提前准备？本文给你详细中文解读。",
+      "评估改为3小时面谈制，对 Provider、Support Coordinator 的经营意味着什么？如何调整服务流程、帮团队和客户提前准备、避免计划缩水带来的收入波动。从业者视角的中文解读。",
     category: "改革速递",
     date: "2025-03-20",
     readTime: "8分钟",
-    tags: ["2026改革", "评估", "计划管理"],
+    tags: ["2026改革", "评估", "经营应对"],
     featured: true,
   },
   {
     id: "2",
-    title: "华人家长必读：孩子被诊断自闭症后的NDIS申请完整步骤",
+    title: "Provider/SC 实操：如何专业协助自闭症家庭完成 NDIS 申请",
     excerpt:
-      "很多华人家长面对孩子的ASD诊断不知所措。从找GP到获得NDIS计划，这篇文章把每一步都说清楚。包括：哪些材料最关键、怎么和规划师沟通、Early Childhood通道是什么。",
-    category: "参与者指南",
+      "ASD 家庭是很多华人 Provider/SC 的核心客户群。这篇从从业者角度拆解服务流程：哪些材料最关键、如何专业地与规划师对接、Early Childhood 通道的合规要点——把它当成你的服务能力，而不是替家庭做决定。",
+    category: "行业知识",
     date: "2025-03-15",
     readTime: "12分钟",
-    tags: ["自闭症", "申请指南", "儿童"],
+    tags: ["自闭症", "服务流程", "合规"],
     featured: true,
   },
   {
     id: "3",
-    title: "NDIS计划管理三种方式对比：哪种最适合华人家庭？",
+    title: "Plan Manager / SC 必懂：三种计划管理方式的差异与获客切入",
     excerpt:
-      "Agency管理、Plan管理还是自管？很多华人参与者对这三种方式感到困惑。本文从灵活性、复杂度、适合人群三个维度做清晰对比。",
-    category: "参与者指南",
+      "Agency管理、Plan管理、自管——作为从业者，你要清楚每种方式下你的角色和获客切入点在哪。本文从经营角度对比三者的差异、适合的客户群和你的服务机会。",
+    category: "行业知识",
     date: "2025-03-10",
     readTime: "6分钟",
-    tags: ["计划管理", "Plan Manager", "自管"],
+    tags: ["计划管理", "Plan Manager", "获客"],
   },
   {
     id: "4",
@@ -71,13 +71,13 @@ const ARTICLES: Article[] = [
   },
   {
     id: "5",
-    title: "NDIS和养老（Aged Care）如何衔接？65岁后怎么办？",
+    title: "同时做 NDIS 和养老的 Provider：65岁过渡期怎么承接客户",
     excerpt:
-      "当NDIS参与者接近65岁，需要了解如何过渡到Aged Care体系。两个体系有什么不同？My Aged Care怎么申请？本文帮你理清楚。",
+      "客户接近65岁要从 NDIS 转入 Aged Care——这是流失还是机会？本文从同时持牌 NDIS + My Aged Care 的 Provider 角度，讲清两个体系的衔接、如何平滑承接、用同一套团队做大客户生命周期价值。",
     category: "养老专区",
     date: "2025-02-28",
     readTime: "9分钟",
-    tags: ["养老", "过渡", "65岁"],
+    tags: ["养老", "客户承接", "双牌照"],
   },
   {
     id: "6",
@@ -91,7 +91,7 @@ const ARTICLES: Article[] = [
   },
 ];
 
-const CATEGORIES = ["全部", "改革速递", "参与者指南", "生意辅导", "养老专区"];
+const CATEGORIES = ["全部", "改革速递", "行业知识", "生意辅导", "养老专区"];
 
 const UPCOMING_EVENTS = [
   {

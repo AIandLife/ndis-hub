@@ -7,7 +7,6 @@ import {
   Video,
   CheckCircle,
   ArrowRight,
-  Users,
   Star,
   Clock,
   BookOpen,
@@ -87,29 +86,8 @@ const COURSES = [
   },
 ];
 
-const TESTIMONIALS = [
-  {
-    name: "张先生",
-    role: "NDIS Provider · 悉尼",
-    content:
-      "参加课程后3个月内完成了注册，现在已经有15个参与者了。课程内容很实用，特别是服务协议那块，帮我省了很多麻烦。",
-    rating: 5,
-  },
-  {
-    name: "李女士",
-    role: "Support Coordinator · 墨尔本",
-    content:
-      "之前对SC的职责边界很模糊，这个课程让我清楚了很多，工作效率提升了不少，参与者的反馈也更好了。",
-    rating: 5,
-  },
-  {
-    name: "王先生",
-    role: "初入行创业者 · 布里斯班",
-    content:
-      "用中文讲NDIS生意的课程太少了，这个填补了空白。老师有问必答，买课之后进了私人微信群，还能继续问问题。",
-    rating: 5,
-  },
-];
+// 真实学员评价待开课后接入；不放编造的评价。
+const TESTIMONIALS: { name: string; role: string; content: string; rating: number }[] = [];
 
 function InquiryForm({ courseTitle }: { courseTitle?: string }) {
   const [submitted, setSubmitted] = useState(false);
@@ -285,12 +263,9 @@ export default function CoursesPage() {
                       </h2>
                     </div>
                     <div className="text-right flex-shrink-0">
-                      <div className="text-2xl font-bold text-navy-900">
-                        {course.price}
-                      </div>
-                      <div className="text-gray-400 text-sm line-through">
-                        {course.originalPrice}
-                      </div>
+                      <span className="inline-block text-sm font-bold text-gold-700 bg-gold-100 px-3 py-1 rounded-full">
+                        即将推出
+                      </span>
                     </div>
                   </div>
 
@@ -299,14 +274,6 @@ export default function CoursesPage() {
                     <div className="flex items-center gap-1 text-xs text-gray-500">
                       <Clock size={11} />
                       {course.duration}
-                    </div>
-                    <div className="flex items-center gap-1 text-xs text-gray-500">
-                      <Users size={11} />
-                      {course.students} 人已报名
-                    </div>
-                    <div className="flex items-center gap-1 text-xs text-gray-500">
-                      <Star size={11} className="text-gold-500 fill-gold-500" />
-                      {course.rating} / 5.0
                     </div>
                   </div>
 
@@ -360,20 +327,21 @@ export default function CoursesPage() {
                       }}
                       className="flex-1 bg-navy-900 text-white font-bold py-2.5 rounded-xl hover:bg-navy-800 transition-colors text-sm"
                     >
-                      立即报名咨询
+                      感兴趣？登记，开课先通知你
                     </button>
                     <Link
-                      href={`/ai-advisor?q=${encodeURIComponent(`我想了解"${course.title}"这个课程，帮我分析是否适合我`)}`}
+                      href={`/ai-advisor?q=${encodeURIComponent(`"${course.title}"这门课大概会讲哪些内容？`)}`}
                       className="px-4 py-2.5 border-2 border-navy-900 text-navy-900 rounded-xl text-sm font-semibold hover:bg-navy-900 hover:text-white transition-colors"
                     >
-                      问AI是否适合我
+                      问AI讲什么
                     </Link>
                   </div>
                 </div>
               </div>
             ))}
 
-            {/* Testimonials */}
+            {/* Testimonials（有真实评价时才显示） */}
+            {TESTIMONIALS.length > 0 && (
             <div>
               <h2 className="text-xl font-bold text-navy-900 mb-4">
                 学员评价
@@ -406,6 +374,7 @@ export default function CoursesPage() {
                 ))}
               </div>
             </div>
+            )}
           </div>
 
           {/* Sidebar */}

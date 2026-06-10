@@ -19,29 +19,8 @@ import {
 } from "lucide-react";
 import { PROVIDERS } from "@/lib/providers-data";
 
-const REVIEWS = [
-  {
-    author: "陈妈妈",
-    rating: 5,
-    date: "2025-02",
-    content:
-      "帮我儿子申请NDIS的过程非常专业，整个流程都用中文解释清楚，作为家长感觉很放心。Support Coordinator非常有经验，遇到问题也及时处理。",
-  },
-  {
-    author: "李先生",
-    rating: 5,
-    date: "2025-01",
-    content:
-      "团队很负责，每次联系都能及时回复。特别感谢他们帮助我们找到了合适的治疗师，孩子进步很明显。",
-  },
-  {
-    author: "王女士",
-    rating: 4,
-    date: "2024-12",
-    content:
-      "整体服务不错，沟通顺畅。偶尔响应时间略长，但服务质量有保障。推荐给同样需要中文服务的家庭。",
-  },
-];
+// 真实评价待认领机构入驻后接入；不放假评价。
+const REVIEWS: { author: string; rating: number; date: string; content: string }[] = [];
 
 const SIMILAR_TIPS = [
   "预约前准备好你的NDIS计划副本",
@@ -121,28 +100,34 @@ export default function ProviderDetailPage({
                     )}
                   </div>
 
-                  {/* Rating */}
-                  <div className="flex items-center gap-2 mt-2">
-                    <div className="flex gap-0.5">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <Star
-                          key={star}
-                          size={15}
-                          className={
-                            star <= Math.round(provider.rating)
-                              ? "text-gold-500 fill-gold-500"
-                              : "text-gray-200 fill-gray-200"
-                          }
-                        />
-                      ))}
+                  {/* Rating（仅已认领且有评分时展示） */}
+                  {provider.rating ? (
+                    <div className="flex items-center gap-2 mt-2">
+                      <div className="flex gap-0.5">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star
+                            key={star}
+                            size={15}
+                            className={
+                              star <= Math.round(provider.rating ?? 0)
+                                ? "text-gold-500 fill-gold-500"
+                                : "text-gray-200 fill-gray-200"
+                            }
+                          />
+                        ))}
+                      </div>
+                      <span className="font-bold text-gray-800">
+                        {provider.rating}
+                      </span>
+                      <span className="text-gray-400 text-sm">
+                        ({provider.reviewCount ?? 0} 位用户评价)
+                      </span>
                     </div>
-                    <span className="font-bold text-gray-800">
-                      {provider.rating}
-                    </span>
-                    <span className="text-gray-400 text-sm">
-                      ({provider.reviewCount} 位用户评价)
-                    </span>
-                  </div>
+                  ) : (
+                    <div className="mt-2 text-xs text-gray-400">
+                      公开信息整理 · 待机构认领完善
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -248,7 +233,8 @@ export default function ProviderDetailPage({
               </ul>
             </div>
 
-            {/* Reviews */}
+            {/* Reviews（仅已认领且有评分时展示） */}
+            {provider.rating ? (
             <div className="bg-white rounded-2xl border border-gray-100 p-6">
               <h3 className="font-bold text-navy-900 mb-5 flex items-center justify-between">
                 <span>用户评价</span>
@@ -261,7 +247,7 @@ export default function ProviderDetailPage({
                 </div>
               </h3>
               <div className="space-y-5">
-                {REVIEWS.slice(0, provider.reviewCount > 20 ? 3 : 2).map(
+                {REVIEWS.slice(0, (provider.reviewCount ?? 0) > 20 ? 3 : 2).map(
                   (review, i) => (
                     <div
                       key={i}
@@ -303,6 +289,7 @@ export default function ProviderDetailPage({
                 )}
               </div>
             </div>
+            ) : null}
 
             {/* AI Ask CTA */}
             <div className="bg-navy-900 rounded-2xl p-5 flex items-center gap-4 flex-wrap">

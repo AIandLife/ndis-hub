@@ -44,7 +44,7 @@ export default function AnimatedHeadline() {
             {ROTATING_ROLES[index]}
           </span>
         </div>
-        <div className="text-white">的专业导航平台</div>
+        <div className="text-white">都在澳洲 NDIS 圈</div>
       </div>
     </div>
   );

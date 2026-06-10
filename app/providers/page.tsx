@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
@@ -23,11 +23,19 @@ import {
   LANGUAGES,
   type Provider,
 } from "@/lib/providers-data";
+import { fetchApprovedProviders } from "@/lib/resources";
 
-function ProviderCard({ provider }: { provider: Provider }) {
+function ProviderCard({
+  provider,
+  onClaim,
+}: {
+  provider: Provider;
+  onClaim: () => void;
+}) {
+  const isPublic = provider.listingType === "public";
   return (
     <div className="bg-white rounded-2xl border border-gray-100 p-6 card-hover">
-      <div className="flex items-start justify-between mb-4">
+      <div className="flex items-start justify-between mb-3">
         <div className="flex items-start gap-3">
           <div className="w-12 h-12 rounded-xl bg-navy-50 border border-navy-100 flex items-center justify-center flex-shrink-0">
             <span className="text-navy-900 font-bold text-lg">
@@ -38,28 +46,46 @@ function ProviderCard({ provider }: { provider: Provider }) {
             <h3 className="font-bold text-navy-900">
               {provider.chineseName || provider.name}
             </h3>
-            <p className="text-gray-400 text-xs">{provider.name}</p>
+            {provider.chineseName && (
+              <p className="text-gray-400 text-xs">{provider.name}</p>
+            )}
           </div>
         </div>
-        {provider.verified && (
-          <div className="verified-badge flex items-center gap-1 px-2 py-1 rounded-full flex-shrink-0">
-            <CheckCircle size={11} className="text-white" />
-            <span className="text-white text-xs font-medium">已核实</span>
+        {isPublic ? (
+          <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-gray-100 flex-shrink-0">
+            <span className="text-gray-500 text-xs font-medium">待认领</span>
           </div>
+        ) : (
+          provider.verified && (
+            <div className="verified-badge flex items-center gap-1 px-2 py-1 rounded-full flex-shrink-0">
+              <CheckCircle size={11} className="text-white" />
+              <span className="text-white text-xs font-medium">已认证</span>
+            </div>
+          )
         )}
       </div>
 
-      <div className="flex items-center gap-1 mb-3">
-        <Star size={13} className="text-gold-500 fill-gold-500" />
-        <span className="text-sm font-semibold text-gray-700">
-          {provider.rating}
+      <div className="flex items-center gap-1.5 mb-3 flex-wrap">
+        <span
+          className={`text-xs px-2 py-0.5 rounded-full ${
+            provider.category === "supplier"
+              ? "bg-purple-50 text-purple-700"
+              : "bg-navy-50 text-navy-700"
+          }`}
+        >
+          {provider.category === "supplier" ? "上游供应商" : "服务机构"}
         </span>
-        <span className="text-gray-400 text-xs">({provider.reviewCount} 评价)</span>
         {provider.ndisRegistered && (
-          <span className="ml-2 text-xs bg-green-50 text-green-700 px-2 py-0.5 rounded-full">
+          <span className="text-xs bg-green-50 text-green-700 px-2 py-0.5 rounded-full">
             NDIS注册
           </span>
         )}
+        {!isPublic && provider.rating ? (
+          <span className="flex items-center gap-0.5 text-xs text-gray-600">
+            <Star size={11} className="text-gold-500 fill-gold-500" />
+            {provider.rating}
+          </span>
+        ) : null}
       </div>
 
       <div className="flex flex-wrap gap-1.5 mb-3">
@@ -88,34 +114,33 @@ function ProviderCard({ provider }: { provider: Provider }) {
         {provider.description}
       </p>
 
-      {provider.specialties.length > 0 && (
-        <div className="flex flex-wrap gap-1 mb-4">
-          {provider.specialties.slice(0, 3).map((s) => (
-            <span
-              key={s}
-              className="text-xs bg-gray-50 text-gray-500 px-2 py-0.5 rounded-full"
+      {isPublic ? (
+        <div className="flex gap-2">
+          {provider.website && (
+            <a
+              href={provider.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 text-center text-sm font-semibold text-navy-900 border-2 border-navy-100 py-2 rounded-xl hover:border-navy-900 transition-all"
             >
-              {s}
-            </span>
-          ))}
+              官网
+            </a>
+          )}
+          <button
+            onClick={onClaim}
+            className="flex-1 text-center text-sm font-semibold text-navy-900 bg-gold-100 hover:bg-gold-200 py-2 rounded-xl transition-colors"
+          >
+            这是我的机构？认领
+          </button>
         </div>
-      )}
-
-      <div className="flex gap-2">
+      ) : (
         <Link
           href={`/providers/${provider.id}`}
-          className="flex-1 text-center text-sm font-semibold text-navy-900 border-2 border-navy-100 py-2 rounded-xl hover:border-navy-900 hover:bg-navy-900 hover:text-white transition-all"
+          className="w-full block text-center text-sm font-semibold text-navy-900 border-2 border-navy-100 py-2 rounded-xl hover:border-navy-900 hover:bg-navy-900 hover:text-white transition-all"
         >
           查看详情
         </Link>
-        <Link
-          href={`/ai-advisor?q=${encodeURIComponent(`帮我评估${provider.chineseName || provider.name}这个Provider是否适合我`)}`}
-          className="px-3 py-2 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors"
-          title="问AI"
-        >
-          <Brain size={15} className="text-gray-500" />
-        </Link>
-      </div>
+      )}
     </div>
   );
 }
@@ -137,11 +162,19 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
     e.preventDefault();
     setSubmitting(true);
     try {
-      await fetch("/api/notify", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type: "provider_register", data: form }),
-      });
+      // 写入数据库（applications 表）+ 邮件通知，并行
+      await Promise.allSettled([
+        fetch("/api/apply", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form),
+        }),
+        fetch("/api/notify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ type: "provider_register", data: form }),
+        }),
+      ]);
     } catch {
       // Silent — user still sees success
     }
@@ -155,9 +188,9 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
         <div className="sticky top-0 bg-white rounded-t-3xl px-6 pt-6 pb-4 border-b border-gray-100 flex items-center justify-between">
           <div>
             <h2 className="text-xl font-bold text-navy-900">
-              申请加入成员目录
+              入驻 / 认领 · NDIS 商家资源库
             </h2>
-            <p className="text-gray-500 text-sm">审核通过后正式展示在目录中</p>
+            <p className="text-gray-500 text-sm">填好信息，审核通过后展示在资源库</p>
           </div>
           <button
             onClick={onClose}
@@ -331,8 +364,13 @@ function ProvidersContent() {
   const [showRegister, setShowRegister] = useState(
     searchParams.get("register") === "true"
   );
+  const [providers, setProviders] = useState<Provider[]>(PROVIDERS);
 
-  const filteredProviders = PROVIDERS.filter((p) => {
+  useEffect(() => {
+    fetchApprovedProviders().then(setProviders);
+  }, []);
+
+  const filteredProviders = providers.filter((p) => {
     const matchSearch =
       !search ||
       p.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -367,21 +405,22 @@ function ProvidersContent() {
               首页
             </Link>
             <ChevronRight size={13} />
-            <span>圈内成员</span>
+            <span>商家资源库</span>
           </div>
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
             <div>
-              <h1 className="text-3xl font-bold mb-2">NDIS 行业成员目录</h1>
-              <p className="text-blue-200">
-                经审核认证的NDIS从业者与机构，按服务类型、地区、语言筛选
+              <h1 className="text-3xl font-bold mb-2">NDIS 商家资源库</h1>
+              <p className="text-blue-200 max-w-2xl">
+                NDIS 行业的服务机构与上游供应商名录——找同行、找供应商、找合作。
+                带「待认领」的是公开信息整理，认领或新增你的生意，让这圈人找到你。
               </p>
             </div>
             <button
               onClick={() => setShowRegister(true)}
-              className="flex items-center gap-2 bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold px-5 py-2.5 rounded-xl transition-colors"
+              className="flex items-center gap-2 bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold px-5 py-2.5 rounded-xl transition-colors whitespace-nowrap"
             >
               <UserPlus size={15} />
-              申请加入
+              入驻 / 认领
             </button>
           </div>
         </div>
@@ -401,7 +440,7 @@ function ProvidersContent() {
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="搜索Provider名称或服务内容..."
+                placeholder="搜索机构 / 供应商名称或服务内容..."
                 className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm outline-none focus:border-navy-900 transition-colors"
               />
             </div>
@@ -451,9 +490,9 @@ function ProvidersContent() {
         {/* Results */}
         <div className="flex items-center justify-between mb-4">
           <p className="text-sm text-gray-500">
-            找到 <strong className="text-navy-900">{filteredProviders.length}</strong> 个Provider
+            共 <strong className="text-navy-900">{filteredProviders.length}</strong> 个机构 / 资源
           </p>
-          {filteredProviders.length < PROVIDERS.length && (
+          {filteredProviders.length < providers.length && (
             <button
               onClick={() => {
                 setSearch("");
@@ -471,7 +510,11 @@ function ProvidersContent() {
         {filteredProviders.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {filteredProviders.map((provider) => (
-              <ProviderCard key={provider.id} provider={provider} />
+              <ProviderCard
+                key={provider.id}
+                provider={provider}
+                onClaim={() => setShowRegister(true)}
+              />
             ))}
           </div>
         ) : (
@@ -500,8 +543,8 @@ function ProvidersContent() {
             {/* Benefits strip */}
             <div className="border-t border-gray-100 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-100">
               {[
-                { icon: CheckCircle, title: "认证展示", desc: "通过审核后在目录中优先展示" },
-                { icon: Brain, title: "AI智能推荐", desc: "参与者通过AI顾问询问时被推荐" },
+                { icon: CheckCircle, title: "认证展示", desc: "认领/入驻后在资源库中优先展示" },
+                { icon: Brain, title: "上下游对接", desc: "供应商与服务机构互相找到、对接合作" },
                 { icon: ArrowRight, title: "圈内转介绍", desc: "加入从业者社群，获得同行转介绍" },
               ].map((item) => (
                 <div key={item.title} className="flex items-start gap-3 px-6 py-5">

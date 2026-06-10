@@ -4,7 +4,7 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   const { type, data } = body;
 
-  const notifyEmail = process.env.NOTIFY_EMAIL || "hello@ndishub.com.au";
+  const notifyEmail = process.env.NOTIFY_EMAIL || "recommendforterry@gmail.com";
   const resendKey = process.env.RESEND_API_KEY;
 
   // Build email content based on form type

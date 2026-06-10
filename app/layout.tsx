@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     icon: "/favicon.png",
     shortcut: "/favicon.png",
   },
-  title: "澳洲NDIS圈 | 华人NDIS专业导航平台",
+  title: "澳洲NDIS圈 | 华人 NDIS 从业者的 B2B 资源与人脉平台",
   description:
-    "澳洲华人NDIS与养老行业专业平台。AI智能问答、精准Provider匹配、行业知识库。用中文，找到你的NDIS方向。",
+    "面向澳洲华人 NDIS 从业者与生意人：商家资源库、行业 AI 顾问、入行与合规、上下游对接。找同行、找供应商、找合作。",
   keywords:
-    "NDIS, 澳洲NDIS, 华人NDIS, NDIS中文, Provider匹配, 养老, Aged Care, 残障服务",
+    "NDIS, 澳洲NDIS, 华人NDIS, NDIS商家, NDIS供应商, NDIS Provider, Support Coordinator, NDIS创业, NDIS合规, 养老 Aged Care",
   openGraph: {
-    title: "澳洲NDIS圈 | 华人NDIS专业导航平台",
-    description: "澳洲华人NDIS与养老行业专业平台",
+    title: "澳洲NDIS圈 | 华人 NDIS 从业者的 B2B 资源与人脉平台",
+    description: "面向澳洲华人 NDIS 从业者：商家资源库、行业 AI 顾问、上下游对接",
     locale: "zh_CN",
     type: "website",
   },
