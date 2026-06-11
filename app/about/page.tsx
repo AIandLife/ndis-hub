@@ -8,6 +8,7 @@ import {
   Brain,
   Heart,
 } from "lucide-react";
+import JoinBanner from "@/components/JoinBanner";
 
 export default function AboutPage() {
   return (
@@ -152,6 +153,7 @@ export default function AboutPage() {
           </Link>
         </div>
       </div>
+      <JoinBanner />
     </div>
   );
 }

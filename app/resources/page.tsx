@@ -14,6 +14,7 @@ import {
   Clock,
   ExternalLink,
 } from "lucide-react";
+import JoinBanner from "@/components/JoinBanner";
 
 interface Article {
   id: string;
@@ -413,7 +414,10 @@ export default function ResourcesPage() {
         </div>
       }
     >
-      <ResourcesContent />
+      <>
+        <ResourcesContent />
+        <JoinBanner />
+      </>
     </Suspense>
   );
 }

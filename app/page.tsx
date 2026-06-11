@@ -110,7 +110,8 @@ export default function HomePage() {
                 className="inline-flex items-center justify-center gap-2 bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold px-6 py-3.5 rounded-xl transition-colors"
               >
                 <MessageCircle size={16} />
-                扫码进 NDIS 从业者群
+                <span className="sm:hidden">加入 NDIS 同业交流群</span>
+                <span className="hidden sm:inline">扫码进 NDIS 同业交流群</span>
               </Link>
               <Link
                 href="/ai-advisor"
@@ -315,6 +316,25 @@ export default function HomePage() {
                     </div>
                   ))}
                 </div>
+
+                {/* 真实线下活动照片（信任证据） */}
+                <div className="relative rounded-2xl overflow-hidden mb-8 border border-white/15">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/event-ndis-sydney.jpg"
+                    alt="NDIS 生意线下交流会现场 · 悉尼"
+                    className="w-full h-48 sm:h-56 object-cover"
+                  />
+                  <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-navy-950/90 to-transparent px-4 pt-10 pb-3">
+                    <span className="text-white text-sm font-medium">
+                      NDIS 生意线下交流会 · 悉尼
+                    </span>
+                    <span className="text-blue-300 text-xs ml-2">
+                      线上进群 · 线下见面
+                    </span>
+                  </div>
+                </div>
+
                 <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                   <Link
                     href="/providers?register=true"
@@ -339,9 +359,13 @@ export default function HomePage() {
                     className="w-44 h-44 mx-auto rounded-xl"
                   />
                   <div className="mt-4 font-bold text-navy-900">
-                    扫码加入 NDIS 同业交流群
+                    加入 NDIS 同业交流群
                   </div>
-                  <div className="text-gray-500 text-xs mt-1">
+                  {/* 手机上无法"扫"自己屏幕上的码，提示长按识别 */}
+                  <div className="text-gray-500 text-xs mt-1 sm:hidden">
+                    长按上方二维码，识别进群
+                  </div>
+                  <div className="text-gray-500 text-xs mt-1 hidden sm:block">
                     微信扫一扫，进群和同行交流
                   </div>
                 </div>

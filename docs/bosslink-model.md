@@ -16,9 +16,9 @@ BossLink / NDIS 圈 / 建房圈 / 房产圈 **不是四个网站，是同一台�
 从「知识平台 + 课程」改成 **「澳洲 NDIS 商家资源库（B2B 名录）+ 加我私域」**。
 
 落地形态：
-1. **冷启动**：爬澳洲 + 海外 NDIS 的 provider/supplier 名录 → 灌进 `resources`（`is_scraped=true`）。目录一上线就是满的。
-2. **钩子**：公开名录，老板天然想填进去做行业对比、被人看到。**低门槛自助填**（不要"审核制入驻"的高门槛闸门——审核只用于是否在目录里加"认证"标，不挡填表）。
-3. **沉淀**：填表 / 想对接资源 → 扫码加 Terry → 进私域（首页 `#join` 已搭骨架）。
+1. **冷启动**：① BossLink 圈内 NDIS/养老成员迁入（✅ 2026-06-11 已迁 30 位，仅公开字段不含联系方式）；② 爬澳洲+海外名录灌 `resources`（`is_scraped=true`）。目录自己铺满。
+2. **钩子**：资源卡展示每位老板的「供/需」，看中了 →「想对接？进群聊」→ 加 Terry 私域。**⚠️ 认领机制已撤**（Terry 2026-06-11 拍板：不做"这是我的机构？认领"，资源靠我们爬取/迁移铺满，不依赖机构自认领）。入驻保留=「免费入驻」自助填表。
+3. **沉淀**：填表 / 想对接 → 扫码进群（首页 `#join`，二维码=Terry 个人微信，对外口径写"同业交流群"）。
 4. **撮合**：商家↔商家（supplier↔provider）。复用 BossLink 已有的 `connection_requests` / `member_matches`，不重写。
 
 ### 合规对齐（关键）
@@ -42,7 +42,7 @@ BossLink 库参考：`~/projects/australia-startup-hub/supabase/schema.sql`。
 | 1 | **定位重构**：首页/导航从"知识平台"改成"NDIS 商家资源库 + 加我"，课程降级为次要 | Claude | ✅ 基本完成（C 端整层下掉；AI/知识库/journey/resources 转从业者口径；`/providers` 改成"NDIS 商家资源库"+真实公开机构种子(待认领)+认领钩子；首页加资源库展示区）。种子=无数据库版，写在 `lib/providers-data.ts`，填表走 /api/notify 邮件 |
 | 2 | **建 Supabase 项目 + 跑 schema** | Claude（自动） | ✅ 完成。CLI 已登录，Claude 自动建：ref=`duyxuvlobtupvcvkfmzl`(悉尼)，schema+种子已 push，key 进 `.env.local` |
 | 3 | 接 Supabase client；自助填表写 `applications`；目录/首页读 `resources` | Claude | ✅ 完成并端到端验证。`lib/supabase/*`、`lib/resources.ts`、`/api/apply`；9 真实种子在 `resources`(approved)；anon 公开可读；表单写 applications(pending) 已验证 |
-| 4 | **冷启动爬虫**：爬澳洲/海外 NDIS 名录 → 灌 `resources`（is_scraped）。目录变满 | Claude | 待办（现有 9 条手工种子；要更满需爬虫）|
+| 4 | **冷启动填库**：BossLink 圈内成员迁入 + 爬澳洲/海外名录 | Claude | 🔶 大头已完成（2026-06-11 迁入 30 位 BossLink NDIS/养老华人成员，目录 39 条）。海外/华人公开资源爬虫可继续扩充 |
 | 5 | 真实微信群/个人二维码进 `settings`，全站二维码数据驱动 | Terry 给码 + Claude 接 | 待办（缺 Terry 的码）|
 | 6 | **审批闭环**：后台审批 `applications` → 通过后生成 `resources`(claimed) 上目录；设 admin | Claude | 待办（**当前缺口**：自助填的申请进了 applications，但还没"审批→上目录"这步）|
 | 7 | B2B 对接请求（connection_requests）+（可选）复用 BossLink 撮合 | Claude | 待办 |

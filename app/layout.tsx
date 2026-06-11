@@ -4,6 +4,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://ndis-hub-ten.vercel.app"),
   icons: {
     icon: "/favicon.png",
     shortcut: "/favicon.png",
@@ -18,6 +19,7 @@ export const metadata: Metadata = {
     description: "面向澳洲华人 NDIS 从业者：商家资源库、行业 AI 顾问、上下游对接",
     locale: "zh_CN",
     type: "website",
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
 };
 

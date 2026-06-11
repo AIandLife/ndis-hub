@@ -15,6 +15,7 @@ import {
   AlertCircle,
   Info,
 } from "lucide-react";
+import JoinBanner from "@/components/JoinBanner";
 
 interface Step {
   id: number;
@@ -421,6 +422,7 @@ export default function JourneyPage() {
           </Link>
         </div>
       </div>
+      <JoinBanner />
     </div>
   );
 }

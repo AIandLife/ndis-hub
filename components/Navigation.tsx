@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, X, ExternalLink } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 const navLinks = [
+  { href: "/providers", label: "商家资源库" },
   { href: "/ai-advisor", label: "AI 顾问" },
   { href: "/journey", label: "NDIS 全流程" },
-  { href: "/providers", label: "圈内成员" },
   { href: "/resources", label: "知识库" },
   { href: "/courses", label: "课程" },
   { href: "/about", label: "关于" },
@@ -48,20 +48,17 @@ export default function Navigation() {
 
           {/* Right actions */}
           <div className="hidden md:flex items-center gap-3">
-            <a
-              href="https://www.australiabusinessalliance.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 text-sm text-gray-500 hover:text-navy-900 transition-colors"
-            >
-              <span>澳洲商业联盟</span>
-              <ExternalLink size={12} />
-            </a>
             <Link
               href="/providers?register=true"
-              className="px-4 py-2 bg-navy-900 text-white text-sm font-semibold rounded-lg hover:bg-navy-800 transition-colors"
+              className="flex items-center gap-1 text-sm text-gray-500 hover:text-navy-900 transition-colors"
             >
-              申请入驻
+              免费入驻
+            </Link>
+            <Link
+              href="/#join"
+              className="px-4 py-2 bg-gold-500 hover:bg-gold-400 text-navy-950 text-sm font-bold rounded-lg transition-colors"
+            >
+              进同业群
             </Link>
           </div>
 
@@ -88,13 +85,20 @@ export default function Navigation() {
               {link.label}
             </Link>
           ))}
-          <div className="pt-2 border-t border-gray-100 mt-2">
+          <div className="pt-2 border-t border-gray-100 mt-2 space-y-2">
+            <Link
+              href="/#join"
+              onClick={() => setOpen(false)}
+              className="block px-4 py-3 bg-gold-500 text-navy-950 text-sm font-bold rounded-lg text-center"
+            >
+              进 NDIS 同业交流群
+            </Link>
             <Link
               href="/providers?register=true"
               onClick={() => setOpen(false)}
-              className="block px-4 py-3 bg-navy-900 text-white text-sm font-semibold rounded-lg text-center"
+              className="block px-4 py-3 border border-navy-200 text-navy-900 text-sm font-semibold rounded-lg text-center"
             >
-              申请加入
+              免费入驻资源库
             </Link>
           </div>
         </div>

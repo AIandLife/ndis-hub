@@ -13,6 +13,7 @@ import {
   Phone,
   MessageCircle,
 } from "lucide-react";
+import JoinBanner from "@/components/JoinBanner";
 
 const COURSES = [
   {
@@ -463,6 +464,7 @@ export default function CoursesPage() {
           </Link>
         </div>
       </div>
+      <JoinBanner />
     </div>
   );
 }
