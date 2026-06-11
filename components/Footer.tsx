@@ -52,7 +52,7 @@ export default function Footer() {
             <h3 className="text-white font-semibold text-sm mb-4">商业合作</h3>
             <ul className="space-y-2">
               {[
-                { href: "/providers?register=true", label: "入驻 / 认领" },
+                { href: "/providers?register=true", label: "免费入驻" },
                 { href: "/providers", label: "商家资源库" },
                 { href: "/courses", label: "生意辅导课程" },
                 { href: "mailto:recommendforterry@gmail.com", label: "联系：Recommend for Terry" },

@@ -125,7 +125,7 @@ export default function ProviderDetailPage({
                     </div>
                   ) : (
                     <div className="mt-2 text-xs text-gray-400">
-                      公开信息整理 · 待机构认领完善
+                      行业公开资源 · 平台持续收录
                     </div>
                   )}
                 </div>

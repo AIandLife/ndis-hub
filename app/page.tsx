@@ -204,8 +204,8 @@ export default function HomePage() {
                 找同行、找供应商、找合作
               </h2>
               <p className="text-gray-500 max-w-xl">
-                NDIS 服务机构与上游供应商的行业名录。带「待认领」的是公开信息整理——
-                认领或新增你的生意，让这圈人找到你。
+                全澳做 NDIS 的华人圈内成员 + 行业公开资源。
+                每张卡都写着对方在供什么、在找什么——看中了就进群对接。
               </p>
             </div>
             <Link
@@ -227,8 +227,14 @@ export default function HomePage() {
                   <div className="w-11 h-11 rounded-xl bg-navy-50 border border-navy-100 flex items-center justify-center">
                     <span className="text-navy-900 font-bold">{p.name[0]}</span>
                   </div>
-                  <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">
-                    {p.listingType === "public" ? "待认领" : "已认证"}
+                  <span
+                    className={`text-xs px-2 py-0.5 rounded-full ${
+                      p.listingType === "claimed"
+                        ? "bg-emerald-50 text-emerald-700"
+                        : "bg-gray-100 text-gray-500"
+                    }`}
+                  >
+                    {p.listingType === "claimed" ? "圈内成员" : "公开收录"}
                   </span>
                 </div>
                 <h3 className="font-bold text-navy-900 mb-1 group-hover:text-blue-600 transition-colors">
@@ -262,10 +268,10 @@ export default function HomePage() {
               className="inline-flex items-center justify-center gap-2 bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold px-6 py-3 rounded-xl transition-colors"
             >
               <Bell size={16} />
-              入驻 / 认领你的生意
+              免费入驻，让圈子找到你
             </Link>
             <span className="text-gray-400 text-sm">
-              免费 · 审核制 · 让上下游找到你
+              写上你在供什么、找什么 · 上下游直接看到
             </span>
           </div>
         </div>

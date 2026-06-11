@@ -16,6 +16,8 @@ interface ResourceRow {
     specialties?: string[];
     ndisRegistered?: boolean;
     state?: string;
+    needs?: string;
+    contactName?: string;
   } | null;
   is_scraped: boolean;
   source_url: string | null;
@@ -36,11 +38,15 @@ function rowToProvider(r: ResourceRow): Provider {
     state: ci.state || "",
     languages: ci.languages || [],
     description: r.description,
-    website: ci.website || r.source_url || undefined,
+    website:
+      ci.website ||
+      (r.source_url && r.source_url.startsWith("http") ? r.source_url : undefined),
     listingType: r.is_scraped ? "public" : "claimed",
     verified: !r.is_scraped,
     ndisRegistered: ci.ndisRegistered ?? false,
     specialties: ci.specialties || [],
+    needs: ci.needs || undefined,
+    contactName: ci.contactName || undefined,
   };
 }
 

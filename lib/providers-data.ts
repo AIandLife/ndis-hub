@@ -13,7 +13,7 @@ export interface Provider {
   website?: string;
   phone?: string;
   email?: string;
-  // public = 公开信息整理、待认领；claimed = 老板已入驻认领
+  // public = 爬取/整理的公开资源；claimed = 圈内成员（BossLink 登记或本站入驻）
   listingType: "public" | "claimed";
   verified: boolean;
   rating?: number;
@@ -21,6 +21,9 @@ export interface Provider {
   ndisRegistered: boolean;
   specialties: string[];
   featured?: boolean;
+  // 圈内成员的对接信息（来自 BossLink 登记的「需」）
+  needs?: string;
+  contactName?: string;
 }
 
 // ── 种子数据 ──────────────────────────────────────────────────
