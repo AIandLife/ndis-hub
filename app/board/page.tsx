@@ -13,6 +13,7 @@ import {
   Clock,
 } from "lucide-react";
 import { fetchApprovedProviders } from "@/lib/resources";
+import ConnectModal, { type ConnectTarget } from "@/components/ConnectModal";
 
 // 对接大厅：全行业的「在找什么」聚合在这一页。
 // 数据两路：demands 表（任何人自助挂的需求）+ 圈内成员档案里的「需」。
@@ -251,6 +252,7 @@ export default function BoardPage() {
   const [items, setItems] = useState<BoardItem[]>([]);
   const [category, setCategory] = useState("全部");
   const [showPost, setShowPost] = useState(false);
+  const [connectTarget, setConnectTarget] = useState<ConnectTarget | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -304,6 +306,12 @@ export default function BoardPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {showPost && <PostDemandModal onClose={() => setShowPost(false)} />}
+      {connectTarget && (
+        <ConnectModal
+          target={connectTarget}
+          onClose={() => setConnectTarget(null)}
+        />
+      )}
 
       {/* Header */}
       <div className="bg-navy-900 text-white py-12">
@@ -398,13 +406,20 @@ export default function BoardPage() {
                       <span className="ml-1.5 text-emerald-600">· 圈内成员</span>
                     )}
                   </span>
-                  <Link
-                    href="/#join"
+                  <button
+                    onClick={() =>
+                      setConnectTarget({
+                        type: item.source === "demand" ? "demand" : "member",
+                        id: item.id.slice(2),
+                        name: item.who,
+                        need: item.need,
+                      })
+                    }
                     className="inline-flex items-center gap-1.5 text-sm font-bold text-navy-950 bg-gold-500 hover:bg-gold-400 px-4 py-1.5 rounded-lg transition-colors"
                   >
                     <MessageCircle size={13} />
                     我能对接
-                  </Link>
+                  </button>
                 </div>
               </div>
             ))}

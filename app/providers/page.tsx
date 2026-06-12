@@ -20,8 +20,15 @@ import {
   type Provider,
 } from "@/lib/providers-data";
 import { fetchApprovedProviders } from "@/lib/resources";
+import ConnectModal, { type ConnectTarget } from "@/components/ConnectModal";
 
-function ProviderCard({ provider }: { provider: Provider }) {
+function ProviderCard({
+  provider,
+  onConnect,
+}: {
+  provider: Provider;
+  onConnect: () => void;
+}) {
   const isMember = provider.listingType === "claimed";
   return (
     <div className="bg-white rounded-2xl border border-gray-100 p-6 card-hover flex flex-col">
@@ -110,12 +117,12 @@ function ProviderCard({ provider }: { provider: Provider }) {
             官网
           </a>
         )}
-        <Link
-          href="/#join"
+        <button
+          onClick={onConnect}
           className="flex-1 text-center text-sm font-semibold text-navy-950 bg-gold-500 hover:bg-gold-400 py-2 rounded-xl transition-colors"
         >
-          想对接？进群聊
-        </Link>
+          我要对接
+        </button>
       </div>
     </div>
   );
@@ -340,6 +347,7 @@ function ProvidersContent() {
   const [showRegister, setShowRegister] = useState(
     searchParams.get("register") === "true"
   );
+  const [connectTarget, setConnectTarget] = useState<ConnectTarget | null>(null);
   const [providers, setProviders] = useState<Provider[]>(PROVIDERS);
 
   useEffect(() => {
@@ -372,6 +380,12 @@ function ProvidersContent() {
   return (
     <div className="min-h-screen bg-gray-50">
       {showRegister && <RegisterModal onClose={() => setShowRegister(false)} />}
+      {connectTarget && (
+        <ConnectModal
+          target={connectTarget}
+          onClose={() => setConnectTarget(null)}
+        />
+      )}
 
       {/* Header */}
       <div className="bg-navy-900 text-white py-12">
@@ -486,7 +500,18 @@ function ProvidersContent() {
         {filteredProviders.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {filteredProviders.map((provider) => (
-              <ProviderCard key={provider.id} provider={provider} />
+              <ProviderCard
+                key={provider.id}
+                provider={provider}
+                onConnect={() =>
+                  setConnectTarget({
+                    type: "member",
+                    id: provider.id,
+                    name: provider.chineseName || provider.name,
+                    need: provider.needs,
+                  })
+                }
+              />
             ))}
           </div>
         ) : (
