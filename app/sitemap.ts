@@ -2,10 +2,11 @@ import { MetadataRoute } from "next";
 import { PROVIDERS } from "@/lib/providers-data";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://ndishub.com.au";
+  const baseUrl = "https://ndis-hub-ten.vercel.app";
 
   const staticPages = [
     { url: baseUrl, lastModified: new Date(), priority: 1.0 },
+    { url: `${baseUrl}/board`, lastModified: new Date(), priority: 0.9 },
     { url: `${baseUrl}/ai-advisor`, lastModified: new Date(), priority: 0.9 },
     { url: `${baseUrl}/journey`, lastModified: new Date(), priority: 0.9 },
     { url: `${baseUrl}/providers`, lastModified: new Date(), priority: 0.9 },

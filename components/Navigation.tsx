@@ -5,11 +5,11 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 
 const navLinks = [
+  { href: "/board", label: "对接大厅" },
   { href: "/providers", label: "商家资源库" },
   { href: "/ai-advisor", label: "AI 顾问" },
   { href: "/journey", label: "NDIS 全流程" },
   { href: "/resources", label: "知识库" },
-  { href: "/courses", label: "课程" },
   { href: "/about", label: "关于" },
 ];
 

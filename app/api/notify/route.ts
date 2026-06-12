@@ -38,6 +38,20 @@ export async function POST(req: NextRequest) {
       </table>
       <p style="color:#666;margin-top:16px">提交时间：${new Date().toLocaleString("zh-AU", { timeZone: "Australia/Sydney" })}</p>
     `;
+  } else if (type === "demand_post") {
+    subject = `【澳洲NDIS圈】对接大厅新需求 - ${data.title}`;
+    html = `
+      <h2>对接大厅收到新需求（待审核）</h2>
+      <table style="border-collapse:collapse;width:100%">
+        <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold">在找</td><td style="padding:8px;border:1px solid #eee">${data.title}</td></tr>
+        <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold">详情</td><td style="padding:8px;border:1px solid #eee">${data.description}</td></tr>
+        <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold">分类 / 城市</td><td style="padding:8px;border:1px solid #eee">${data.category} / ${data.city}</td></tr>
+        <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold">发布人</td><td style="padding:8px;border:1px solid #eee">${data.name}</td></tr>
+        <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold">微信</td><td style="padding:8px;border:1px solid #eee">${data.wechat || "未提供"}</td></tr>
+        <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold">邮箱</td><td style="padding:8px;border:1px solid #eee">${data.email || "未提供"}</td></tr>
+      </table>
+      <p style="color:#666;margin-top:16px">提交时间：${new Date().toLocaleString("zh-AU", { timeZone: "Australia/Sydney" })}</p>
+    `;
   } else {
     return Response.json({ error: "Unknown notification type" }, { status: 400 });
   }

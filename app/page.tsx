@@ -47,11 +47,11 @@ const VALUE_PROPS = [
   },
   {
     icon: TrendingUp,
-    title: "上下游对接",
-    desc: "圈内人脉、资源转介、合作撮合——你缺客户/缺供应商/缺合伙人，群里有人接得住。",
+    title: "对接大厅",
+    desc: "全行业的「在找什么」都在这——找员工、找客户、找供应商。挂上你的需求，圈子帮你找。",
     color: "text-purple-600",
     bg: "bg-purple-50",
-    href: "#join",
+    href: "/board",
   },
 ];
 
@@ -120,10 +120,10 @@ export default function HomePage() {
                 AI 行业顾问
               </Link>
               <Link
-                href="/courses"
+                href="/board"
                 className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold px-6 py-3.5 rounded-xl transition-colors"
               >
-                查看入行课程
+                逛对接大厅
               </Link>
             </div>
 
