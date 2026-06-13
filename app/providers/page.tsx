@@ -21,6 +21,7 @@ import {
 } from "@/lib/providers-data";
 import { fetchApprovedProviders } from "@/lib/resources";
 import ConnectModal, { type ConnectTarget } from "@/components/ConnectModal";
+import { useI18n } from "@/lib/i18n";
 
 function ProviderCard({
   provider,
@@ -29,6 +30,7 @@ function ProviderCard({
   provider: Provider;
   onConnect: () => void;
 }) {
+  const { t } = useI18n();
   const isMember = provider.listingType === "claimed";
   return (
     <div className="bg-white rounded-2xl border border-gray-100 p-6 card-hover flex flex-col">
@@ -52,11 +54,11 @@ function ProviderCard({
         {isMember ? (
           <div className="verified-badge flex items-center gap-1 px-2 py-1 rounded-full flex-shrink-0">
             <CheckCircle size={11} className="text-white" />
-            <span className="text-white text-xs font-medium">圈内成员</span>
+            <span className="text-white text-xs font-medium">{t("lib.member")}</span>
           </div>
         ) : (
           <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-gray-100 flex-shrink-0">
-            <span className="text-gray-500 text-xs font-medium">公开收录</span>
+            <span className="text-gray-500 text-xs font-medium">{t("lib.public")}</span>
           </div>
         )}
       </div>
@@ -65,15 +67,15 @@ function ProviderCard({
         <span
           className={`text-xs px-2 py-0.5 rounded-full ${
             provider.category === "supplier"
-              ? "bg-purple-50 text-purple-700"
+              ? "bg-amber-50 text-amber-700"
               : "bg-navy-50 text-navy-700"
           }`}
         >
-          {provider.category === "supplier" ? "上游供应商" : "服务机构"}
+          {provider.category === "supplier" ? t("lib.supplier") : t("lib.provider")}
         </span>
         {provider.ndisRegistered && (
           <span className="text-xs bg-green-50 text-green-700 px-2 py-0.5 rounded-full">
-            NDIS注册
+            {t("lib.ndisReg")}
           </span>
         )}
         <span className="flex items-center gap-1 text-xs text-gray-400">
@@ -83,12 +85,12 @@ function ProviderCard({
       </div>
 
       <div className="flex flex-wrap gap-1.5 mb-3">
-        {provider.type.map((t) => (
+        {provider.type.map((tag) => (
           <span
-            key={t}
-            className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full"
+            key={tag}
+            className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full"
           >
-            {t}
+            {tag}
           </span>
         ))}
       </div>
@@ -99,7 +101,7 @@ function ProviderCard({
 
       {provider.needs && (
         <div className="bg-gold-50 border border-gold-100 rounded-xl px-3 py-2 mb-4">
-          <span className="text-xs text-gold-700 font-semibold">在找：</span>
+          <span className="text-xs text-gold-700 font-semibold">{t("lib.lookingFor")}</span>
           <span className="text-xs text-gray-600 line-clamp-2">
             {provider.needs}
           </span>
@@ -114,14 +116,14 @@ function ProviderCard({
             rel="noopener noreferrer"
             className="px-4 text-center text-sm font-semibold text-navy-900 border-2 border-navy-100 py-2 rounded-xl hover:border-navy-900 transition-all"
           >
-            官网
+            {t("lib.website")}
           </a>
         )}
         <button
           onClick={onConnect}
           className="flex-1 text-center text-sm font-semibold text-navy-950 bg-gold-500 hover:bg-gold-400 py-2 rounded-xl transition-colors"
         >
-          我要对接
+          {t("lib.connect")}
         </button>
       </div>
     </div>
@@ -129,6 +131,8 @@ function ProviderCard({
 }
 
 function RegisterModal({ onClose }: { onClose: () => void }) {
+  const { lang } = useI18n();
+  const en = lang === "en";
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
@@ -171,9 +175,11 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
         <div className="sticky top-0 bg-white rounded-t-3xl px-6 pt-6 pb-4 border-b border-gray-100 flex items-center justify-between">
           <div>
             <h2 className="text-xl font-bold text-navy-900">
-              免费入驻 · NDIS 商家资源库
+              {en ? "List free · NDIS Directory" : "免费入驻 · NDIS 商家资源库"}
             </h2>
-            <p className="text-gray-500 text-sm">填好信息，审核通过后展示在资源库</p>
+            <p className="text-gray-500 text-sm">
+              {en ? "Fill this in — shown in the directory once reviewed" : "填好信息，审核通过后展示在资源库"}
+            </p>
           </div>
           <button
             onClick={onClose}
@@ -189,53 +195,57 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
               <CheckCircle size={28} className="text-green-600" />
             </div>
             <h3 className="text-xl font-bold text-navy-900 mb-2">
-              提交成功！
+              {en ? "Submitted!" : "提交成功！"}
             </h3>
             <p className="text-gray-500 mb-6">
-              我们会在1-2个工作日内审核你的信息，通过后你将正式成为圈内认证成员。
+              {en
+                ? "We'll review within 1–2 business days; once approved you'll be a verified member."
+                : "我们会在1-2个工作日内审核你的信息，通过后你将正式成为圈内认证成员。"}
             </p>
             <button
               onClick={onClose}
               className="bg-navy-900 text-white px-6 py-2.5 rounded-xl font-semibold text-sm"
             >
-              好的，关闭
+              {en ? "Done" : "好的，关闭"}
             </button>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="p-6 space-y-4">
             <div className="bg-navy-50 rounded-2xl p-4 text-sm text-navy-800">
-              提交申请后，我们会在1-2个工作日内审核你的信息。审核通过后，你的机构将正式展示在成员目录中。
+              {en
+                ? "After you apply, we review within 1–2 business days. Once approved, your business is listed in the directory."
+                : "提交申请后，我们会在1-2个工作日内审核你的信息。审核通过后，你的机构将正式展示在成员目录中。"}
             </div>
 
             <div>
               <label className="block text-sm font-semibold text-navy-900 mb-1">
-                你的姓名 *
+                {en ? "Your name *" : "你的姓名 *"}
               </label>
               <input
                 required
                 type="text"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                placeholder="中文姓名"
+                placeholder={en ? "Your name" : "中文姓名"}
                 className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-navy-900 transition-colors"
               />
             </div>
             <div>
               <label className="block text-sm font-semibold text-navy-900 mb-1">
-                公司/机构名称 *
+                {en ? "Business / organisation *" : "公司/机构名称 *"}
               </label>
               <input
                 required
                 type="text"
                 value={form.business}
                 onChange={(e) => setForm({ ...form, business: e.target.value })}
-                placeholder="例：Harmony NDIS Services"
+                placeholder="e.g. Harmony NDIS Services"
                 className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-navy-900 transition-colors"
               />
             </div>
             <div>
               <label className="block text-sm font-semibold text-navy-900 mb-1">
-                服务类型 *
+                {en ? "Service type *" : "服务类型 *"}
               </label>
               <select
                 required
@@ -243,7 +253,7 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
                 onChange={(e) => setForm({ ...form, type: e.target.value })}
                 className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-navy-900 transition-colors bg-white"
               >
-                <option value="">选择主要服务类型</option>
+                <option value="">{en ? "Select main service type" : "选择主要服务类型"}</option>
                 {SERVICE_TYPES.slice(1).map((t) => (
                   <option key={t} value={t}>
                     {t}
@@ -254,7 +264,7 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-sm font-semibold text-navy-900 mb-1">
-                  所在城市 *
+                  {en ? "City *" : "所在城市 *"}
                 </label>
                 <select
                   required
@@ -264,7 +274,7 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
                   }
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-navy-900 transition-colors bg-white"
                 >
-                  <option value="">选择城市</option>
+                  <option value="">{en ? "Select city" : "选择城市"}</option>
                   {LOCATIONS.slice(1).map((l) => (
                     <option key={l} value={l}>
                       {l}
@@ -274,7 +284,7 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
               </div>
               <div>
                 <label className="block text-sm font-semibold text-navy-900 mb-1">
-                  服务语言 *
+                  {en ? "Service language *" : "服务语言 *"}
                 </label>
                 <select
                   required
@@ -284,7 +294,7 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
                   }
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-navy-900 transition-colors bg-white"
                 >
-                  <option value="">选择语言</option>
+                  <option value="">{en ? "Select language" : "选择语言"}</option>
                   {LANGUAGES.slice(1).map((l) => (
                     <option key={l} value={l}>
                       {l}
@@ -295,7 +305,7 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
             </div>
             <div>
               <label className="block text-sm font-semibold text-navy-900 mb-1">
-                联系电话 *
+                {en ? "Phone *" : "联系电话 *"}
               </label>
               <input
                 required
@@ -308,7 +318,7 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
             </div>
             <div>
               <label className="block text-sm font-semibold text-navy-900 mb-1">
-                联系邮箱 *
+                {en ? "Email *" : "联系邮箱 *"}
               </label>
               <input
                 required
@@ -321,7 +331,9 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
             </div>
 
             <div className="bg-gray-50 rounded-xl p-3 text-xs text-gray-500">
-              ✓ 审核制入驻  ✓ 圈内认证展示  ✓ 中文团队1对1支持
+              {en
+                ? "✓ Reviewed listings  ✓ Verified badge  ✓ 1-on-1 support"
+                : "✓ 审核制入驻  ✓ 圈内认证展示  ✓ 中文团队1对1支持"}
             </div>
 
             <button
@@ -329,7 +341,7 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
               disabled={submitting}
               className="w-full bg-navy-900 text-white font-bold py-3 rounded-xl hover:bg-navy-800 disabled:bg-gray-400 transition-colors"
             >
-              {submitting ? "提交中..." : "提交申请，免费入驻"}
+              {submitting ? (en ? "Submitting..." : "提交中...") : en ? "Submit — list free" : "提交申请，免费入驻"}
             </button>
           </form>
         )}
@@ -339,6 +351,7 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
 }
 
 function ProvidersContent() {
+  const { t } = useI18n();
   const searchParams = useSearchParams();
   const [search, setSearch] = useState("");
   const [serviceFilter, setServiceFilter] = useState("全部");
@@ -392,17 +405,16 @@ function ProvidersContent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-2 text-blue-300 text-sm mb-3">
             <Link href="/" className="hover:text-white transition-colors">
-              首页
+              {t("common.home")}
             </Link>
             <ChevronRight size={13} />
-            <span>商家资源库</span>
+            <span>{t("lib.tag")}</span>
           </div>
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
             <div>
-              <h1 className="text-3xl font-bold mb-2">NDIS 商家资源库</h1>
+              <h1 className="text-3xl font-bold mb-2">{t("lib.tag")}</h1>
               <p className="text-blue-200 max-w-2xl">
-                全澳做 NDIS 的华人圈内成员 + 持续收录的行业公开资源。
-                每张卡都写着对方在供什么、在找什么——看中了就进群对接。
+                {t("lib.pageSub")}
               </p>
             </div>
             <button
@@ -410,7 +422,7 @@ function ProvidersContent() {
               className="flex items-center gap-2 bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold px-5 py-2.5 rounded-xl transition-colors whitespace-nowrap"
             >
               <UserPlus size={15} />
-              免费入驻，让圈子找到你
+              {t("lib.listFree")}
             </button>
           </div>
         </div>
@@ -430,7 +442,7 @@ function ProvidersContent() {
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="搜索机构 / 供应商名称或服务内容..."
+                placeholder={t("lib.searchPlaceholder")}
                 className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm outline-none focus:border-navy-900 transition-colors"
               />
             </div>
@@ -444,9 +456,9 @@ function ProvidersContent() {
                   onChange={(e) => setServiceFilter(e.target.value)}
                   className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-navy-900 bg-white transition-colors"
                 >
-                  {SERVICE_TYPES.map((t) => (
-                    <option key={t} value={t}>
-                      {t}
+                  {SERVICE_TYPES.map((opt) => (
+                    <option key={opt} value={opt}>
+                      {opt}
                     </option>
                   ))}
                 </select>
@@ -480,7 +492,7 @@ function ProvidersContent() {
         {/* Results */}
         <div className="flex items-center justify-between mb-4">
           <p className="text-sm text-gray-500">
-            共 <strong className="text-navy-900">{filteredProviders.length}</strong> 个机构 / 资源
+            <strong className="text-navy-900">{filteredProviders.length}</strong> {t("lib.count")}
           </p>
           {filteredProviders.length < providers.length && (
             <button

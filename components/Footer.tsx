@@ -1,7 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import { ExternalLink, Heart } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
 
 export default function Footer() {
+  const { lang, t } = useI18n();
   return (
     <footer className="bg-navy-950 text-gray-400">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -13,27 +17,29 @@ export default function Footer() {
                 <span className="text-navy-950 font-bold text-sm">N</span>
               </div>
               <div>
-                <div className="text-white font-bold text-base">澳洲NDIS圈</div>
+                <div className="text-white font-bold text-base">
+                  {lang === "en" ? "NDIS Hub" : "澳洲NDIS圈"}
+                </div>
                 <div className="text-gray-500 text-xs">NDIS Hub AU</div>
               </div>
             </div>
             <p className="text-sm text-gray-500 leading-relaxed">
-              华人 NDIS 从业者的 B2B 资源与人脉平台。找同行、找供应商、找合作。
+              {t("footer.tagline")}
             </p>
             <p className="text-xs text-gray-600 mt-3">
-              本平台内容仅供参考，不构成专业法律或医疗建议。
+              {t("footer.disclaimer")}
             </p>
           </div>
 
           {/* Platform */}
           <div>
-            <h3 className="text-white font-semibold text-sm mb-4">平台功能</h3>
+            <h3 className="text-white font-semibold text-sm mb-4">{t("footer.platform")}</h3>
             <ul className="space-y-2">
               {[
-                { href: "/ai-advisor", label: "AI 智能顾问" },
-                { href: "/journey", label: "NDIS 全流程图" },
-                { href: "/providers", label: "圈内成员" },
-                { href: "/resources", label: "知识库" },
+                { href: "/providers", label: t("nav.providers") },
+                { href: "/board", label: t("nav.board") },
+                { href: "/ai-advisor", label: t("nav.aiAdvisor") },
+                { href: "/insights", label: t("nav.insights") },
               ].map((link) => (
                 <li key={link.href}>
                   <Link
@@ -49,13 +55,13 @@ export default function Footer() {
 
           {/* For Business */}
           <div>
-            <h3 className="text-white font-semibold text-sm mb-4">商业合作</h3>
+            <h3 className="text-white font-semibold text-sm mb-4">{t("footer.business")}</h3>
             <ul className="space-y-2">
               {[
-                { href: "/providers?register=true", label: "免费入驻" },
-                { href: "/providers", label: "商家资源库" },
-                { href: "/courses", label: "生意辅导课程" },
-                { href: "mailto:recommendforterry@gmail.com", label: "联系：Recommend for Terry" },
+                { href: "/providers?register=true", label: t("nav.freeListing") },
+                { href: "/providers", label: t("nav.providers") },
+                { href: "/board", label: t("nav.board") },
+                { href: "mailto:RecommendforTerry@gmail.com", label: (lang === "en" ? "Email: " : "联系邮箱：") + "RecommendforTerry@gmail.com" },
               ].map((link) => (
                 <li key={link.href}>
                   <Link
@@ -71,7 +77,7 @@ export default function Footer() {
 
           {/* Ecosystem */}
           <div>
-            <h3 className="text-white font-semibold text-sm mb-4">生态伙伴</h3>
+            <h3 className="text-white font-semibold text-sm mb-4">{t("footer.ecosystem")}</h3>
             <ul className="space-y-2">
               <li>
                 <a

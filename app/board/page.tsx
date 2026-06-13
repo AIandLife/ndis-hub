@@ -14,6 +14,19 @@ import {
 } from "lucide-react";
 import { fetchApprovedProviders } from "@/lib/resources";
 import ConnectModal, { type ConnectTarget } from "@/components/ConnectModal";
+import { useI18n } from "@/lib/i18n";
+
+// 分类值(数据，中文)→ 显示 key 映射
+const CAT_KEY: Record<string, string> = {
+  全部: "board.cat.all",
+  "找员工/招聘": "board.cat.staff",
+  "找客户/转介": "board.cat.clients",
+  找供应商: "board.cat.suppliers",
+  找合作伙伴: "board.cat.partners",
+  买卖生意: "board.cat.trade",
+  "找房源/场地": "board.cat.space",
+  其他: "board.cat.other",
+};
 
 // 对接大厅：全行业的「在找什么」聚合在这一页。
 // 数据两路：demands 表（任何人自助挂的需求）+ 圈内成员档案里的「需」。
@@ -54,6 +67,7 @@ function guessCategory(text: string): string {
 }
 
 function PostDemandModal({ onClose }: { onClose: () => void }) {
+  const { t } = useI18n();
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
@@ -93,9 +107,9 @@ function PostDemandModal({ onClose }: { onClose: () => void }) {
       <div className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white rounded-t-3xl px-6 pt-6 pb-4 border-b border-gray-100 flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold text-navy-900">发布需求 · 免费</h2>
+            <h2 className="text-xl font-bold text-navy-900">{t("post.title")}</h2>
             <p className="text-gray-500 text-sm">
-              审核通过后公开展示，圈子帮你找
+              {t("post.sub")}
             </p>
           </div>
           <button
@@ -111,23 +125,22 @@ function PostDemandModal({ onClose }: { onClose: () => void }) {
             <div className="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center mx-auto mb-4">
               <CheckCircle size={28} className="text-green-600" />
             </div>
-            <h3 className="text-xl font-bold text-navy-900 mb-2">需求已提交！</h3>
+            <h3 className="text-xl font-bold text-navy-900 mb-2">{t("post.done")}</h3>
             <p className="text-gray-500 mb-6 text-sm">
-              审核通过后会展示在对接大厅。想更快对接？
-              直接进群，群里随时有人接得住。
+              {t("post.doneSub")}
             </p>
             <Link
               href="/#join"
               className="inline-block bg-gold-500 hover:bg-gold-400 text-navy-950 px-6 py-2.5 rounded-xl font-bold text-sm transition-colors"
             >
-              进 NDIS 同业交流群
+              {t("hero.ctaJoinMobile")}
             </Link>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="p-6 space-y-4">
             <div>
               <label className="block text-sm font-semibold text-navy-900 mb-1">
-                你在找什么？（一句话）*
+                {t("post.qTitle")} *
               </label>
               <input
                 required
@@ -135,13 +148,13 @@ function PostDemandModal({ onClose }: { onClose: () => void }) {
                 maxLength={80}
                 value={form.title}
                 onChange={(e) => setForm({ ...form, title: e.target.value })}
-                placeholder="例：找悉尼有 SIL 经验的 Support Worker 两名"
+                placeholder="e.g. Two Support Workers in Sydney with SIL experience"
                 className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-navy-900 transition-colors"
               />
             </div>
             <div>
               <label className="block text-sm font-semibold text-navy-900 mb-1">
-                补充细节 *
+                {t("post.qDetail")} *
               </label>
               <textarea
                 required
@@ -151,14 +164,14 @@ function PostDemandModal({ onClose }: { onClose: () => void }) {
                 onChange={(e) =>
                   setForm({ ...form, description: e.target.value })
                 }
-                placeholder="背景、具体要求、合作方式等"
+                placeholder="Background, requirements, how you'd like to work together..."
                 className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-navy-900 transition-colors resize-none"
               />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-sm font-semibold text-navy-900 mb-1">
-                  分类 *
+                  {t("post.qCategory")} *
                 </label>
                 <select
                   value={form.category}
@@ -169,14 +182,14 @@ function PostDemandModal({ onClose }: { onClose: () => void }) {
                 >
                   {CATEGORIES.slice(1).map((c) => (
                     <option key={c} value={c}>
-                      {c}
+                      {t(CAT_KEY[c] || "")}
                     </option>
                   ))}
                 </select>
               </div>
               <div>
                 <label className="block text-sm font-semibold text-navy-900 mb-1">
-                  城市 *
+                  {t("post.qCity")} *
                 </label>
                 <select
                   value={form.city}
@@ -202,7 +215,7 @@ function PostDemandModal({ onClose }: { onClose: () => void }) {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-sm font-semibold text-navy-900 mb-1">
-                  你的称呼 *
+                  {t("post.qName")} *
                 </label>
                 <input
                   required
@@ -210,13 +223,13 @@ function PostDemandModal({ onClose }: { onClose: () => void }) {
                   maxLength={40}
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  placeholder="姓名 / 公司"
+                  placeholder="Name / company"
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-navy-900 transition-colors"
                 />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-navy-900 mb-1">
-                  微信号 *（不公开）
+                  {t("post.qContact")} *
                 </label>
                 <input
                   required
@@ -224,14 +237,14 @@ function PostDemandModal({ onClose }: { onClose: () => void }) {
                   maxLength={40}
                   value={form.wechat}
                   onChange={(e) => setForm({ ...form, wechat: e.target.value })}
-                  placeholder="仅用于对接联系"
+                  placeholder="WeChat / WhatsApp / phone"
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-navy-900 transition-colors"
                 />
               </div>
             </div>
 
             <div className="bg-gray-50 rounded-xl p-3 text-xs text-gray-500">
-              微信号不会公开展示，只用于对接时联系你。
+              {t("post.contactHint")}
             </div>
 
             <button
@@ -239,7 +252,7 @@ function PostDemandModal({ onClose }: { onClose: () => void }) {
               disabled={submitting}
               className="w-full bg-navy-900 text-white font-bold py-3 rounded-xl hover:bg-navy-800 disabled:bg-gray-400 transition-colors"
             >
-              {submitting ? "提交中..." : "免费发布"}
+              {submitting ? t("post.submitting") : t("post.submit")}
             </button>
           </form>
         )}
@@ -249,10 +262,17 @@ function PostDemandModal({ onClose }: { onClose: () => void }) {
 }
 
 export default function BoardPage() {
+  const { t } = useI18n();
   const [items, setItems] = useState<BoardItem[]>([]);
   const [category, setCategory] = useState("全部");
   const [showPost, setShowPost] = useState(false);
   const [connectTarget, setConnectTarget] = useState<ConnectTarget | null>(null);
+
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("post") === "1") {
+      setShowPost(true);
+    }
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -318,17 +338,16 @@ export default function BoardPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-2 text-blue-300 text-sm mb-3">
             <Link href="/" className="hover:text-white transition-colors">
-              首页
+              {t("common.home")}
             </Link>
             <ChevronRight size={13} />
-            <span>对接大厅</span>
+            <span>{t("board.title")}</span>
           </div>
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
             <div>
-              <h1 className="text-3xl font-bold mb-2">对接大厅</h1>
+              <h1 className="text-3xl font-bold mb-2">{t("board.title")}</h1>
               <p className="text-blue-200 max-w-2xl">
-                全行业的「在找什么」都在这一页——找员工、找客户、找供应商、找合伙人。
-                挂上你的需求，圈子帮你找；看中谁的需求，进群直接聊。
+                {t("board.sub")}
               </p>
             </div>
             <button
@@ -336,7 +355,7 @@ export default function BoardPage() {
               className="flex items-center gap-2 bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold px-5 py-2.5 rounded-xl transition-colors whitespace-nowrap"
             >
               <Plus size={15} />
-              免费发布需求
+              {t("board.post")}
             </button>
           </div>
         </div>
@@ -355,13 +374,13 @@ export default function BoardPage() {
                   : "bg-white border border-gray-200 text-gray-600 hover:border-navy-900 hover:text-navy-900"
               }`}
             >
-              {c}
+              {t(CAT_KEY[c] || "")}
             </button>
           ))}
         </div>
 
         <p className="text-sm text-gray-500 mb-4">
-          共 <strong className="text-navy-900">{filtered.length}</strong> 条需求
+          <strong className="text-navy-900">{filtered.length}</strong> {t("board.count")}
         </p>
 
         {filtered.length > 0 ? (
@@ -373,7 +392,7 @@ export default function BoardPage() {
               >
                 <div className="flex items-center gap-2 mb-3 flex-wrap">
                   <span className="text-xs bg-navy-50 text-navy-700 px-2.5 py-1 rounded-full font-semibold">
-                    {item.category}
+                    {t(CAT_KEY[item.category] || "") || item.category}
                   </span>
                   <span className="flex items-center gap-1 text-xs text-gray-400">
                     <MapPin size={11} />
@@ -403,7 +422,7 @@ export default function BoardPage() {
                   <span className="text-xs text-gray-400">
                     {item.who}
                     {item.source === "member" && (
-                      <span className="ml-1.5 text-emerald-600">· 圈内成员</span>
+                      <span className="ml-1.5 text-emerald-600">· {t("board.member")}</span>
                     )}
                   </span>
                   <button
@@ -418,7 +437,7 @@ export default function BoardPage() {
                     className="inline-flex items-center gap-1.5 text-sm font-bold text-navy-950 bg-gold-500 hover:bg-gold-400 px-4 py-1.5 rounded-lg transition-colors"
                   >
                     <MessageCircle size={13} />
-                    我能对接
+                    {t("board.canHelp")}
                   </button>
                 </div>
               </div>
@@ -427,17 +446,17 @@ export default function BoardPage() {
         ) : (
           <div className="bg-white rounded-2xl border border-gray-100 text-center py-14 px-6">
             <h3 className="text-xl font-bold text-navy-900 mb-2">
-              这个分类下还没有需求
+              {t("board.emptyTitle")}
             </h3>
             <p className="text-gray-500 text-sm mb-6">
-              你来发第一条——免费，审核后全行业可见。
+              {t("board.emptySub")}
             </p>
             <button
               onClick={() => setShowPost(true)}
               className="inline-flex items-center gap-2 bg-navy-900 hover:bg-navy-800 text-white font-bold px-6 py-3 rounded-xl transition-colors text-sm"
             >
               <Plus size={15} />
-              免费发布需求
+              {t("board.post")}
             </button>
           </div>
         )}

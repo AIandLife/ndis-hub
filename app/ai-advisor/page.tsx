@@ -10,6 +10,16 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { PRACTITIONER_QUESTIONS } from "@/lib/ndis-knowledge";
+import { useI18n } from "@/lib/i18n";
+
+const QUESTIONS_EN = [
+  "How do I register as an NDIS Provider — and what does it cost?",
+  "What does the 2026 reform mean for my operation?",
+  "How do I read the NDIS price guide — what can I charge?",
+  "As a new operator, how do I win my first clients, compliantly?",
+  "What are the red lines I must never cross in NDIS?",
+  "Doing NDIS + aged care — how do dual registration and hand-over work?",
+];
 
 interface Message {
   role: "user" | "assistant";
@@ -17,6 +27,7 @@ interface Message {
 }
 
 function AIAdvisorContent() {
+  const { lang } = useI18n();
   const searchParams = useSearchParams();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -101,9 +112,13 @@ function AIAdvisorContent() {
               <Brain className="text-gold-400" size={20} />
             </div>
             <div>
-              <h1 className="text-xl font-bold">NDIS 行业顾问</h1>
+              <h1 className="text-xl font-bold">
+                {lang === "en" ? "NDIS Industry Advisor" : "NDIS 行业顾问"}
+              </h1>
               <p className="text-blue-300 text-sm">
-                给从业者的入行 · 合规 · 经营答疑
+                {lang === "en"
+                  ? "Entry · compliance · operations — for operators"
+                  : "给从业者的入行 · 合规 · 经营答疑"}
               </p>
             </div>
             {messages.length > 0 && (
@@ -111,7 +126,7 @@ function AIAdvisorContent() {
                 onClick={resetChat}
                 className="ml-auto flex items-center gap-1.5 text-sm text-blue-300 hover:text-white transition-colors"
               >
-                <RefreshCw size={14} /> 新对话
+                <RefreshCw size={14} /> {lang === "en" ? "New chat" : "新对话"}
               </button>
             )}
           </div>
@@ -128,16 +143,19 @@ function AIAdvisorContent() {
                 <Brain className="text-gold-400" size={28} />
               </div>
               <h2 className="text-xl font-bold text-navy-900 mb-2">
-                你好！我是你的 NDIS 行业顾问
+                {lang === "en"
+                  ? "Hi — I'm your NDIS industry advisor"
+                  : "你好！我是你的 NDIS 行业顾问"}
               </h2>
               <p className="text-gray-500 max-w-md mx-auto text-sm">
-                面向 NDIS 从业者与生意人——入行、注册、合规、定价、经营、对接，
-                用中文给你有方向的答案。
+                {lang === "en"
+                  ? "For NDIS operators — entry, registration, compliance, pricing, operations and B2B connections. Directional answers, fast."
+                  : "面向 NDIS 从业者与生意人——入行、注册、合规、定价、经营、对接，给你有方向的答案。"}
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl mx-auto">
-              {PRACTITIONER_QUESTIONS.map((q, i) => (
+              {(lang === "en" ? QUESTIONS_EN : PRACTITIONER_QUESTIONS).map((q, i) => (
                 <button
                   key={i}
                   onClick={() => sendMessage(q)}
@@ -208,14 +226,18 @@ function AIAdvisorContent() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="输入你的NDIS问题（Shift+Enter换行，Enter发送）..."
+              placeholder={
+                lang === "en"
+                  ? "Ask your NDIS business question (Shift+Enter for newline, Enter to send)..."
+                  : "输入你的NDIS问题（Shift+Enter换行，Enter发送）..."
+              }
               rows={2}
               className="w-full px-4 pt-4 pb-2 text-sm text-gray-800 outline-none resize-none leading-relaxed"
               disabled={loading}
             />
             <div className="flex items-center justify-between px-4 py-2 border-t border-gray-50">
               <span className="text-xs text-gray-400">
-                回答基于NDIS官方文件
+                {lang === "en" ? "Based on official NDIS material" : "回答基于NDIS官方文件"}
               </span>
               <button
                 onClick={() => sendMessage()}
@@ -223,7 +245,7 @@ function AIAdvisorContent() {
                 className="flex items-center gap-1.5 bg-navy-900 hover:bg-navy-800 disabled:bg-gray-200 disabled:cursor-not-allowed text-white disabled:text-gray-400 px-4 py-2 rounded-xl text-sm font-semibold transition-colors"
               >
                 <Send size={13} />
-                {loading ? "回答中..." : "发送"}
+                {loading ? (lang === "en" ? "..." : "回答中...") : (lang === "en" ? "Send" : "发送")}
               </button>
             </div>
           </div>

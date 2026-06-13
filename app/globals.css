@@ -94,9 +94,9 @@ body {
   transform: scale(1.05);
 }
 
-/* Provider badge */
+/* Provider badge — 金色=圈内身份色，与全站 navy+gold 体系一致 */
 .verified-badge {
-  background: linear-gradient(135deg, #0EA5E9, #0284C7);
+  background: linear-gradient(135deg, #F5A623, #d97706);
 }
 
 /* Mobile responsive */

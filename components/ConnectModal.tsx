@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { X, CheckCircle, MessageCircle, Copy } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
 
 // 「我能对接」直连弹窗（对接大厅 + 资源库共用）。
 // 留下称呼+微信 → 对方有联系方式就当场互换直连；没有就由圈主牵线。
@@ -20,6 +21,7 @@ export default function ConnectModal({
   target: ConnectTarget;
   onClose: () => void;
 }) {
+  const { t } = useI18n();
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<null | {
     bridged: boolean;
@@ -84,7 +86,7 @@ export default function ConnectModal({
       <div className="bg-white rounded-3xl max-w-md w-full max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white rounded-t-3xl px-6 pt-6 pb-4 border-b border-gray-100 flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold text-navy-900">对接：{target.name}</h2>
+            <h2 className="text-lg font-bold text-navy-900">{t("connect.title")}{target.name}</h2>
             {target.need && (
               <p className="text-gray-500 text-xs mt-1 line-clamp-1">
                 {target.need}
@@ -107,12 +109,12 @@ export default function ConnectModal({
             {!result.bridged && (result.wechat || result.email) ? (
               <>
                 <h3 className="text-lg font-bold text-navy-900 mb-2">
-                  直接联系对方
+                  {t("connect.directTitle")}
                 </h3>
                 {result.wechat && (
                   <div className="bg-gray-50 rounded-xl px-4 py-3 mb-2 flex items-center justify-between gap-2">
                     <div className="text-left">
-                      <div className="text-xs text-gray-400">对方微信</div>
+                      <div className="text-xs text-gray-400">{t("connect.theirContact")}</div>
                       <div className="font-mono font-bold text-navy-900">
                         {result.wechat}
                       </div>
@@ -122,30 +124,29 @@ export default function ConnectModal({
                       className="flex items-center gap-1 text-xs font-semibold text-navy-900 bg-white border border-gray-200 px-3 py-1.5 rounded-lg hover:border-navy-900 transition-colors"
                     >
                       <Copy size={12} />
-                      {copied ? "已复制" : "复制"}
+                      {copied ? t("connect.copied") : t("connect.copy")}
                     </button>
                   </div>
                 )}
                 {result.email && (
                   <div className="bg-gray-50 rounded-xl px-4 py-3 mb-2 text-left">
-                    <div className="text-xs text-gray-400">对方邮箱</div>
+                    <div className="text-xs text-gray-400">Email</div>
                     <div className="font-mono font-bold text-navy-900 text-sm">
                       {result.email}
                     </div>
                   </div>
                 )}
                 <p className="text-gray-500 text-xs mt-3">
-                  加好友时备注「澳洲NDIS圈对接」，对方会更快通过
+                  {t("connect.note")}
                 </p>
               </>
             ) : (
               <>
                 <h3 className="text-lg font-bold text-navy-900 mb-2">
-                  已转交圈主牵线
+                  {t("connect.bridgedTitle")}
                 </h3>
                 <p className="text-gray-500 text-sm mb-5">
-                  对方未公开联系方式。圈主已收到你的微信，
-                  会尽快把你推给对方。想更快？进群直接@圈主。
+                  {t("connect.bridgedSub")}
                 </p>
                 <Link
                   href="/#join"
@@ -153,7 +154,7 @@ export default function ConnectModal({
                   className="inline-flex items-center gap-2 bg-gold-500 hover:bg-gold-400 text-navy-950 px-6 py-2.5 rounded-xl font-bold text-sm transition-colors"
                 >
                   <MessageCircle size={14} />
-                  进同业交流群
+                  {t("connect.joinGroup")}
                 </Link>
               </>
             )}
@@ -161,13 +162,14 @@ export default function ConnectModal({
         ) : (
           <form onSubmit={handleSubmit} className="p-6 space-y-4">
             <div className="bg-navy-50 rounded-xl p-3 text-xs text-navy-800">
-              留下你的微信，{target.type === "demand"
-                ? "提交后直接显示对方联系方式，你们自行对接。"
-                : "圈主会把你推给对方，完成牵线。"}
+              {t("connect.lead")}
+              {target.type === "demand"
+                ? t("connect.intro.demand")
+                : t("connect.intro.member")}
             </div>
             <div>
               <label className="block text-sm font-semibold text-navy-900 mb-1">
-                你的称呼 *
+                {t("connect.yourName")} *
               </label>
               <input
                 required
@@ -181,28 +183,28 @@ export default function ConnectModal({
             </div>
             <div>
               <label className="block text-sm font-semibold text-navy-900 mb-1">
-                你的微信号 *
+                {t("connect.yourContact")} *
               </label>
               <input
                 required
                 type="text"
-                maxLength={40}
+                maxLength={60}
                 value={form.wechat}
                 onChange={(e) => setForm({ ...form, wechat: e.target.value })}
-                placeholder="对方/圈主通过它联系你"
+                placeholder="例：wx_id / +61 4xx xxx xxx"
                 className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-navy-900 transition-colors"
               />
             </div>
             <div>
               <label className="block text-sm font-semibold text-navy-900 mb-1">
-                想说的话（选填）
+                {t("connect.msg")}
               </label>
               <textarea
                 rows={2}
                 maxLength={300}
                 value={form.message}
                 onChange={(e) => setForm({ ...form, message: e.target.value })}
-                placeholder="一句话介绍你能提供什么"
+                placeholder={t("connect.msgPlaceholder")}
                 className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-navy-900 transition-colors resize-none"
               />
             </div>
@@ -211,7 +213,7 @@ export default function ConnectModal({
               disabled={submitting}
               className="w-full bg-navy-900 text-white font-bold py-3 rounded-xl hover:bg-navy-800 disabled:bg-gray-400 transition-colors"
             >
-              {submitting ? "提交中..." : "提交，开始对接"}
+              {submitting ? t("post.submitting") : t("connect.submit")}
             </button>
           </form>
         )}

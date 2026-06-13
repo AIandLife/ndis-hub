@@ -219,4 +219,19 @@ export const LOCATIONS = [
   "堪培拉 Canberra",
 ];
 
-export const LANGUAGES = ["全部语言", "普通话", "广东话", "其他中文方言"];
+// 服务语言：覆盖 NDIS 从业主要族裔社群（调研依据：照护从业者出生国前三=尼泊尔/印度/菲律宾；
+// 社区语言前五=普通话/阿拉伯语/越南语/粤语/旁遮普语，ABS 2021）
+export const LANGUAGES = [
+  "全部语言",
+  "中文",
+  "粤语",
+  "English",
+  "Tiếng Việt",
+  "العربية Arabic",
+  "Punjabi",
+  "Hindi",
+  "Nepali",
+  "Tagalog",
+  "한국어 Korean",
+  "其他",
+];

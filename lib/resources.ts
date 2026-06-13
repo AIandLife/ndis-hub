@@ -24,6 +24,13 @@ interface ResourceRow {
   status: string;
 }
 
+// 旧数据语言值 → 新版多族裔标签
+const LANG_ALIAS: Record<string, string> = {
+  英文: "English",
+  普通话: "中文",
+  广东话: "粤语",
+};
+
 // resources 行 → 页面用的 Provider 形状
 function rowToProvider(r: ResourceRow): Provider {
   const ci = r.contact_info || {};
@@ -36,7 +43,7 @@ function rowToProvider(r: ResourceRow): Provider {
     location: r.location || "",
     suburb: "",
     state: ci.state || "",
-    languages: ci.languages || [],
+    languages: (ci.languages || []).map((l) => LANG_ALIAS[l] || l),
     description: r.description,
     website:
       ci.website ||

@@ -2,19 +2,22 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Globe } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
 
-const navLinks = [
-  { href: "/board", label: "对接大厅" },
-  { href: "/providers", label: "商家资源库" },
-  { href: "/ai-advisor", label: "AI 顾问" },
-  { href: "/journey", label: "NDIS 全流程" },
-  { href: "/resources", label: "知识库" },
-  { href: "/about", label: "关于" },
+const NAV = [
+  { href: "/providers", key: "nav.providers" },
+  { href: "/board", key: "nav.board" },
+  { href: "/ai-advisor", key: "nav.aiAdvisor" },
+  { href: "/insights", key: "nav.insights" },
+  { href: "/about", key: "nav.about" },
 ];
 
 export default function Navigation() {
   const [open, setOpen] = useState(false);
+  const { lang, setLang, t } = useI18n();
+
+  const toggleLang = () => setLang(lang === "zh" ? "en" : "zh");
 
   return (
     <nav className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
@@ -27,62 +30,80 @@ export default function Navigation() {
             </div>
             <div className="hidden sm:block">
               <div className="text-navy-900 font-bold text-base leading-tight">
-                澳洲NDIS圈
+                {lang === "en" ? "NDIS Circle" : "澳洲NDIS圈"}
               </div>
-              <div className="text-gray-400 text-xs">NDIS Hub AU</div>
+              <div className="text-gray-400 text-xs">NDIS Circle AU</div>
             </div>
           </Link>
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) => (
+            {NAV.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="px-4 py-2 text-sm text-gray-600 hover:text-navy-900 hover:bg-gray-50 rounded-lg transition-colors font-medium"
+                className="px-3 py-2 text-sm text-gray-600 hover:text-navy-900 hover:bg-gray-50 rounded-lg transition-colors font-medium"
               >
-                {link.label}
+                {t(link.key)}
               </Link>
             ))}
           </div>
 
           {/* Right actions */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-2">
+            <button
+              onClick={toggleLang}
+              className="flex items-center gap-1 px-2.5 py-2 text-sm text-gray-500 hover:text-navy-900 transition-colors font-semibold"
+              aria-label="Switch language"
+            >
+              <Globe size={15} />
+              {t("lang.switch")}
+            </button>
             <Link
               href="/providers?register=true"
               className="flex items-center gap-1 text-sm text-gray-500 hover:text-navy-900 transition-colors"
             >
-              免费入驻
+              {t("nav.freeListing")}
             </Link>
             <Link
               href="/#join"
               className="px-4 py-2 bg-gold-500 hover:bg-gold-400 text-navy-950 text-sm font-bold rounded-lg transition-colors"
             >
-              进同业群
+              {t("nav.joinGroup")}
             </Link>
           </div>
 
-          {/* Mobile menu button */}
-          <button
-            onClick={() => setOpen(!open)}
-            className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100"
-          >
-            {open ? <X size={20} /> : <Menu size={20} />}
-          </button>
+          {/* Mobile actions */}
+          <div className="md:hidden flex items-center gap-1">
+            <button
+              onClick={toggleLang}
+              className="flex items-center gap-1 px-2 py-2 text-sm text-gray-600 font-semibold"
+              aria-label="Switch language"
+            >
+              <Globe size={16} />
+              {t("lang.switch")}
+            </button>
+            <button
+              onClick={() => setOpen(!open)}
+              className="p-2 rounded-lg text-gray-600 hover:bg-gray-100"
+            >
+              {open ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Mobile Menu */}
       {open && (
         <div className="md:hidden bg-white border-t border-gray-100 px-4 py-3 space-y-1">
-          {navLinks.map((link) => (
+          {NAV.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
               className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors font-medium"
             >
-              {link.label}
+              {t(link.key)}
             </Link>
           ))}
           <div className="pt-2 border-t border-gray-100 mt-2 space-y-2">
@@ -91,14 +112,14 @@ export default function Navigation() {
               onClick={() => setOpen(false)}
               className="block px-4 py-3 bg-gold-500 text-navy-950 text-sm font-bold rounded-lg text-center"
             >
-              进 NDIS 同业交流群
+              {t("hero.ctaJoinMobile")}
             </Link>
             <Link
               href="/providers?register=true"
               onClick={() => setOpen(false)}
               className="block px-4 py-3 border border-navy-200 text-navy-900 text-sm font-semibold rounded-lg text-center"
             >
-              免费入驻资源库
+              {t("nav.freeListing")}
             </Link>
           </div>
         </div>

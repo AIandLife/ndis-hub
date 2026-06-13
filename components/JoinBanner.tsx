@@ -15,7 +15,7 @@ export default function JoinBanner() {
               做 NDIS 生意？同行都在群里
             </div>
             <div className="text-blue-300 text-sm">
-              政策解读 · 上下游对接 · 踩坑互助 — 免费加入 NDIS 同业交流群
+              政策解读 · 上下游对接 · 踩坑互助 — 免费加入 NDIS 行业交流群
             </div>
           </div>
           <Link

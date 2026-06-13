@@ -14,61 +14,104 @@ import {
   MessageCircle,
   ExternalLink,
   Bell,
-  Video,
   MapPin,
   Search,
 } from "lucide-react";
 import { fetchApprovedProviders } from "@/lib/resources";
 import { PROVIDERS, type Provider } from "@/lib/providers-data";
+import { useI18n } from "@/lib/i18n";
 
 const STATS = [
-  { value: "76万+", label: "澳洲NDIS参与者（2025）" },
-  { value: "$46B+", label: "年度行业规模" },
-  { value: "10%+", label: "年增长，行业仍在扩张" },
-  { value: "2026", label: "改革落地年 · 评估改3小时面谈" },
+  { value: "76万+", valueEn: "761K+", label: "stat.participants" },
+  { value: "$46B+", valueEn: "$46B+", label: "stat.marketSize" },
+  { value: "10%+", valueEn: "10%+", label: "stat.growth" },
+  { value: "2026", valueEn: "2026", label: "stat.reformYear" },
 ];
 
 const VALUE_PROPS = [
   {
     icon: Brain,
-    title: "AI 中文顾问",
-    desc: "用中文提问，获得有方向性的NDIS专业回答。不是百科，是导航。",
+    titleKey: "vp.ai.t",
+    descKey: "vp.ai.d",
     color: "text-blue-600",
     bg: "bg-blue-50",
     href: "/ai-advisor",
   },
   {
     icon: Users,
-    title: "从业者社群",
-    desc: "扫码进群，和悉尼/墨尔本/布里斯班的华人Provider、SC、PM在一个圈子里，不再单打独斗。",
+    titleKey: "vp.community.t",
+    descKey: "vp.community.d",
     color: "text-emerald-600",
     bg: "bg-emerald-50",
     href: "#join",
   },
   {
     icon: TrendingUp,
-    title: "对接大厅",
-    desc: "全行业的「在找什么」都在这——找员工、找客户、找供应商。挂上你的需求，圈子帮你找。",
-    color: "text-purple-600",
-    bg: "bg-purple-50",
+    titleKey: "vp.board.t",
+    descKey: "vp.board.d",
+    color: "text-gold-600",
+    bg: "bg-gold-50",
     href: "/board",
   },
 ];
 
-const JOURNEY_STEPS = [
-  { num: "01", title: "资格申请", desc: "准备诊断材料，提交Access Request" },
-  { num: "02", title: "计划制定", desc: "与NDIS规划师讨论目标和支持需求" },
-  { num: "03", title: "计划管理", desc: "选择Agency管理、Plan管理或自管" },
-  { num: "04", title: "找 Provider", desc: "按需搜索，签署服务协议" },
-  { num: "05", title: "使用服务", desc: "享受支持，追踪预算使用" },
-  { num: "06", title: "计划审查", desc: "年度审查，调整支持和资金" },
-];
+interface NeedPreview {
+  id: string;
+  need: string;
+  who: string;
+  city: string;
+  category: string;
+  member: boolean;
+}
+
+function guessCat(text: string): string {
+  if (/招|员工|support worker|护士|治疗师|人才|加入团队/i.test(text)) return "找员工";
+  if (/客户|转介|referral|获客|客源/i.test(text)) return "找客户";
+  if (/供应商|采购|建材|供货/i.test(text)) return "找供应商";
+  if (/买家|卖|收购|并购|转让/i.test(text)) return "买卖生意";
+  if (/房源|场地|物业|租/i.test(text)) return "找场地";
+  return "找合作";
+}
 
 export default function HomePage() {
+  const { lang, t } = useI18n();
   const [providers, setProviders] = useState<Provider[]>(PROVIDERS);
+  const [needs, setNeeds] = useState<NeedPreview[]>([]);
 
   useEffect(() => {
-    fetchApprovedProviders().then(setProviders);
+    fetchApprovedProviders().then((ps) => {
+      setProviders(ps);
+      // 对接大厅首页预览：取圈内成员的「需」
+      const memberNeeds: NeedPreview[] = ps
+        .filter((p) => p.needs && p.needs.length > 8)
+        .slice(0, 8)
+        .map((p) => ({
+          id: `m-${p.id}`,
+          need: p.needs as string,
+          who: p.chineseName || p.name,
+          city: p.location,
+          category: guessCat(p.needs as string),
+          member: true,
+        }));
+      setNeeds(memberNeeds);
+    });
+    // 自助发布的需求（有就并入预览，排前面）
+    fetch("/api/demands")
+      .then((r) => r.json())
+      .then(({ demands }) => {
+        if (Array.isArray(demands) && demands.length) {
+          const d: NeedPreview[] = demands.slice(0, 4).map((x: { id: string; title: string; submitter_name: string; city: string; category: string }) => ({
+            id: `d-${x.id}`,
+            need: x.title,
+            who: x.submitter_name,
+            city: x.city,
+            category: x.category,
+            member: false,
+          }));
+          setNeeds((prev) => [...d, ...prev].slice(0, 8));
+        }
+      })
+      .catch(() => {});
   }, []);
 
   return (
@@ -92,7 +135,7 @@ export default function HomePage() {
             <div className="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-1.5 mb-6 backdrop-blur-sm border border-white/20">
               <div className="pulse-dot" />
               <span className="text-white/90 text-sm font-medium">
-                华人 NDIS 从业者的 B2B 资源圈 · 2026改革实时更新
+                {t("hero.badge")}
               </span>
             </div>
 
@@ -100,7 +143,7 @@ export default function HomePage() {
             <AnimatedHeadline />
 
             <p className="text-lg text-blue-100 mb-8 max-w-2xl leading-relaxed">
-              行业知识、合规工具、圈内人脉、上下游合作——用中文，帮NDIS从业者做对、做好、做大。
+              {t("hero.sub")}
             </p>
 
             {/* Primary CTAs for practitioners */}
@@ -110,26 +153,26 @@ export default function HomePage() {
                 className="inline-flex items-center justify-center gap-2 bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold px-6 py-3.5 rounded-xl transition-colors"
               >
                 <MessageCircle size={16} />
-                <span className="sm:hidden">加入 NDIS 同业交流群</span>
-                <span className="hidden sm:inline">扫码进 NDIS 同业交流群</span>
+                <span className="sm:hidden">{t("hero.ctaJoinMobile")}</span>
+                <span className="hidden sm:inline">{t("hero.ctaJoin")}</span>
               </Link>
               <Link
                 href="/ai-advisor"
                 className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold px-6 py-3.5 rounded-xl transition-colors"
               >
-                AI 行业顾问
+                {t("hero.ctaAi")}
               </Link>
               <Link
                 href="/board"
                 className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold px-6 py-3.5 rounded-xl transition-colors"
               >
-                逛对接大厅
+                {t("hero.ctaBoard")}
               </Link>
             </div>
 
             {/* Compliance-safe positioning line */}
             <div className="flex items-center gap-2 text-blue-300 text-sm">
-              <span>面向 NDIS 行业从业者的 B2B 资源与人脉平台</span>
+              <span>{t("hero.posLine")}</span>
             </div>
           </div>
 
@@ -141,9 +184,9 @@ export default function HomePage() {
                 className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20"
               >
                 <div className="text-2xl font-bold text-gold-400">
-                  {stat.value}
+                  {lang === "en" ? stat.valueEn : stat.value}
                 </div>
-                <div className="text-sm text-blue-200 mt-1">{stat.label}</div>
+                <div className="text-sm text-blue-200 mt-1">{t(stat.label)}</div>
               </div>
             ))}
           </div>
@@ -155,10 +198,10 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-navy-900 mb-3">
-              为什么来这里？
+              {t("vp.why")}
             </h2>
             <p className="text-gray-500">
-              做 NDIS 生意，信息散、资源散、同行难找——这里把人、资源和机会聚到一起。
+              {t("vp.whySub")}
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -174,15 +217,15 @@ export default function HomePage() {
                   <prop.icon className={`${prop.color}`} size={22} />
                 </div>
                 <h3 className="text-lg font-bold text-navy-900 mb-2 group-hover:text-blue-600 transition-colors">
-                  {prop.title}
+                  {t(prop.titleKey)}
                 </h3>
                 <p className="text-gray-500 text-sm leading-relaxed">
-                  {prop.desc}
+                  {t(prop.descKey)}
                 </p>
                 <div
                   className={`flex items-center gap-1 mt-4 text-sm font-medium ${prop.color}`}
                 >
-                  了解更多 <ChevronRight size={14} />
+                  {t("common.learnMore")} <ChevronRight size={14} />
                 </div>
               </Link>
             ))}
@@ -190,30 +233,102 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ─── MARKETPLACE LIVE PREVIEW (差异化明星功能，靠前) ─── */}
+      {needs.length > 0 && (
+        <section className="py-16 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between mb-8 gap-4">
+              <div>
+                <div className="inline-flex items-center gap-2 bg-emerald-50 rounded-full px-3 py-1 mb-3">
+                  <span className="pulse-dot" style={{ background: "#10b981" }} />
+                  <span className="text-emerald-700 text-xs font-semibold">
+                    {t("mp.tag")}
+                  </span>
+                </div>
+                <h2 className="text-3xl font-bold text-navy-900 mb-2">
+                  {t("mp.title")}
+                </h2>
+                <p className="text-gray-500 max-w-xl">{t("mp.sub")}</p>
+              </div>
+              <Link
+                href="/board"
+                className="flex items-center gap-2 text-sm font-semibold text-navy-900 border-2 border-navy-900 px-4 py-2 rounded-xl hover:bg-navy-900 hover:text-white transition-colors whitespace-nowrap"
+              >
+                {t("mp.browse")} <ArrowRight size={14} />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {needs.slice(0, 6).map((n) => (
+                <Link
+                  key={n.id}
+                  href="/board"
+                  className="bg-gray-50 rounded-2xl border border-gray-100 p-5 card-hover group"
+                >
+                  <div className="flex items-center gap-2 mb-2.5 flex-wrap">
+                    <span className="text-xs bg-navy-50 text-navy-700 px-2 py-0.5 rounded-full font-semibold">
+                      {n.category}
+                    </span>
+                    <span className="flex items-center gap-1 text-xs text-gray-400">
+                      <MapPin size={11} />
+                      {n.city}
+                    </span>
+                    {n.member && (
+                      <span className="text-xs text-emerald-600 font-medium">
+                        {t("board.member")}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-start gap-1.5">
+                    <span className="text-gold-500 font-bold text-xs mt-0.5 flex-shrink-0">
+                      {t("mp.lookingFor")}:
+                    </span>
+                    <p className="text-navy-900 text-sm font-medium leading-relaxed line-clamp-2">
+                      {n.need}
+                    </p>
+                  </div>
+                  <div className="text-gray-400 text-xs mt-3">{n.who}</div>
+                </Link>
+              ))}
+            </div>
+
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link
+                href="/board?post=1"
+                className="inline-flex items-center justify-center gap-2 bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold px-6 py-3 rounded-xl transition-colors"
+              >
+                <Bell size={16} />
+                {t("mp.post")}
+              </Link>
+              <span className="text-gray-400 text-sm text-center">{t("mp.split")}</span>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* ─── RESOURCE LIBRARY SHOWCASE ─── */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between mb-8 gap-4">
             <div>
               <div className="inline-flex items-center gap-2 bg-navy-50 rounded-full px-3 py-1 mb-3">
                 <Search size={13} className="text-navy-700" />
                 <span className="text-navy-700 text-xs font-semibold">
-                  NDIS 商家资源库
+                  {t("lib.tag")}
                 </span>
               </div>
               <h2 className="text-3xl font-bold text-navy-900 mb-2">
-                找同行、找供应商、找合作
+                {t("lib.title")}
               </h2>
               <p className="text-gray-500 max-w-xl">
-                全澳做 NDIS 的华人圈内成员 + 行业公开资源。
-                每张卡都写着对方在供什么、在找什么——看中了就进群对接。
+                {t("lib.showcaseSub")}
               </p>
             </div>
             <Link
               href="/providers"
               className="flex items-center gap-2 text-sm font-semibold text-navy-900 border-2 border-navy-900 px-4 py-2 rounded-xl hover:bg-navy-900 hover:text-white transition-colors whitespace-nowrap"
             >
-              进入资源库 <ArrowRight size={14} />
+              {t("lib.enter")} <ArrowRight size={14} />
             </Link>
           </div>
 
@@ -235,7 +350,7 @@ export default function HomePage() {
                         : "bg-gray-100 text-gray-500"
                     }`}
                   >
-                    {p.listingType === "claimed" ? "圈内成员" : "公开收录"}
+                    {p.listingType === "claimed" ? t("lib.member") : t("lib.public")}
                   </span>
                 </div>
                 <h3 className="font-bold text-navy-900 mb-1 group-hover:text-blue-600 transition-colors">
@@ -245,11 +360,11 @@ export default function HomePage() {
                   <span
                     className={`text-xs px-2 py-0.5 rounded-full ${
                       p.category === "supplier"
-                        ? "bg-purple-50 text-purple-700"
+                        ? "bg-amber-50 text-amber-700"
                         : "bg-navy-50 text-navy-700"
                     }`}
                   >
-                    {p.category === "supplier" ? "上游供应商" : "服务机构"}
+                    {p.category === "supplier" ? t("lib.supplier") : t("lib.provider")}
                   </span>
                   <span className="flex items-center gap-1 text-xs text-gray-400">
                     <MapPin size={11} />
@@ -269,11 +384,8 @@ export default function HomePage() {
               className="inline-flex items-center justify-center gap-2 bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold px-6 py-3 rounded-xl transition-colors"
             >
               <Bell size={16} />
-              免费入驻，让圈子找到你
+              {t("lib.listFree")}
             </Link>
-            <span className="text-gray-400 text-sm">
-              写上你在供什么、找什么 · 上下游直接看到
-            </span>
           </div>
         </div>
       </section>
@@ -286,33 +398,26 @@ export default function HomePage() {
             <div className="absolute top-0 right-0 w-64 h-64 bg-gold-500/10 rounded-full -translate-y-16 translate-x-16" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-500/10 rounded-full translate-y-12 -translate-x-12" />
 
-            <div className="relative grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-center">
+            <div className="relative grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-stretch">
               {/* Left: copy */}
               <div className="lg:col-span-3">
                 <div className="inline-flex items-center gap-2 bg-gold-500/20 rounded-full px-3 py-1 mb-5">
                   <MessageCircle size={13} className="text-gold-400" />
                   <span className="text-gold-300 text-xs font-semibold">
-                    免费 · 华人 NDIS 从业者专属
+                    {t("join.badge")}
                   </span>
                 </div>
                 <h2 className="text-2xl lg:text-3xl font-bold mb-4 leading-snug">
-                  扫码进群，<br />
-                  加入澳洲华人 NDIS 从业者圈
+                  {t("join.h")}
                 </h2>
                 <p className="text-blue-200 mb-6 leading-relaxed max-w-xl">
-                  这里聚集着全澳做 NDIS 的华人 Provider、Support Coordinator、
-                  Plan Manager 和正在入行的人。进群你能：
+                  {t("join.intro")}
                 </p>
                 <div className="space-y-2.5 mb-8">
-                  {[
-                    "第一时间拿到 2026 改革政策解读，不再靠猜",
-                    "找上下游合作、转介客户、对接供应商和合伙人",
-                    "遇到合规/定价/注册的坑，群里有人踩过帮你绕开",
-                    "免费用站内 AI 中文顾问 + NDIS 全流程工具",
-                  ].map((item, i) => (
-                    <div key={i} className="flex items-start gap-2">
+                  {["join.b1", "join.b2", "join.b3", "join.b4"].map((k) => (
+                    <div key={k} className="flex items-start gap-2">
                       <CheckCircle size={16} className="text-gold-400 flex-shrink-0 mt-0.5" />
-                      <span className="text-blue-100 text-sm">{item}</span>
+                      <span className="text-blue-100 text-sm">{t(k)}</span>
                     </div>
                   ))}
                 </div>
@@ -327,10 +432,10 @@ export default function HomePage() {
                   />
                   <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-navy-950/90 to-transparent px-4 pt-10 pb-3">
                     <span className="text-white text-sm font-medium">
-                      NDIS 生意线下交流会 · 悉尼
+                      {t("join.photoCaption")}
                     </span>
                     <span className="text-blue-300 text-xs ml-2">
-                      线上进群 · 线下见面
+                      {t("join.photoNote")}
                     </span>
                   </div>
                 </div>
@@ -341,112 +446,85 @@ export default function HomePage() {
                     className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm"
                   >
                     <Bell size={14} />
-                    想进官方成员目录？申请入驻
+                    {t("join.applyDirectory")}
                   </Link>
                   <span className="text-blue-300 text-xs">
-                    ✓ 审核制 ✓ 圈内认证展示 ✓ 优先转介
+                    {t("join.applyNote")}
                   </span>
                 </div>
               </div>
 
-              {/* Right: QR card */}
-              <div className="lg:col-span-2">
-                <div className="bg-white rounded-2xl p-6 text-center shadow-xl">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/wechat-qr.jpg"
-                    alt="NDIS 同业交流群二维码"
-                    className="w-44 h-44 mx-auto rounded-xl"
-                  />
-                  <div className="mt-4 font-bold text-navy-900">
-                    加入 NDIS 同业交流群
+              {/* Right: QR card（与左栏等高的完整面板） */}
+              <div className="lg:col-span-2 flex">
+                <div className="bg-white rounded-2xl p-7 text-center shadow-xl w-full flex flex-col justify-center">
+                  <div className="inline-flex items-center justify-center gap-1.5 mx-auto bg-emerald-50 rounded-full px-3 py-1 mb-5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    <span className="text-emerald-700 text-xs font-semibold">
+                      {t("join.coverage")}
+                    </span>
+                  </div>
+                  <div className="mx-auto p-2 rounded-2xl border-2 border-gold-200 bg-white">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="/wechat-qr.jpg"
+                      alt="NDIS group QR code"
+                      className="w-52 h-52 rounded-xl"
+                    />
+                  </div>
+                  <div className="mt-5 font-bold text-navy-900 text-lg">
+                    {t("join.cardTitle")}
                   </div>
                   {/* 手机上无法"扫"自己屏幕上的码，提示长按识别 */}
                   <div className="text-gray-500 text-xs mt-1 sm:hidden">
-                    长按上方二维码，识别进群
+                    {t("join.scanMobile")}
                   </div>
                   <div className="text-gray-500 text-xs mt-1 hidden sm:block">
-                    微信扫一扫，进群和同行交流
+                    {t("join.scanDesktop")}
+                  </div>
+
+                  <div className="border-t border-gray-100 mt-5 pt-5 grid grid-cols-3 gap-2">
+                    {[
+                      ["1", "join.step1"],
+                      ["2", "join.step2"],
+                      ["3", "join.step3"],
+                    ].map(([n, k]) => (
+                      <div key={n} className="flex flex-col items-center gap-1.5">
+                        <span className="w-6 h-6 rounded-full bg-navy-900 text-gold-400 text-xs font-bold flex items-center justify-center">
+                          {n}
+                        </span>
+                        <span className="text-gray-500 text-xs">{t(k)}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ─── NDIS JOURNEY ─── */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-10 gap-4">
-            <div>
-              <h2 className="text-3xl font-bold text-navy-900 mb-2">
-                NDIS 全流程图
-              </h2>
-              <p className="text-gray-500">
-                从申请到服务，每一步都有中文指引
-              </p>
-            </div>
-            <Link
-              href="/journey"
-              className="flex items-center gap-2 text-sm font-semibold text-navy-900 border-2 border-navy-900 px-4 py-2 rounded-xl hover:bg-navy-900 hover:text-white transition-colors"
-            >
-              查看完整流程图 <ArrowRight size={14} />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {JOURNEY_STEPS.map((step, i) => (
-              <Link
-                key={i}
-                href={`/journey#step-${i + 1}`}
-                className="bg-white rounded-2xl p-4 border border-gray-100 card-hover group text-center"
-              >
-                <div className="w-10 h-10 rounded-full bg-navy-900 text-white flex items-center justify-center mx-auto mb-3 text-xs font-bold group-hover:bg-gold-500 group-hover:text-navy-950 transition-colors">
-                  {step.num}
-                </div>
-                <div className="text-navy-900 font-semibold text-sm mb-1">
-                  {step.title}
-                </div>
-                <div className="text-gray-400 text-xs leading-relaxed">
-                  {step.desc}
-                </div>
-              </Link>
-            ))}
           </div>
         </div>
       </section>
 
       {/* ─── AI ADVISOR PREVIEW ─── */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <div className="inline-flex items-center gap-2 bg-blue-50 rounded-full px-3 py-1 mb-4">
                 <Zap size={13} className="text-blue-600" />
                 <span className="text-blue-700 text-xs font-semibold">
-                  AI 驱动 · 中文优先
+                  {t("aip.badge")}
                 </span>
               </div>
               <h2 className="text-3xl font-bold text-navy-900 mb-4">
-                做 NDIS 生意的
-                <br />
-                行业顾问
+                {t("aip.title")}
               </h2>
               <p className="text-gray-500 mb-6 leading-relaxed">
-                面向 NDIS 从业者与生意人——入行注册、合规运营、定价、开拓客户、
-                上下游对接。给你有方向、能落地的经营答案，不是病人答疑。
+                {t("aip.sub")}
               </p>
               <div className="space-y-3 mb-8">
-                {[
-                  "入行/注册/合规：做这行你必须知道的",
-                  "定价与经营：怎么收费、怎么开拓第一批客户",
-                  "2026年改革对从业者的影响，实时跟踪",
-                  "只讲生意，不针对参与者个人做指导（合规）",
-                ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-2">
+                {["aip.b1", "aip.b2", "aip.b3", "aip.b4"].map((k) => (
+                  <div key={k} className="flex items-center gap-2">
                     <CheckCircle size={15} className="text-emerald-500 flex-shrink-0" />
-                    <span className="text-gray-600 text-sm">{item}</span>
+                    <span className="text-gray-600 text-sm">{t(k)}</span>
                   </div>
                 ))}
               </div>
@@ -454,7 +532,7 @@ export default function HomePage() {
                 href="/ai-advisor"
                 className="inline-flex items-center gap-2 bg-navy-900 text-white font-semibold px-6 py-3 rounded-xl hover:bg-navy-800 transition-colors"
               >
-                开始提问 <ArrowRight size={16} />
+                {t("aip.start")} <ArrowRight size={16} />
               </Link>
             </div>
 
@@ -465,18 +543,18 @@ export default function HomePage() {
                   <Brain size={14} className="text-gold-400" />
                 </div>
                 <span className="text-white text-sm font-medium">
-                  NDIS AI 顾问
+                  {t("vp.ai.t")}
                 </span>
                 <div className="ml-auto flex items-center gap-1">
                   <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
-                  <span className="text-green-400 text-xs">在线</span>
+                  <span className="text-green-400 text-xs">{t("aip.online")}</span>
                 </div>
               </div>
               <div className="p-5 space-y-4 min-h-[280px]">
                 {/* User message */}
                 <div className="flex justify-end">
                   <div className="bg-navy-900 text-white rounded-2xl rounded-tr-sm px-4 py-2.5 max-w-[75%] text-sm">
-                    我想注册成为 NDIS Provider，第一步该做什么？成本大概多少？
+                    {t("aip.userMsg")}
                   </div>
                 </div>
                 {/* AI response */}
@@ -485,12 +563,24 @@ export default function HomePage() {
                     <Brain size={13} className="text-gold-600" />
                   </div>
                   <div className="bg-gray-50 rounded-2xl rounded-tl-sm px-4 py-3 max-w-[80%] text-sm text-gray-700 leading-relaxed">
-                    先想清楚做哪类服务——决定你走<strong>注册</strong>还是<strong>未注册</strong>路线、要不要 SIL/SDA 这类高资质类别。
-                    <br /><br />
-                    <strong>第一步：</strong>到 NDIS Commission 提交 Provider 注册申请，同时给直接服务员工办 Worker Screening Check。
-                    <br /><br />
-                    成本主要在<strong>认证审核（按服务类别）</strong>和合规体系搭建...
-                    <span className="text-blue-600 cursor-pointer"> 继续阅读</span>
+                    {lang === "en" ? (
+                      <>
+                        First decide which services you&apos;ll offer — that sets whether you go <strong>registered</strong> or <strong>unregistered</strong>, and whether you need high-bar categories like SIL/SDA.
+                        <br /><br />
+                        <strong>Step 1:</strong> submit a Provider registration to the NDIS Commission, and arrange Worker Screening Checks for frontline staff.
+                        <br /><br />
+                        Most of the cost is in <strong>certification audits (by service type)</strong> and building your compliance system...
+                      </>
+                    ) : (
+                      <>
+                        先想清楚做哪类服务——决定你走<strong>注册</strong>还是<strong>未注册</strong>路线、要不要 SIL/SDA 这类高资质类别。
+                        <br /><br />
+                        <strong>第一步：</strong>到 NDIS Commission 提交 Provider 注册申请，同时给直接服务员工办 Worker Screening Check。
+                        <br /><br />
+                        成本主要在<strong>认证审核（按服务类别）</strong>和合规体系搭建...
+                      </>
+                    )}
+                    <span className="text-blue-600 cursor-pointer">{t("aip.continueRead")}</span>
                   </div>
                 </div>
                 {/* Typing indicator */}
@@ -504,7 +594,7 @@ export default function HomePage() {
                       />
                     ))}
                   </div>
-                  <span className="text-gray-400 text-xs">AI正在回答...</span>
+                  <span className="text-gray-400 text-xs">{t("aip.typing")}</span>
                 </div>
               </div>
               <div className="border-t border-gray-100 px-4 py-3">
@@ -512,7 +602,7 @@ export default function HomePage() {
                   href="/ai-advisor"
                   className="flex items-center justify-center gap-2 text-navy-900 text-sm font-semibold hover:text-blue-600 transition-colors"
                 >
-                  点击继续对话 <ArrowRight size={14} />
+                  {t("aip.continueChat")} <ArrowRight size={14} />
                 </Link>
               </div>
             </div>
@@ -525,32 +615,32 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
             <p className="text-gray-400 text-sm font-medium tracking-wide uppercase">
-              澳洲商业联盟生态矩阵
+              {t("eco.title")}
             </p>
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
             {[
               {
-                name: "澳洲商业联盟",
-                desc: "华人商业圈子总站",
+                name: lang === "en" ? "Business Alliance" : "澳洲商业联盟",
+                desc: lang === "en" ? "Main hub" : "华人商业圈子总站",
                 href: "https://www.australiabusinessalliance.com",
                 active: false,
               },
               {
-                name: "澳洲NDIS圈",
-                desc: "NDIS行业专业平台",
+                name: lang === "en" ? "NDIS Hub" : "澳洲NDIS圈",
+                desc: lang === "en" ? "NDIS professionals" : "NDIS行业专业平台",
                 href: "/",
                 active: true,
               },
               {
-                name: "澳洲房产圈",
-                desc: "房产投资智能导航",
+                name: lang === "en" ? "Property Circle" : "澳洲房产圈",
+                desc: lang === "en" ? "Property investing" : "房产投资智能导航",
                 href: "https://auspropertycircle.com",
                 active: false,
               },
               {
-                name: "澳洲建房圈",
-                desc: "建房项目专业平台",
+                name: lang === "en" ? "Build Circle" : "澳洲建房圈",
+                desc: lang === "en" ? "Home building" : "建房项目专业平台",
                 href: "https://ausbuildcircle.com",
                 active: false,
               },
@@ -584,79 +674,28 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ─── COURSES CTA ─── */}
-      <section className="py-16 bg-white border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-br from-gold-50 to-amber-50 border border-gold-200 rounded-3xl p-8 lg:p-10">
-            <div className="flex flex-col lg:flex-row items-start lg:items-center gap-8">
-              <div className="flex-1">
-                <div className="inline-flex items-center gap-2 bg-gold-500/20 rounded-full px-3 py-1 mb-4">
-                  <Video size={13} className="text-gold-600" />
-                  <span className="text-gold-700 text-xs font-semibold">
-                    华人NDIS从业者专属
-                  </span>
-                </div>
-                <h2 className="text-2xl font-bold text-navy-900 mb-3">
-                  想进入 NDIS 行业？先学对再入场
-                </h2>
-                <p className="text-gray-600 mb-4">
-                  从注册入行到合规运营，全中文课程。
-                  避开华人Provider最常见的坑，用最短时间做对。
-                </p>
-                <div className="flex flex-wrap gap-4">
-                  {[
-                    "Provider注册全流程",
-                    "合规与定价",
-                    "Support Coordinator技能",
-                  ].map((item) => (
-                    <div key={item} className="flex items-center gap-1.5 text-sm text-gray-700">
-                      <CheckCircle size={14} className="text-gold-600" />
-                      {item}
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="flex flex-col gap-3 flex-shrink-0">
-                <Link
-                  href="/courses"
-                  className="inline-flex items-center justify-center gap-2 bg-navy-900 text-white font-bold px-6 py-3 rounded-xl hover:bg-navy-800 transition-colors"
-                >
-                  查看所有课程 <ArrowRight size={15} />
-                </Link>
-                <Link
-                  href="/ai-advisor?q=我想进入NDIS行业，应该怎么开始？"
-                  className="inline-flex items-center justify-center gap-2 border-2 border-navy-900 text-navy-900 font-semibold px-6 py-3 rounded-xl hover:bg-navy-900 hover:text-white transition-colors text-sm"
-                >
-                  问AI帮我规划路径
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* ─── FINAL CTA ─── */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-navy-900 mb-4">
-            你在 NDIS 行业做生意？
+            {t("final.title")}
           </h2>
           <p className="text-gray-500 mb-8 leading-relaxed">
-            扫码进澳洲华人 NDIS 从业者群，建立人脉、
-            拓展上下游合作，共同把生意做大。
+            {t("final.sub")}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="#join"
               className="inline-flex items-center justify-center gap-2 bg-navy-900 text-white font-bold px-8 py-3.5 rounded-xl hover:bg-navy-800 transition-colors"
             >
-              扫码进群 <ArrowRight size={16} />
+              {t("final.join")} <ArrowRight size={16} />
             </Link>
             <Link
               href="/ai-advisor"
               className="inline-flex items-center justify-center gap-2 border-2 border-navy-900 text-navy-900 font-bold px-8 py-3.5 rounded-xl hover:bg-navy-900 hover:text-white transition-colors"
             >
-              先试试 AI 顾问
+              {t("final.tryAi")}
             </Link>
           </div>
         </div>

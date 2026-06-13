@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
         <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold">详情</td><td style="padding:8px;border:1px solid #eee">${data.description}</td></tr>
         <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold">分类 / 城市</td><td style="padding:8px;border:1px solid #eee">${data.category} / ${data.city}</td></tr>
         <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold">发布人</td><td style="padding:8px;border:1px solid #eee">${data.name}</td></tr>
-        <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold">微信</td><td style="padding:8px;border:1px solid #eee">${data.wechat || "未提供"}</td></tr>
+        <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold">联系方式</td><td style="padding:8px;border:1px solid #eee">${data.wechat || "未提供"}</td></tr>
         <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold">邮箱</td><td style="padding:8px;border:1px solid #eee">${data.email || "未提供"}</td></tr>
       </table>
       <p style="color:#666;margin-top:16px">提交时间：${new Date().toLocaleString("zh-AU", { timeZone: "Australia/Sydney" })}</p>
@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
         <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold">想对接的需求</td><td style="padding:8px;border:1px solid #eee">${data.need || "（资源库成员）"}</td></tr>
         <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold">需求方</td><td style="padding:8px;border:1px solid #eee">${data.targetName}</td></tr>
         <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold">响应人</td><td style="padding:8px;border:1px solid #eee">${data.name}</td></tr>
-        <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold">响应人微信</td><td style="padding:8px;border:1px solid #eee">${data.wechat}</td></tr>
+        <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold">响应人联系方式</td><td style="padding:8px;border:1px solid #eee">${data.wechat}</td></tr>
         <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold">留言</td><td style="padding:8px;border:1px solid #eee">${data.message || "无"}</td></tr>
         <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold">直连状态</td><td style="padding:8px;border:1px solid #eee">${data.bridged === "yes" ? "⚠️ 需你牵线（对方无公开联系方式）" : "已自动互换微信，可跟进"}</td></tr>
       </table>
