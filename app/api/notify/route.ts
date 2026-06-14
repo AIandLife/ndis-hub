@@ -107,7 +107,10 @@ export async function POST(req: NextRequest) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          from: "澳洲NDIS圈 <onboarding@resend.dev>",
+          // 发件人开关：默认用已验证的 bosslink.ai；ndiscircle.com 在 Resend 验证后，
+          // 把 Vercel 环境变量 EMAIL_FROM 设成「澳洲NDIS圈 <noreply@ndiscircle.com>」即可切换，无需改代码。
+          from:
+            process.env.EMAIL_FROM || "澳洲NDIS圈 <noreply@bosslink.ai>",
           to: [notifyEmail],
           subject,
           html,
