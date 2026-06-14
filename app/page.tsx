@@ -58,6 +58,7 @@ const VALUE_PROPS = [
 interface NeedPreview {
   id: string;
   need: string;
+  needEn?: string;
   who: string;
   city: string;
   category: string;
@@ -87,7 +88,8 @@ export default function HomePage() {
         .slice(0, 8)
         .map((p) => ({
           id: `m-${p.id}`,
-          need: p.needs as string,
+          need: p.needsZh || (p.needs as string),
+          needEn: p.needsEn || (p.needs as string),
           who: p.chineseName || p.name,
           city: p.location,
           category: guessCat(p.needs as string),
@@ -100,9 +102,10 @@ export default function HomePage() {
       .then((r) => r.json())
       .then(({ demands }) => {
         if (Array.isArray(demands) && demands.length) {
-          const d: NeedPreview[] = demands.slice(0, 4).map((x: { id: string; title: string; submitter_name: string; city: string; category: string }) => ({
+          const d: NeedPreview[] = demands.slice(0, 4).map((x: { id: string; title: string; submitter_name: string; city: string; category: string; tr?: { zh?: { title?: string }; en?: { title?: string } } }) => ({
             id: `d-${x.id}`,
-            need: x.title,
+            need: x.tr?.zh?.title || x.title,
+            needEn: x.tr?.en?.title || x.title,
             who: x.submitter_name,
             city: x.city,
             category: x.category,
@@ -284,7 +287,7 @@ export default function HomePage() {
                       {t("mp.lookingFor")}:
                     </span>
                     <p className="text-navy-900 text-sm font-medium leading-relaxed line-clamp-2">
-                      {n.need}
+                      {lang === "en" && n.needEn ? n.needEn : n.need}
                     </p>
                   </div>
                   <div className="text-gray-400 text-xs mt-3">{n.who}</div>

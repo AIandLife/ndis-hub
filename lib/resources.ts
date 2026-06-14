@@ -17,6 +17,8 @@ interface ResourceRow {
     ndisRegistered?: boolean;
     state?: string;
     needs?: string;
+    needs_en?: string;
+    needs_zh?: string;
     contactName?: string;
   } | null;
   is_scraped: boolean;
@@ -53,6 +55,8 @@ function rowToProvider(r: ResourceRow): Provider {
     ndisRegistered: ci.ndisRegistered ?? false,
     specialties: ci.specialties || [],
     needs: ci.needs || undefined,
+    needsEn: ci.needs_en || undefined,
+    needsZh: ci.needs_zh || undefined,
     contactName: ci.contactName || undefined,
   };
 }

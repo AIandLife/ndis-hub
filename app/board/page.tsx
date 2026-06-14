@@ -45,8 +45,10 @@ const CATEGORIES = [
 
 interface BoardItem {
   id: string;
-  need: string;
+  need: string; // 中文（原文/翻译）
+  needEn?: string; // 英文
   detail?: string;
+  detailEn?: string;
   who: string;
   city: string;
   category: string;
@@ -262,8 +264,9 @@ function PostDemandModal({ onClose }: { onClose: () => void }) {
 }
 
 export default function BoardPage() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [items, setItems] = useState<BoardItem[]>([]);
+  const [loaded, setLoaded] = useState(false);
   const [category, setCategory] = useState("全部");
   const [showPost, setShowPost] = useState(false);
   const [connectTarget, setConnectTarget] = useState<ConnectTarget | null>(null);
@@ -277,15 +280,18 @@ export default function BoardPage() {
   useEffect(() => {
     (async () => {
       const out: BoardItem[] = [];
-      // 1) demands 表（服务端已过滤联系方式）
+      // 1) demands 表（服务端已过滤联系方式；tr=中/英双语）
       try {
         const r = await fetch("/api/demands");
         const { demands } = await r.json();
         for (const d of demands || []) {
+          const tr = d.tr || {};
           out.push({
             id: `d-${d.id}`,
-            need: d.title,
-            detail: d.description,
+            need: tr.zh?.title || d.title,
+            needEn: tr.en?.title || d.title,
+            detail: tr.zh?.description || d.description,
+            detailEn: tr.en?.description || d.description,
             who: d.submitter_name,
             city: d.city,
             category: d.category,
@@ -296,14 +302,15 @@ export default function BoardPage() {
       } catch {
         /* ignore */
       }
-      // 2) 圈内成员档案里的「需」
+      // 2) 圈内成员档案里的「需」（needsZh/needsEn 已批量翻译）
       try {
         const providers = await fetchApprovedProviders();
         for (const p of providers) {
           if (p.needs && p.needs.length > 8) {
             out.push({
               id: `m-${p.id}`,
-              need: p.needs,
+              need: p.needsZh || p.needs,
+              needEn: p.needsEn || p.needs,
               who: p.chineseName || p.name,
               city: p.location,
               category: guessCategory(p.needs),
@@ -315,6 +322,7 @@ export default function BoardPage() {
         /* ignore */
       }
       setItems(out);
+      setLoaded(true);
     })();
   }, []);
 
@@ -380,10 +388,38 @@ export default function BoardPage() {
         </div>
 
         <p className="text-sm text-gray-500 mb-4">
-          <strong className="text-navy-900">{filtered.length}</strong> {t("board.count")}
+          {loaded ? (
+            <>
+              <strong className="text-navy-900">{filtered.length}</strong> {t("board.count")}
+            </>
+          ) : (
+            <span className="inline-block h-4 w-24 bg-gray-200 rounded animate-pulse" />
+          )}
         </p>
 
-        {filtered.length > 0 ? (
+        {!loaded ? (
+          // 加载骨架（消除"先空白再填充"的闪烁）
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div
+                key={i}
+                className="bg-white rounded-2xl border border-gray-100 p-6 animate-pulse"
+              >
+                <div className="flex gap-2 mb-3">
+                  <div className="h-5 w-16 bg-gray-200 rounded-full" />
+                  <div className="h-5 w-20 bg-gray-100 rounded-full" />
+                </div>
+                <div className="h-4 w-3/4 bg-gray-200 rounded mb-2" />
+                <div className="h-3 w-full bg-gray-100 rounded mb-1" />
+                <div className="h-3 w-2/3 bg-gray-100 rounded mb-5" />
+                <div className="flex justify-between items-center pt-3 border-t border-gray-50">
+                  <div className="h-3 w-20 bg-gray-100 rounded" />
+                  <div className="h-7 w-20 bg-gray-200 rounded-lg" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : filtered.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {filtered.map((item) => (
               <div
@@ -409,12 +445,12 @@ export default function BoardPage() {
                 <div className="flex items-start gap-2 mb-2">
                   <Megaphone size={16} className="text-gold-500 flex-shrink-0 mt-1" />
                   <p className="text-navy-900 font-semibold leading-relaxed">
-                    {item.need}
+                    {lang === "en" && item.needEn ? item.needEn : item.need}
                   </p>
                 </div>
                 {item.detail && (
                   <p className="text-gray-500 text-sm leading-relaxed mb-3 line-clamp-2 pl-6">
-                    {item.detail}
+                    {lang === "en" && item.detailEn ? item.detailEn : item.detail}
                   </p>
                 )}
 
@@ -431,7 +467,7 @@ export default function BoardPage() {
                         type: item.source === "demand" ? "demand" : "member",
                         id: item.id.slice(2),
                         name: item.who,
-                        need: item.need,
+                        need: lang === "en" && item.needEn ? item.needEn : item.need,
                       })
                     }
                     className="inline-flex items-center gap-1.5 text-sm font-bold text-navy-950 bg-gold-500 hover:bg-gold-400 px-4 py-1.5 rounded-lg transition-colors"

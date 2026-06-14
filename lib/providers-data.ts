@@ -23,6 +23,8 @@ export interface Provider {
   featured?: boolean;
   // 圈内成员的对接信息（来自 BossLink 登记的「需」）
   needs?: string;
+  needsEn?: string;
+  needsZh?: string;
   contactName?: string;
 }
 

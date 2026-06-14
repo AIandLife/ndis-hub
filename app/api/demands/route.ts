@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAdminClient } from "@/lib/supabase/admin";
+import { translateBoth } from "@/lib/translate";
 
 // 对接大厅：需求的公开读取与提交。
 // 读取走服务端过滤——contact_email / contact_wechat 永不返回给浏览器。
@@ -10,7 +11,7 @@ export async function GET() {
 
   const { data, error } = await admin
     .from("demands")
-    .select("id,title,description,category,city,budget,submitter_name,created_at")
+    .select("id,title,description,category,city,budget,submitter_name,created_at,tr")
     .eq("status", "approved")
     .eq("circle", "ndis")
     .order("created_at", { ascending: false })
@@ -39,9 +40,14 @@ export async function POST(req: Request) {
   const admin = getAdminClient();
   if (!admin) return NextResponse.json({ ok: true, stored: false });
 
+  const cleanTitle = title.slice(0, 80);
+  const cleanDesc = description.slice(0, 600);
+  // 写入时翻成中/英两份，按访客界面语言显示（失败回退原文，不阻塞提交）
+  const tr = await translateBoth(cleanTitle, cleanDesc);
+
   const { error } = await admin.from("demands").insert({
-    title: title.slice(0, 80),
-    description: description.slice(0, 600),
+    title: cleanTitle,
+    description: cleanDesc,
     category: category || "其他",
     circle: "ndis",
     city: city || "全澳洲",
@@ -49,6 +55,7 @@ export async function POST(req: Request) {
     contact_email: email || null,
     submitter_name: name.slice(0, 40),
     status: "pending",
+    tr,
   });
 
   if (error)

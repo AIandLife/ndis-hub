@@ -30,7 +30,7 @@ function ProviderCard({
   provider: Provider;
   onConnect: () => void;
 }) {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const isMember = provider.listingType === "claimed";
   return (
     <div className="bg-white rounded-2xl border border-gray-100 p-6 card-hover flex flex-col">
@@ -103,7 +103,7 @@ function ProviderCard({
         <div className="bg-gold-50 border border-gold-100 rounded-xl px-3 py-2 mb-4">
           <span className="text-xs text-gold-700 font-semibold">{t("lib.lookingFor")}</span>
           <span className="text-xs text-gray-600 line-clamp-2">
-            {provider.needs}
+            {(lang === "en" ? provider.needsEn : provider.needsZh) || provider.needs}
           </span>
         </div>
       )}
