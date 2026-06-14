@@ -6,6 +6,7 @@ export async function POST(req: NextRequest) {
 
   const notifyEmail = process.env.NOTIFY_EMAIL || "recommendforterry@gmail.com";
   const resendKey = process.env.RESEND_API_KEY;
+  const larkWebhook = process.env.NOTIFY_LARK_WEBHOOK;
 
   // Build email content based on form type
   let subject = "";
@@ -70,32 +71,58 @@ export async function POST(req: NextRequest) {
     return Response.json({ error: "Unknown notification type" }, { status: 400 });
   }
 
-  // If no Resend key configured, log and return success (graceful degradation)
-  if (!resendKey) {
-    console.log(`[notify] No RESEND_API_KEY. Would send: ${subject}`, data);
-    return Response.json({ ok: true, sent: false, reason: "no_api_key" });
+  // 纯文本摘要（飞书/Lark 自定义机器人 webhook 用）。每条提交都进库，
+  // 同时尽量推一份实时通知给圈主。任何渠道失败都不影响用户侧成功提示。
+  const textLines = [subject.replace(/^【澳洲NDIS圈】/, "")];
+  for (const [k, v] of Object.entries(data || {})) {
+    if (v == null || v === "" || k === "bridged") continue;
+    textLines.push(`${k}: ${v}`);
+  }
+  const text = textLines.join("\n");
+
+  const channels: string[] = [];
+
+  // 1) 飞书 / Lark 自定义机器人 webhook
+  if (larkWebhook) {
+    try {
+      const lr = await fetch(larkWebhook, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ msg_type: "text", content: { text } }),
+      });
+      if (lr.ok) channels.push("lark");
+      else console.error("[notify] Lark error:", await lr.text());
+    } catch (e) {
+      console.error("[notify] Lark exception:", e);
+    }
   }
 
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${resendKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from: "澳洲NDIS圈 <onboarding@resend.dev>",
-      to: [notifyEmail],
-      subject,
-      html,
-    }),
-  });
-
-  if (!res.ok) {
-    const err = await res.text();
-    console.error("[notify] Resend error:", err);
-    // Still return 200 so the user-facing form doesn't show an error
-    return Response.json({ ok: true, sent: false, reason: "resend_error" });
+  // 2) 邮件（Resend）
+  if (resendKey) {
+    try {
+      const res = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${resendKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from: "澳洲NDIS圈 <onboarding@resend.dev>",
+          to: [notifyEmail],
+          subject,
+          html,
+        }),
+      });
+      if (res.ok) channels.push("email");
+      else console.error("[notify] Resend error:", await res.text());
+    } catch (e) {
+      console.error("[notify] Resend exception:", e);
+    }
   }
 
-  return Response.json({ ok: true, sent: true });
+  if (channels.length === 0) {
+    console.log(`[notify] No channel configured. Would send: ${subject}`, data);
+    return Response.json({ ok: true, sent: false, reason: "no_channel" });
+  }
+  return Response.json({ ok: true, sent: true, channels });
 }

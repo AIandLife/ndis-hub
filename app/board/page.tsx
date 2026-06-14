@@ -15,6 +15,7 @@ import {
 import { fetchApprovedProviders } from "@/lib/resources";
 import ConnectModal, { type ConnectTarget } from "@/components/ConnectModal";
 import { useI18n } from "@/lib/i18n";
+import { cityLabel } from "@/lib/labels";
 
 // 分类值(数据，中文)→ 显示 key 映射
 const CAT_KEY: Record<string, string> = {
@@ -69,7 +70,7 @@ function guessCategory(text: string): string {
 }
 
 function PostDemandModal({ onClose }: { onClose: () => void }) {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
@@ -208,7 +209,7 @@ function PostDemandModal({ onClose }: { onClose: () => void }) {
                     "全澳洲",
                   ].map((c) => (
                     <option key={c} value={c}>
-                      {c}
+                      {cityLabel(c, lang)}
                     </option>
                   ))}
                 </select>
@@ -432,7 +433,7 @@ export default function BoardPage() {
                   </span>
                   <span className="flex items-center gap-1 text-xs text-gray-400">
                     <MapPin size={11} />
-                    {item.city}
+                    {cityLabel(item.city, lang)}
                   </span>
                   {item.date && (
                     <span className="flex items-center gap-1 text-xs text-gray-400">

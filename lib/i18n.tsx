@@ -91,6 +91,32 @@ const DICT: Record<string, { zh: string; en: string }> = {
   "lib.lookingFor": { zh: "在找：", en: "Looking for: " },
   "lib.website": { zh: "官网", en: "Website" },
   "lib.connect": { zh: "联系 TA", en: "Contact" },
+  "lib.clearFilters": { zh: "清除筛选", en: "Clear filters" },
+  "lib.emptyTitle": { zh: "这个筛选下还没有人", en: "No one under this filter yet" },
+  "lib.emptySub": {
+    zh: "这正是空位——你做这块生意？免费入驻，做这个分类下圈子里的第一个。",
+    en: "That's an open spot — do you work in this space? List free and be the first in this category.",
+  },
+  "lib.emptyCta": { zh: "申请加入成员目录", en: "Apply to join the directory" },
+  "lib.benefit1.t": { zh: "认证展示", en: "Verified listing" },
+  "lib.benefit1.d": { zh: "入驻后在资源库中优先展示", en: "Priority placement in the directory once listed" },
+  "lib.benefit2.t": { zh: "上下游对接", en: "B2B connections" },
+  "lib.benefit2.d": { zh: "供应商与服务机构互相找到、对接合作", en: "Suppliers and providers find and connect with each other" },
+  "lib.benefit3.t": { zh: "圈内转介绍", en: "Peer referrals" },
+  "lib.benefit3.d": { zh: "加入从业者社群，获得同行转介绍", en: "Join the community and get referrals from peers" },
+  "lib.ctaTitle": { zh: "你也在NDIS行业？", en: "Also in the NDIS industry?" },
+  "lib.ctaSub": {
+    zh: "提交申请，审核通过后加入成员目录，让同行和客户找到你",
+    en: "Apply, and once approved you'll be in the directory so peers and clients can find you.",
+  },
+  "lib.ctaBtn": { zh: "申请加入", en: "Apply to join" },
+
+  // ── Join banner (shared bottom CTA) ──
+  "jb.title": { zh: "做 NDIS 生意？同行都在群里", en: "In the NDIS business? Your peers are in the group" },
+  "jb.sub": {
+    zh: "政策解读 · 上下游对接 · 踩坑互助 — 免费加入 NDIS 行业交流群",
+    en: "Policy updates · B2B deals · shared lessons — join the free NDIS community group",
+  },
 
   // ── Join section ──
   "join.badge": { zh: "免费 · 华人 NDIS 从业者专属", en: "Free · for NDIS professionals" },
@@ -212,7 +238,7 @@ const DICT: Record<string, { zh: string; en: string }> = {
   "connect.theirContact": { zh: "对方联系方式", en: "Their contact" },
   "connect.copy": { zh: "复制", en: "Copy" },
   "connect.copied": { zh: "已复制", en: "Copied" },
-  "connect.note": { zh: "联系时备注「澳洲NDIS圈对接」，对方会更快回复", en: "Mention 'NDIS Hub' when you reach out — you'll get a faster reply" },
+  "connect.note": { zh: "联系时备注「澳洲NDIS圈对接」，对方会更快回复", en: "Mention 'NDIS Circle' when you reach out — you'll get a faster reply" },
   "connect.bridgedTitle": { zh: "已转交圈主牵线", en: "Passed to the host" },
   "connect.bridgedSub": { zh: "对方未公开联系方式。圈主已收到你的联系方式，会尽快把你推给对方。想更快？进群直接@圈主。", en: "They haven't shared public contact. The host has your details and will introduce you soon. Faster? Join the group and message the host." },
   "connect.joinGroup": { zh: "进行业交流群", en: "Join community group" },

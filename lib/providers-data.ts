@@ -21,6 +21,7 @@ export interface Provider {
   ndisRegistered: boolean;
   specialties: string[];
   featured?: boolean;
+  descriptionEn?: string;
   // 圈内成员的对接信息（来自 BossLink 登记的「需」）
   needs?: string;
   needsEn?: string;
@@ -45,6 +46,8 @@ export const PROVIDERS: Provider[] = [
     languages: ["英文"],
     description:
       "澳洲规模最大的 NDIS 服务机构之一，覆盖全澳，提供支持性独立生活（SIL）、社区支持、心理健康与就业支持等。",
+    descriptionEn:
+      "One of Australia's largest NDIS providers, operating nationally — SIL, community supports, mental health and employment support.",
     website: "https://www.lwb.org.au",
     listingType: "public",
     verified: false,
@@ -62,6 +65,8 @@ export const PROVIDERS: Provider[] = [
     languages: ["英文"],
     description:
       "由 House with No Steps 与 The Tipping Foundation 合并而成的大型残障服务机构，覆盖 NSW、QLD、VIC、ACT，提供住宿、就业、治疗与社区参与。",
+    descriptionEn:
+      "A large disability provider formed by the merger of House with No Steps and The Tipping Foundation — accommodation, employment, therapy and community participation across NSW, QLD, VIC and ACT.",
     website: "https://www.aruma.com.au",
     listingType: "public",
     verified: false,
@@ -79,6 +84,8 @@ export const PROVIDERS: Provider[] = [
     languages: ["英文"],
     description:
       "深耕残障服务 65 年以上的 NSW 机构，专注个性化支持计划，提供住宿、社区参与与就业支持。",
+    descriptionEn:
+      "A NSW provider with 65+ years in disability services, focused on individualised support plans — accommodation, community participation and employment support.",
     website: "https://www.achieveaustralia.org.au",
     listingType: "public",
     verified: false,
@@ -96,6 +103,8 @@ export const PROVIDERS: Provider[] = [
     languages: ["英文"],
     description:
       "治疗服务、沟通支持与辅助技术领域的 VIC 领先机构，提供日间项目、喘息照护与就业支持。",
+    descriptionEn:
+      "A leading VIC provider in therapy, communication support and assistive technology — day programs, respite care and employment support.",
     website: "https://www.scopeaust.org.au",
     listingType: "public",
     verified: false,
@@ -113,6 +122,8 @@ export const PROVIDERS: Provider[] = [
     languages: ["英文"],
     description:
       "脑瘫及相关残障领域的知名机构，提供治疗、早期干预、辅助技术与研究。",
+    descriptionEn:
+      "A well-known organisation in cerebral palsy and related disability — therapy, early intervention, assistive technology and research.",
     website: "https://www.cerebralpalsy.org.au",
     listingType: "public",
     verified: false,
@@ -130,6 +141,8 @@ export const PROVIDERS: Provider[] = [
     languages: ["英文"],
     description:
       "澳洲历史悠久的大型残障服务机构之一，主营 QLD，提供学习与就业、社区参与与住宿支持。",
+    descriptionEn:
+      "One of Australia's long-established large disability providers, mainly in QLD — learning and employment, community participation and accommodation support.",
     website: "https://www.endeavour.com.au",
     listingType: "public",
     verified: false,
@@ -147,6 +160,8 @@ export const PROVIDERS: Provider[] = [
     languages: ["英文"],
     description:
       "维州历史最悠久的残障服务机构之一，提供住宿、个人护理、治疗与社区支持。",
+    descriptionEn:
+      "One of Victoria's oldest disability providers — accommodation, personal care, therapy and community support.",
     website: "https://www.yooralla.com.au",
     listingType: "public",
     verified: false,
@@ -164,6 +179,8 @@ export const PROVIDERS: Provider[] = [
     languages: ["英文"],
     description:
       "面向 NDIS / 居家照护机构的排班、客户管理与发票软件，供应商类资源示例（服务于 Provider）。",
+    descriptionEn:
+      "Rostering, client management and invoicing software for NDIS / home-care providers — a supplier-type resource (serves Providers).",
     website: "https://www.shiftcare.com",
     listingType: "public",
     verified: false,
@@ -181,6 +198,8 @@ export const PROVIDERS: Provider[] = [
     languages: ["英文"],
     description:
       "澳洲本土的残障与养老服务管理平台（CRM），服务于 NDIS Provider 的运营与合规，供应商类资源示例。",
+    descriptionEn:
+      "An Australian-built disability & aged-care management platform (CRM) for NDIS Provider operations and compliance — a supplier-type resource.",
     website: "https://www.lumary.com",
     listingType: "public",
     verified: false,

@@ -1,8 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import { MessageCircle, ArrowRight } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
 
 // 页面底部统一的进群转化条：所有内容页看完都有下一步，不留死胡同。
 export default function JoinBanner() {
+  const { t } = useI18n();
   return (
     <section className="py-12 bg-white border-t border-gray-100">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -12,17 +16,17 @@ export default function JoinBanner() {
           </div>
           <div className="flex-1">
             <div className="text-white font-bold text-lg mb-1">
-              做 NDIS 生意？同行都在群里
+              {t("jb.title")}
             </div>
             <div className="text-blue-300 text-sm">
-              政策解读 · 上下游对接 · 踩坑互助 — 免费加入 NDIS 行业交流群
+              {t("jb.sub")}
             </div>
           </div>
           <Link
             href="/#join"
             className="inline-flex items-center gap-2 bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold px-6 py-3 rounded-xl transition-colors whitespace-nowrap"
           >
-            进群 <ArrowRight size={15} />
+            {t("nav.joinGroup")} <ArrowRight size={15} />
           </Link>
         </div>
       </div>

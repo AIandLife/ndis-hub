@@ -18,9 +18,9 @@ export default function Footer() {
               </div>
               <div>
                 <div className="text-white font-bold text-base">
-                  {lang === "en" ? "NDIS Hub" : "澳洲NDIS圈"}
+                  {lang === "en" ? "NDIS Circle" : "澳洲NDIS圈"}
                 </div>
-                <div className="text-gray-500 text-xs">NDIS Hub AU</div>
+                <div className="text-gray-500 text-xs">NDIS Circle AU</div>
               </div>
             </div>
             <p className="text-sm text-gray-500 leading-relaxed">
@@ -86,7 +86,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="text-sm hover:text-white transition-colors flex items-center gap-1"
                 >
-                  澳洲商业联盟 <ExternalLink size={11} />
+                  {lang === "en" ? "Australia Business Alliance" : "澳洲商业联盟"} <ExternalLink size={11} />
                 </a>
               </li>
               <li>
@@ -96,7 +96,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="text-sm hover:text-white transition-colors flex items-center gap-1"
                 >
-                  澳洲房产圈 <ExternalLink size={11} />
+                  {lang === "en" ? "Property Circle" : "澳洲房产圈"} <ExternalLink size={11} />
                 </a>
               </li>
               <li>
@@ -106,7 +106,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="text-sm hover:text-white transition-colors flex items-center gap-1"
                 >
-                  澳洲建房圈 <ExternalLink size={11} />
+                  {lang === "en" ? "Build Circle" : "澳洲建房圈"} <ExternalLink size={11} />
                 </a>
               </li>
               <li>
@@ -116,7 +116,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="text-sm hover:text-white transition-colors flex items-center gap-1"
                 >
-                  NDIS 官网 <ExternalLink size={11} />
+                  {lang === "en" ? "NDIS official site" : "NDIS 官网"} <ExternalLink size={11} />
                 </a>
               </li>
             </ul>
@@ -125,10 +125,12 @@ export default function Footer() {
 
         <div className="border-t border-gray-800 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-gray-600">
-            © 2026 澳洲NDIS圈 NDIS Hub AU. All rights reserved.
+            © 2026 {lang === "en" ? "NDIS Circle AU" : "澳洲NDIS圈 NDIS Circle AU"}. All rights reserved.
           </p>
           <p className="text-xs text-gray-600 flex items-center gap-1">
-            Built with <Heart size={11} className="text-gold-500" /> by 澳洲商业联盟生态
+            {lang === "en" ? "Built with" : "用心打造"}{" "}
+            <Heart size={11} className="text-gold-500" />{" "}
+            {lang === "en" ? "by the Australia Business Alliance" : "by 澳洲商业联盟生态"}
           </p>
         </div>
       </div>

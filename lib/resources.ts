@@ -19,6 +19,7 @@ interface ResourceRow {
     needs?: string;
     needs_en?: string;
     needs_zh?: string;
+    description_en?: string;
     contactName?: string;
   } | null;
   is_scraped: boolean;
@@ -47,6 +48,7 @@ function rowToProvider(r: ResourceRow): Provider {
     state: ci.state || "",
     languages: (ci.languages || []).map((l) => LANG_ALIAS[l] || l),
     description: r.description,
+    descriptionEn: ci.description_en || undefined,
     website:
       ci.website ||
       (r.source_url && r.source_url.startsWith("http") ? r.source_url : undefined),

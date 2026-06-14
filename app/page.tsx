@@ -20,6 +20,7 @@ import {
 import { fetchApprovedProviders } from "@/lib/resources";
 import { PROVIDERS, type Provider } from "@/lib/providers-data";
 import { useI18n } from "@/lib/i18n";
+import { cityLabel, catLabel } from "@/lib/labels";
 
 const STATS = [
   { value: "76万+", valueEn: "761K+", label: "stat.participants" },
@@ -270,11 +271,11 @@ export default function HomePage() {
                 >
                   <div className="flex items-center gap-2 mb-2.5 flex-wrap">
                     <span className="text-xs bg-navy-50 text-navy-700 px-2 py-0.5 rounded-full font-semibold">
-                      {n.category}
+                      {catLabel(n.category, lang)}
                     </span>
                     <span className="flex items-center gap-1 text-xs text-gray-400">
                       <MapPin size={11} />
-                      {n.city}
+                      {cityLabel(n.city, lang)}
                     </span>
                     {n.member && (
                       <span className="text-xs text-emerald-600 font-medium">
@@ -371,11 +372,11 @@ export default function HomePage() {
                   </span>
                   <span className="flex items-center gap-1 text-xs text-gray-400">
                     <MapPin size={11} />
-                    {p.location}
+                    {cityLabel(p.location, lang)}
                   </span>
                 </div>
                 <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">
-                  {p.description}
+                  {lang === "en" && p.descriptionEn ? p.descriptionEn : p.description}
                 </p>
               </Link>
             ))}

@@ -21,7 +21,7 @@ export default function ConnectModal({
   target: ConnectTarget;
   onClose: () => void;
 }) {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<null | {
     bridged: boolean;
@@ -177,7 +177,7 @@ export default function ConnectModal({
                 maxLength={40}
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                placeholder="姓名 / 公司"
+                placeholder={lang === "en" ? "Name / company" : "姓名 / 公司"}
                 className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-navy-900 transition-colors"
               />
             </div>
@@ -191,7 +191,7 @@ export default function ConnectModal({
                 maxLength={60}
                 value={form.wechat}
                 onChange={(e) => setForm({ ...form, wechat: e.target.value })}
-                placeholder="例：wx_id / +61 4xx xxx xxx"
+                placeholder={lang === "en" ? "e.g. wx_id / +61 4xx xxx xxx" : "例：wx_id / +61 4xx xxx xxx"}
                 className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-navy-900 transition-colors"
               />
             </div>

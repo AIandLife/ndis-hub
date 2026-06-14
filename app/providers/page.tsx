@@ -22,6 +22,7 @@ import {
 import { fetchApprovedProviders } from "@/lib/resources";
 import ConnectModal, { type ConnectTarget } from "@/components/ConnectModal";
 import { useI18n } from "@/lib/i18n";
+import { cityLabel, tagLabel, langLabel } from "@/lib/labels";
 
 function ProviderCard({
   provider,
@@ -80,7 +81,7 @@ function ProviderCard({
         )}
         <span className="flex items-center gap-1 text-xs text-gray-400">
           <MapPin size={11} />
-          {provider.location}
+          {cityLabel(provider.location, lang)}
         </span>
       </div>
 
@@ -90,13 +91,15 @@ function ProviderCard({
             key={tag}
             className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full"
           >
-            {tag}
+            {tagLabel(tag, lang)}
           </span>
         ))}
       </div>
 
       <p className="text-xs text-gray-500 leading-relaxed mb-3 line-clamp-3">
-        {provider.description}
+        {lang === "en" && provider.descriptionEn
+          ? provider.descriptionEn
+          : provider.description}
       </p>
 
       {provider.needs && (
@@ -254,9 +257,9 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
                 className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-navy-900 transition-colors bg-white"
               >
                 <option value="">{en ? "Select main service type" : "选择主要服务类型"}</option>
-                {SERVICE_TYPES.slice(1).map((t) => (
-                  <option key={t} value={t}>
-                    {t}
+                {SERVICE_TYPES.slice(1).map((s) => (
+                  <option key={s} value={s}>
+                    {tagLabel(s, lang)}
                   </option>
                 ))}
               </select>
@@ -277,7 +280,7 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
                   <option value="">{en ? "Select city" : "选择城市"}</option>
                   {LOCATIONS.slice(1).map((l) => (
                     <option key={l} value={l}>
-                      {l}
+                      {cityLabel(l, lang)}
                     </option>
                   ))}
                 </select>
@@ -297,7 +300,7 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
                   <option value="">{en ? "Select language" : "选择语言"}</option>
                   {LANGUAGES.slice(1).map((l) => (
                     <option key={l} value={l}>
-                      {l}
+                      {langLabel(l, lang)}
                     </option>
                   ))}
                 </select>
@@ -351,7 +354,7 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
 }
 
 function ProvidersContent() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const searchParams = useSearchParams();
   const [search, setSearch] = useState("");
   const [serviceFilter, setServiceFilter] = useState("全部");
@@ -458,7 +461,7 @@ function ProvidersContent() {
                 >
                   {SERVICE_TYPES.map((opt) => (
                     <option key={opt} value={opt}>
-                      {opt}
+                      {tagLabel(opt, lang)}
                     </option>
                   ))}
                 </select>
@@ -470,7 +473,7 @@ function ProvidersContent() {
               >
                 {LOCATIONS.map((l) => (
                   <option key={l} value={l}>
-                    {l}
+                    {cityLabel(l, lang)}
                   </option>
                 ))}
               </select>
@@ -481,7 +484,7 @@ function ProvidersContent() {
               >
                 {LANGUAGES.map((l) => (
                   <option key={l} value={l}>
-                    {l}
+                    {langLabel(l, lang)}
                   </option>
                 ))}
               </select>
@@ -504,7 +507,7 @@ function ProvidersContent() {
               }}
               className="text-xs text-blue-600 hover:underline"
             >
-              清除筛选
+              {t("lib.clearFilters")}
             </button>
           )}
         </div>
@@ -534,27 +537,26 @@ function ProvidersContent() {
                 <UserPlus size={28} className="text-gold-400" />
               </div>
               <h3 className="text-xl font-bold text-navy-900 mb-2">
-                这个筛选下还没有人
+                {t("lib.emptyTitle")}
               </h3>
               <p className="text-gray-500 text-sm max-w-md mx-auto mb-8">
-                这正是空位——你做这块生意？免费入驻，
-                做这个分类下圈子里的第一个。
+                {t("lib.emptySub")}
               </p>
               <button
                 onClick={() => setShowRegister(true)}
                 className="inline-flex items-center gap-2 bg-navy-900 hover:bg-navy-800 text-white font-bold px-6 py-3 rounded-xl transition-colors text-sm"
               >
                 <UserPlus size={15} />
-                申请加入成员目录
+                {t("lib.emptyCta")}
               </button>
             </div>
 
             {/* Benefits strip */}
             <div className="border-t border-gray-100 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-100">
               {[
-                { icon: CheckCircle, title: "认证展示", desc: "入驻后在资源库中优先展示" },
-                { icon: Search, title: "上下游对接", desc: "供应商与服务机构互相找到、对接合作" },
-                { icon: UserPlus, title: "圈内转介绍", desc: "加入从业者社群，获得同行转介绍" },
+                { icon: CheckCircle, title: t("lib.benefit1.t"), desc: t("lib.benefit1.d") },
+                { icon: Search, title: t("lib.benefit2.t"), desc: t("lib.benefit2.d") },
+                { icon: UserPlus, title: t("lib.benefit3.t"), desc: t("lib.benefit3.d") },
               ].map((item) => (
                 <div key={item.title} className="flex items-start gap-3 px-6 py-5">
                   <item.icon size={16} className="text-gold-500 mt-0.5 flex-shrink-0" />
@@ -572,17 +574,17 @@ function ProvidersContent() {
         {filteredProviders.length > 0 && (
           <div className="mt-10 bg-navy-900 rounded-2xl p-6 text-center">
             <h3 className="text-white font-bold text-lg mb-2">
-              你也在NDIS行业？
+              {t("lib.ctaTitle")}
             </h3>
             <p className="text-blue-300 text-sm mb-4">
-              提交申请，审核通过后加入成员目录，让同行和客户找到你
+              {t("lib.ctaSub")}
             </p>
             <button
               onClick={() => setShowRegister(true)}
               className="inline-flex items-center gap-2 bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold px-6 py-3 rounded-xl transition-colors text-sm"
             >
               <UserPlus size={15} />
-              申请加入
+              {t("lib.ctaBtn")}
             </button>
           </div>
         )}
