@@ -5,8 +5,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: "/api/",
+      disallow: ["/api/", "/admin"],
     },
-    sitemap: "https://ndishub.com.au/sitemap.xml",
+    sitemap: "https://ndiscircle.com/sitemap.xml",
   };
 }

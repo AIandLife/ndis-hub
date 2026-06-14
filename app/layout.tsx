@@ -3,9 +3,10 @@ import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { I18nProvider } from "@/lib/i18n";
+import { Analytics } from "@vercel/analytics/react";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://ndis-hub-ten.vercel.app"),
+  metadataBase: new URL("https://ndiscircle.com"),
   icons: {
     icon: "/favicon.png",
     shortcut: "/favicon.png",
@@ -37,6 +38,7 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           <Footer />
         </I18nProvider>
+        <Analytics />
       </body>
     </html>
   );
