@@ -19,6 +19,8 @@ const CITY: Record<string, Pair> = {
   "线上 Online": { zh: "线上", en: "Online" },
   全澳洲: { zh: "全澳洲", en: "All Australia" },
   澳洲其他城市: { zh: "澳洲其他城市", en: "Other AU cities" },
+  澳洲: { zh: "澳洲", en: "Australia" },
+  全澳: { zh: "全澳", en: "National" },
 };
 const CITY_ZH_EN: Record<string, string> = {
   悉尼: "Sydney",
@@ -39,6 +41,7 @@ export function cityLabel(value: string, lang: Lang): string {
     if (ascii) return ascii; // 已含英文（如 "Sydney" 或 "悉尼 Sydney"）
     for (const [zh, en] of Object.entries(CITY_ZH_EN))
       if (value.includes(zh)) return en;
+    if (value.includes("澳洲") || value.includes("全澳")) return "Australia";
     return value;
   }
   // 中文界面：去掉英文部分，只保留中文；若本身纯英文则原样
