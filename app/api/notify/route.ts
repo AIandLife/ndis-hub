@@ -105,6 +105,8 @@ export async function POST(req: NextRequest) {
         { label: "姓名", value: data.name },
         { label: "公司 / 机构", value: data.business },
         { label: "服务类型", value: data.type },
+        { label: "业务介绍", value: data.intro },
+        { label: "在找", value: data.needs },
         { label: "所在城市", value: data.location },
         { label: "服务语言", value: data.language },
         { label: "联系电话", value: data.phone },

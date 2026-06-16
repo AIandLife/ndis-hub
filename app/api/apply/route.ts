@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "bad json" }, { status: 400 });
   }
 
-  const { name, business, type, location, phone, email, language, wechat } =
+  const { name, business, type, location, phone, email, language, wechat, intro, needs } =
     body;
 
   if (!name || !email) {
@@ -39,6 +39,9 @@ export async function POST(req: Request) {
       circle: "ndis",
       ndis_role: type || null,
       resource_tags: type ? [type] : [],
+      // 业务介绍 → 卡片描述；在找 → 卡片「在找」。审批通过时由 admin 路由落到 resources。
+      resources_offered: intro || null,
+      needs: needs || null,
       description: language ? `服务语言：${language}` : null,
       status: "pending",
     },

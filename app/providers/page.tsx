@@ -142,6 +142,8 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
     name: "",
     business: "",
     type: "",
+    intro: "",
+    needs: "",
     location: "",
     phone: "",
     email: "",
@@ -263,6 +265,41 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
                   </option>
                 ))}
               </select>
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-navy-900 mb-1">
+                {en ? "About your business / what you offer *" : "业务介绍 / 你能提供什么 *"}
+              </label>
+              <textarea
+                required
+                rows={3}
+                maxLength={600}
+                value={form.intro}
+                onChange={(e) => setForm({ ...form, intro: e.target.value })}
+                placeholder={
+                  en
+                    ? "A few lines on your NDIS services / what you can offer — shown on your directory card."
+                    : "用几句话介绍你的 NDIS 业务 / 你能提供什么——这段会显示在你的资源库卡片上。"
+                }
+                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-navy-900 transition-colors resize-none"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-navy-900 mb-1">
+                {en ? "What are you looking for? (optional)" : "你在找什么？（选填）"}
+              </label>
+              <textarea
+                rows={2}
+                maxLength={400}
+                value={form.needs}
+                onChange={(e) => setForm({ ...form, needs: e.target.value })}
+                placeholder={
+                  en
+                    ? "e.g. clients, suppliers, staff, partners..."
+                    : "例：找客户 / 找供应商 / 找员工 / 找合作..."
+                }
+                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-navy-900 transition-colors resize-none"
+              />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
