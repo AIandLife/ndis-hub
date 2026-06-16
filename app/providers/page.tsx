@@ -39,7 +39,7 @@ function ProviderCard({
         <div className="flex items-start gap-3">
           <div className="w-12 h-12 rounded-xl bg-navy-50 border border-navy-100 flex items-center justify-center flex-shrink-0">
             <span className="text-navy-900 font-bold text-lg">
-              {provider.name[0]}
+              {provider.name?.[0] ?? "?"}
             </span>
           </div>
           <div>
@@ -148,6 +148,7 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
     phone: "",
     email: "",
     language: "",
+    ndisRegistered: false,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -369,6 +370,27 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
                 className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-navy-900 transition-colors"
               />
             </div>
+
+            <label className="flex items-start gap-2.5 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={form.ndisRegistered}
+                onChange={(e) =>
+                  setForm({ ...form, ndisRegistered: e.target.checked })
+                }
+                className="mt-0.5 w-4 h-4 accent-navy-900"
+              />
+              <span className="text-sm text-navy-800">
+                {en
+                  ? "We are an NDIS-registered provider (registered with the NDIS Commission)"
+                  : "我的机构已在 NDIS Commission 注册（registered provider）"}
+                <span className="block text-xs text-gray-400 mt-0.5">
+                  {en
+                    ? "Only tick if true — it shows a green “NDIS registered” badge on your card."
+                    : "属实再勾——勾选后卡片会显示绿色「NDIS注册」标。"}
+                </span>
+              </span>
+            </label>
 
             <div className="bg-gray-50 rounded-xl p-3 text-xs text-gray-500">
               {en

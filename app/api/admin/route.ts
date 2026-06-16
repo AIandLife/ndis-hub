@@ -78,7 +78,19 @@ export async function POST(req: Request) {
     // 通过 → 生成一条圈内成员 resource（上资源库）
     if (action === "approve" && app) {
       const role: string = app.ndis_role || "";
-      const isSupplier = /supplier|供应|供货|批发|厂/i.test(role);
+      // 供应商类服务（上游 B2B），其余为服务机构。按所选服务类型判定，不再用模糊正则。
+      const SUPPLIER_TYPES = [
+        "排班/CRM 软件",
+        "管理软件/CRM",
+        "招聘/人力",
+        "记账/财税",
+        "合规/法律",
+        "SDA 建筑/改造",
+      ];
+      const isSupplier = SUPPLIER_TYPES.includes(role);
+      // 服务语言 + 是否 NDIS 注册，从入驻时写进 description 的标记里解析。
+      const language = ((app.description || "").match(/服务语言：([^|]+)/)?.[1] || "").trim();
+      const ndisReg = /NDIS注册/.test(app.description || "");
       const desc =
         (app.resources_offered && app.resources_offered.trim()) ||
         `${role || "NDIS 服务"} · 位于${app.location || "澳洲"}`;
@@ -95,7 +107,9 @@ export async function POST(req: Request) {
         tags: app.resource_tags?.length ? app.resource_tags : role ? [role] : ["NDIS 服务"],
         contact_info: {
           contactName: app.full_name,
-          ndisRegistered: true,
+          // 只有本人勾选「已 NDIS 注册」才打绿标，不再一律 true（避免虚假认证）
+          ndisRegistered: ndisReg,
+          ...(language ? { languages: [language] } : {}),
           ...(descEn ? { description_en: descEn } : {}),
           ...(needsZh ? { needs: needsZh, needs_zh: needsZh, needs_en: needsEn } : {}),
         },

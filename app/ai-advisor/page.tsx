@@ -78,8 +78,11 @@ function AIAdvisorContent() {
         ...prev,
         { role: "assistant", content: data.text },
       ]);
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : "AI服务暂时不可用，请稍后再试";
+    } catch {
+      const msg =
+        lang === "en"
+          ? "Sorry, the AI advisor is temporarily unavailable. Please try again in a moment, or join the group to ask directly."
+          : "抱歉，AI 顾问暂时不可用，请稍后再试；或进群直接问。";
       setMessages((prev) => [
         ...prev,
         { role: "assistant", content: msg },

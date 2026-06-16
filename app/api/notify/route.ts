@@ -113,18 +113,6 @@ export async function POST(req: NextRequest) {
         { label: "联系邮箱", value: data.email },
       ],
     });
-  } else if (type === "course_inquiry") {
-    subject = `【澳洲NDIS圈】新课程咨询 · ${data.name}`;
-    html = card({
-      badge: "课程咨询",
-      title: "新课程报名咨询",
-      rows: [
-        { label: "姓名", value: data.name },
-        { label: "联系电话", value: data.phone },
-        { label: "微信号", value: data.wechat },
-        { label: "感兴趣课程", value: data.interest },
-      ],
-    });
   } else if (type === "demand_post") {
     subject = `【澳洲NDIS圈】对接大厅新需求 · ${data.title}`;
     html = card({

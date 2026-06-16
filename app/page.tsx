@@ -345,7 +345,7 @@ export default function HomePage() {
               >
                 <div className="flex items-start justify-between mb-3">
                   <div className="w-11 h-11 rounded-xl bg-navy-50 border border-navy-100 flex items-center justify-center">
-                    <span className="text-navy-900 font-bold">{p.name[0]}</span>
+                    <span className="text-navy-900 font-bold">{p.name?.[0] ?? "?"}</span>
                   </div>
                   <span
                     className={`text-xs px-2 py-0.5 rounded-full ${
@@ -431,7 +431,7 @@ export default function HomePage() {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="/event-ndis-sydney.jpg"
-                    alt="NDIS 生意线下交流会现场 · 悉尼"
+                    alt={lang === "en" ? "NDIS business meetup · Sydney" : "NDIS 生意线下交流会现场 · 悉尼"}
                     className="w-full h-48 sm:h-56 object-cover"
                   />
                   <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-navy-950/90 to-transparent px-4 pt-10 pb-3">
@@ -631,7 +631,7 @@ export default function HomePage() {
                 active: false,
               },
               {
-                name: lang === "en" ? "NDIS Hub" : "澳洲NDIS圈",
+                name: lang === "en" ? "NDIS Circle" : "澳洲NDIS圈",
                 desc: lang === "en" ? "NDIS professionals" : "NDIS行业专业平台",
                 href: "/",
                 active: true,

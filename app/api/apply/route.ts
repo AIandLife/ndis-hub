@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "bad json" }, { status: 400 });
   }
 
-  const { name, business, type, location, phone, email, language, wechat, intro, needs } =
+  const { name, business, type, location, phone, email, language, wechat, intro, needs, ndisRegistered } =
     body;
 
   if (!name || !email) {
@@ -42,7 +42,8 @@ export async function POST(req: Request) {
       // 业务介绍 → 卡片描述；在找 → 卡片「在找」。审批通过时由 admin 路由落到 resources。
       resources_offered: intro || null,
       needs: needs || null,
-      description: language ? `服务语言：${language}` : null,
+      // description 兼作元信息载体：服务语言 +（可选）NDIS 注册标记，审批时解析。
+      description: `服务语言：${language || "中文"}${ndisRegistered ? " | NDIS注册" : ""}`,
       status: "pending",
     },
     { onConflict: "email" }
