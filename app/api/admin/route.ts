@@ -82,9 +82,10 @@ export async function POST(req: Request) {
       const desc =
         (app.resources_offered && app.resources_offered.trim()) ||
         `${role || "NDIS 服务"} · 位于${app.location || "澳洲"}`;
-      // 把"在找什么"翻成双语，资源库卡片 "在找:" 双语显示
+      // 业务介绍 + 在找 都翻成英文，英文界面卡片不残留中文（与迁入成员对齐）
       const needsZh = (app.needs || "").trim();
       const needsEn = needsZh ? (await translateText(needsZh)).en : "";
+      const descEn = /[一-鿿]/.test(desc) ? (await translateText(desc)).en : "";
       await admin.from("resources").insert({
         title: app.company || app.full_name,
         category: isSupplier ? "supplier" : "provider",
@@ -95,6 +96,7 @@ export async function POST(req: Request) {
         contact_info: {
           contactName: app.full_name,
           ndisRegistered: true,
+          ...(descEn ? { description_en: descEn } : {}),
           ...(needsZh ? { needs: needsZh, needs_zh: needsZh, needs_en: needsEn } : {}),
         },
         submitter_email: app.email,
