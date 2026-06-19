@@ -269,9 +269,14 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>("zh");
 
   useEffect(() => {
-    const saved = (typeof window !== "undefined" &&
-      window.localStorage.getItem("ndis-lang")) as Lang | null;
-    if (saved === "en" || saved === "zh") setLangState(saved);
+    // 微信/隐私模式内核读 localStorage 可能抛异常——必须 try/catch，
+    // 否则这个包裹全站的 Provider 一崩，整页白屏。
+    try {
+      const saved = window.localStorage.getItem("ndis-lang") as Lang | null;
+      if (saved === "en" || saved === "zh") setLangState(saved);
+    } catch {
+      /* localStorage 不可用：用默认中文，不影响渲染 */
+    }
   }, []);
 
   const setLang = (l: Lang) => {

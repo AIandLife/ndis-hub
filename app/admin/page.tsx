@@ -36,10 +36,14 @@ export default function AdminPage() {
   const [err, setErr] = useState("");
 
   useEffect(() => {
-    const s = localStorage.getItem("ndis-admin-secret");
-    if (s) {
-      setSecret(s);
-      setAuthed(true);
+    try {
+      const s = localStorage.getItem("ndis-admin-secret");
+      if (s) {
+        setSecret(s);
+        setAuthed(true);
+      }
+    } catch {
+      /* localStorage 不可用：照常显示登录框 */
     }
   }, []);
 
