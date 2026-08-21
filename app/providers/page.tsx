@@ -184,7 +184,7 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
               {en ? "List free · NDIS Directory" : "免费入驻 · NDIS 商家资源库"}
             </h2>
             <p className="text-gray-500 text-sm">
-              {en ? "Fill this in — shown in the directory once reviewed" : "填好信息，审核通过后展示在资源库"}
+              {en ? "Fill this in — you'll be listed in the directory right away" : "填好信息，提交后即时展示在资源库"}
             </p>
           </div>
           <button
@@ -205,8 +205,8 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
             </h3>
             <p className="text-gray-500 mb-6">
               {en
-                ? "We'll review within 1–2 business days; once approved you'll be a verified member."
-                : "我们会在1-2个工作日内审核你的信息，通过后你将正式成为圈内认证成员。"}
+                ? "You're now listed in the directory — peers and clients can find you right away."
+                : "你已经上架资源库了，圈子里的同行和客户现在就能找到你。"}
             </p>
             <button
               onClick={onClose}
@@ -219,8 +219,8 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
           <form onSubmit={handleSubmit} className="p-6 space-y-4">
             <div className="bg-navy-50 rounded-2xl p-4 text-sm text-navy-800">
               {en
-                ? "After you apply, we review within 1–2 business days. Once approved, your business is listed in the directory."
-                : "提交申请后，我们会在1-2个工作日内审核你的信息。审核通过后，你的机构将正式展示在成员目录中。"}
+                ? "Submit and your business is listed in the directory right away."
+                : "提交后，你的机构会立即展示在成员目录中，无需等待审核。"}
             </div>
 
             <div>

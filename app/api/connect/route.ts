@@ -23,6 +23,27 @@ export async function POST(req: Request) {
   const admin = getAdminClient();
   if (!admin) return NextResponse.json({ ok: true, bridged: true });
 
+  // 限频：同一微信 1 小时内 ≥3 次对接，第 4 次起温和提醒并拒收。
+  // 防止有人把「我能对接」当群发广告用（真实发生过：一人连发 7 条推销）。
+  const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+  const { count } = await admin
+    .from("connection_requests")
+    .select("id", { count: "exact", head: true })
+    .eq("circle", "ndis")
+    .eq("requester_wechat", wechat.slice(0, 40))
+    .gte("created_at", oneHourAgo);
+  if ((count ?? 0) >= 3) {
+    return NextResponse.json(
+      {
+        ok: false,
+        rateLimited: true,
+        error:
+          "你刚连续发起了好几次对接。对接大厅是帮大家一对一精准找资源的，同样内容反复群发会打扰对方、也容易被当广告，反而影响你在圈里的口碑。想让更多人认识你的业务？更好的办法是免费入驻资源库，写清你能提供什么，有需要的人会主动找你。歇一会儿（1 小时后）再发吧，谢谢配合 🙏",
+      },
+      { status: 429 }
+    );
+  }
+
   const row: Record<string, unknown> = {
     circle: "ndis",
     requester_name: name.slice(0, 40),

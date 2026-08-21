@@ -29,6 +29,7 @@ export default function ConnectModal({
     email?: string | null;
   }>(null);
   const [copied, setCopied] = useState(false);
+  const [rateLimitMsg, setRateLimitMsg] = useState("");
   const [form, setForm] = useState({ name: "", wechat: "", message: "" });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -50,6 +51,16 @@ export default function ConnectModal({
         }),
       });
       const d = await r.json();
+      // 发太频繁：显示温和提醒，不当成功处理、不发通知
+      if (r.status === 429 && d.rateLimited) {
+        setRateLimitMsg(
+          lang === "en"
+            ? "You've sent quite a few connection requests in a row. The Marketplace is for precise one-to-one matching — repeated blasts can feel like spam and hurt your reputation in the circle. A better way to get known: list your business free in the Directory. Please try again in an hour. Thanks! 🙏"
+            : d.error
+        );
+        setSubmitting(false);
+        return;
+      }
       res = { bridged: d.bridged !== false, ...(d.contact || {}) };
       // 通知圈主（不阻塞用户）
       fetch("/api/notify", {
@@ -161,6 +172,14 @@ export default function ConnectModal({
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="p-6 space-y-4">
+            {rateLimitMsg && (
+              <div className="bg-gold-50 border border-gold-200 rounded-xl p-4 text-sm text-gold-800 leading-relaxed">
+                <span className="font-bold">
+                  {lang === "en" ? "A friendly note: " : "友情提醒："}
+                </span>
+                {rateLimitMsg}
+              </div>
+            )}
             <div className="bg-navy-50 rounded-xl p-3 text-xs text-navy-800">
               {t("connect.lead")}
               {target.type === "demand"

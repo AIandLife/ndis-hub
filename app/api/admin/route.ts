@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAdminClient } from "@/lib/supabase/admin";
-import { translateText } from "@/lib/translate";
+import { createResourceFromApplication } from "@/lib/resource-from-application";
 
 // 简易后台审批：密码保护（x-admin-secret 头 == ADMIN_SECRET）。
 // GET  → 列出待审的入驻申请 + 需求
@@ -75,49 +75,9 @@ export async function POST(req: Request) {
       .eq("id", id);
     if (error) return NextResponse.json({ ok: false }, { status: 500 });
 
-    // 通过 → 生成一条圈内成员 resource（上资源库）
+    // 通过 → 生成一条圈内成员 resource（共用逻辑，含去重）
     if (action === "approve" && app) {
-      const role: string = app.ndis_role || "";
-      // 供应商类服务（上游 B2B），其余为服务机构。按所选服务类型判定，不再用模糊正则。
-      const SUPPLIER_TYPES = [
-        "排班/CRM 软件",
-        "管理软件/CRM",
-        "招聘/人力",
-        "记账/财税",
-        "合规/法律",
-        "SDA 建筑/改造",
-      ];
-      const isSupplier = SUPPLIER_TYPES.includes(role);
-      // 服务语言 + 是否 NDIS 注册，从入驻时写进 description 的标记里解析。
-      const language = ((app.description || "").match(/服务语言：([^|]+)/)?.[1] || "").trim();
-      const ndisReg = /NDIS注册/.test(app.description || "");
-      const desc =
-        (app.resources_offered && app.resources_offered.trim()) ||
-        `${role || "NDIS 服务"} · 位于${app.location || "澳洲"}`;
-      // 业务介绍 + 在找 都翻成英文，英文界面卡片不残留中文（与迁入成员对齐）
-      const needsZh = (app.needs || "").trim();
-      const needsEn = needsZh ? (await translateText(needsZh)).en : "";
-      const descEn = /[一-鿿]/.test(desc) ? (await translateText(desc)).en : "";
-      await admin.from("resources").insert({
-        title: app.company || app.full_name,
-        category: isSupplier ? "supplier" : "provider",
-        circle: "ndis",
-        description: desc,
-        location: app.location || "澳洲",
-        tags: app.resource_tags?.length ? app.resource_tags : role ? [role] : ["NDIS 服务"],
-        contact_info: {
-          contactName: app.full_name,
-          // 只有本人勾选「已 NDIS 注册」才打绿标，不再一律 true（避免虚假认证）
-          ndisRegistered: ndisReg,
-          ...(language ? { languages: [language] } : {}),
-          ...(descEn ? { description_en: descEn } : {}),
-          ...(needsZh ? { needs: needsZh, needs_zh: needsZh, needs_en: needsEn } : {}),
-        },
-        submitter_email: app.email,
-        submitter_name: app.full_name,
-        is_scraped: false,
-        status: "approved",
-      });
+      await createResourceFromApplication(admin, app);
     }
     return NextResponse.json({ ok: true });
   }
